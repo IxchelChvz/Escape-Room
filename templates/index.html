@@ -1,80 +1,119 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Heracles.exe - Los 12 Trabajos del Código</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:wght@400;500;700&family=Cinzel:wght@600;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/css/styles.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Olimpo Digital · ΣΦΑΛΜΑ</title>
+
+    <link rel="stylesheet" href="/static/css/webAveriada.css">
 </head>
+
 <body>
-    <div class="flash" id="flash" aria-hidden="true"></div>
-    <div class="wrap">
-        <header class="bar">
-            <div class="brand">
-                <h1>Heracles<span>.exe</span></h1>
-                <small>Olympus Tech Solutions - Grupo 4</small>
-            </div>
-            <dl class="stats">
-                <div class="stat"><dt>Sistema</dt><dd id="status">MALDECIDO / CORRUPTO</dd></div>
-                <div class="stat"><dt>Trabajos</dt><dd id="count">0/12</dd></div>
-                <div class="stat"><dt>Contraseña</dt><dd id="passMini">_ _ _ _ _ _ _ _ _ _ _ _</dd></div>
-            </dl>
-        </header>
 
-        <main>
-            <section class="intro">
-                <p class="lede" data-when="curse">Supera el trabajo de cada pin para disipar la niebla y obtener un carácter de la contraseña.</p>
-                <p class="lede" data-when="restored">Las doce hazañas están cumplidas. El Olimpo vuelve a funcionar.</p>
-            </section>
-
-            <!-- Contenedor del Mapa -->
-            <section class="mapsec" aria-label="Mapa de los doce trabajos">
-                <div class="mapscroll">
-                    <div class="map" id="map">
-                        <img class="base" src="/static/images/mapaGriego.jpeg" alt="Mapa de la antigua Grecia">
-                        <canvas id="fog" aria-hidden="true"></canvas>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Lista de pruebas -->
-            <section class="trials">
-                <h2 class="sec">Los doce trabajos</h2>
-                <ul class="tl" id="list"></ul>
-            </section>
-
-            <!-- Zona de desbloqueo final -->
-            <section class="unlock" id="unlock">
-                <h2 class="sec">Zona de desbloqueo</h2>
-                <div class="slots" id="slots"></div>
-                <div class="actions">
-                    <button class="btn" id="restore" type="button">Restaurar el Olimpo</button>
-                    <button class="btn ghost" id="reset" type="button">Reiniciar demo</button>
-                </div>
-                <p class="msg" id="msg" role="status"></p>
-            </section>
-        </main>
+    <div class="bar" role="alert">
+        ⚠ ΣΦΑΛΜΑ 0xΩ12 · SISTEMA CORRUPTO · 12/12 SECCIONES BLOQUEADAS
     </div>
 
-    <!-- Modal de diálogos para las pruebas -->
-    <dialog id="dlg">
-        <div class="dhead">
-            <span class="dgr" id="dGr"></span>
-            <div>
-                <p class="dtag" id="dTag"></p>
-                <h2 id="dTitle"></h2>
-            </div>
-            <button class="x" id="dClose" type="button">×</button>
-        </div>
-        <p class="dstory" id="dStory"></p>
-        <div class="dbody" id="dBody"></div>
-        <p class="fb" id="dFb" role="status"></p>
-    </dialog>
+    <nav class="nav" aria-label="Menú (averiado)">
+        <b>Ὄλυμπος.exe</b>
+        <span>Inicio</span>
+        <span>Dioses</span>
+        <span>Oráculo</span>
+        <span>Contacto</span>
+    </nav>
 
-    <!-- Carga de JS estático con Jinja2 -->
-     <script src="/static/js/main.js"></script>
+    <main>
+
+        <section class="hero">
+            <h1>Olimp<i>o</i> Digi&#8203;tal</h1>
+
+            <div class="tag">
+                Portal oficial de los dioses · versión ∅.404
+            </div>
+
+            <p>
+                Un hacker de la antigüedad ha lanzado una maldición algorítmica sobre este templo. Los doce monstruos de Heracles se han apoderado del código.
+            </p>
+        </section>
+
+        <section class="fix" aria-labelledby="fx">
+
+            <h2 id="fx">🔧 CÓMO ARREGLAR ESTA WEB</h2>
+
+            <p>
+                Para restaurar el Olimpo, <b>pasaos por el mapa</b>, superad las pruebas de los templos y reunid los
+                <b>12 caracteres</b> de la contraseña. Cada prueba os dice qué letra es y en qué posición va.
+            </p>
+
+            <a class="cta" href="/mapa" target="_blank" rel="noopener">
+                Abrir el mapa de pruebas →
+            </a>
+
+        </section>
+
+        <div class="grid" id="grid"></div>
+
+        <p class="stuck">
+            <span class="spin" aria-hidden="true">⌛</span> Cargando secciones… (atascado desde 1184 a. C.)
+        </p>
+
+    </main>
+
+    <div class="ckb" role="note">
+        🍪 Este sitio usa cookies de ámbar.
+        <u>Aceptar</u>
+        <u>Rechazar</u> (botón roto)
+    </div>
+
+    <footer>
+        © Dódeka · Los 12 Trabajos del Código
+        <br>
+        <small>pista: lo que está oculto en el código también cuenta</small>
+    </footer>
+
+    <script>
+        var S = [
+            ["León de Nemea", "Noticias", "🦁"],
+            ["Hidra de Lerna", "Galería", "🐍"],
+            ["Cierva de Cerinia", "Mapa del sitio", "🦌"],
+            ["Jabalí de Erimanto", "Buscador", "🐗"],
+            ["Establos de Augías", "Archivo", "🐴"],
+            ["Aves del Estínfalo", "Chat", "🐦"],
+            ["Toro de Creta", "Tienda", "🐂"],
+            ["Yeguas de Diomedes", "Eventos", "🐎"],
+            ["Cinturón de Hipólita", "Perfil", "👑"],
+            ["Ganado de Gerión", "Foro", "🐄"],
+            ["Manzanas de las Hespérides", "Premios", "🍎"],
+            ["Cerbero", "Acceso final", "🐕"]
+        ];
+
+        var g = document.getElementById("grid");
+
+        S.forEach(function(s, i) {
+
+            var d = document.createElement("div");
+
+            d.className = "card";
+
+            d.innerHTML =
+                "<h3></h3>" +
+                "<div class='img'>🖼 imagen_" + (i + 1) + ".png ✖</div>" +
+                "<p>Lorem ipsum δεδομένα corrupted…</p>" +
+                "<div class='lock'>" +
+                "<span>" + s[2] + "</span>" +
+                "</div>";
+
+            d.querySelector("h3").textContent = s[1];
+
+            d.querySelector(".lock").appendChild(
+                document.createTextNode("Bloqueada por " + s[0])
+            );
+
+            g.appendChild(d);
+        });
+    </script>
+
 </body>
+
 </html>

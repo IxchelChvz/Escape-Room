@@ -10,6 +10,16 @@ def home():
     """Renderea la vista principal de la aplicación."""
     return render_template('index.html')
 
+@app.route('/mapa')
+def mapa():
+    """Renderea la vista del mapa de pruebas."""
+    return render_template('mapa.html')
+
+@app.route('/restaurada')
+def restaurada():
+    """Renderea la vista de restauración exitosa."""
+    return render_template('webRestaurada.html')
+
 @app.route('/api/verify', methods=['POST'])
 def verify_password():
     """Endpoint para validar la contraseña introducida por el usuario."""
