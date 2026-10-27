@@ -1,0 +1,1552 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>HERACLES.EXE | Olympus Tech Solutions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:wght@400;500;700&family=Cinzel:wght@600;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ==========================================================================
+   CONCEPTO: FRISO DIGITAL AVERIADO (MODO MALDICION) vs OLIMPO RESTAURADO
+   Sin emojis. Estilo neoclásico y consola de sistemas DAW.
+   ========================================================================== */
+:root {
+  --bg: #0a0814;
+  --bg2: #120e26;
+  --panel: #17122f;
+  --line: #3b2f6e;
+  --text: #ebdfb8;
+  --dim: #a79c7e;
+  --accent: #35f0e0;
+  --alert: #ff3d8b;
+  --gold: #f4b93a;
+  --gold-ink: #f4b93a;
+  --on-gold: #1a1204;
+  --glow: rgba(244, 185, 58, 0.55);
+  --map-sea: #0d0a1c;
+  --map-land: #1a1435;
+  --map-coast: #54448c;
+  --f-display: 'Cinzel', 'Trajan Pro', Georgia, serif;
+  --f-body: 'Alegreya Sans', 'Segoe UI', system-ui, sans-serif;
+  --f-mono: 'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace;
+  color-scheme: dark;
+}
+
+:root.restored {
+  --bg: #f6f0e0;
+  --bg2: #ece3cb;
+  --panel: #fffaf0;
+  --line: #d8c692;
+  --text: #1b2a5c;
+  --dim: #4f5a86;
+  --accent: #1f4fb8;
+  --alert: #1f4fb8;
+  --gold: #d99a14;
+  --gold-ink: #855600;
+  --on-gold: #1a1204;
+  --glow: rgba(217, 154, 20, 0.5);
+  --map-sea: #e5ddc8;
+  --map-land: #fffcf4;
+  --map-coast: #c2b180;
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+*, *::before, *::after {
+  transition: background-color 0.8s ease, color 0.8s ease, border-color 0.8s ease, fill 0.8s ease, stroke 0.8s ease;
+}
+
+html { background: var(--bg); }
+body {
+  margin: 0;
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(900px 520px at 80% 0%, color-mix(in srgb, var(--accent) 13%, transparent), transparent 70%),
+    radial-gradient(700px 500px at 0% 60%, color-mix(in srgb, var(--gold) 9%, transparent), transparent 70%);
+  color: var(--text);
+  font-family: var(--f-body);
+  font-size: 17px;
+  line-height: 1.5;
+  padding-block: 8px 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  opacity: 0.35;
+  background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.22) 0 1px, transparent 1px 3px);
+}
+:root.restored body::after { display: none; }
+
+.wrap { max-width: 1200px; margin: 0 auto; overflow-x: clip; }
+:root:not(.restored) [data-when="restored"] { display: none; }
+:root.restored [data-when="curse"] { display: none; }
+
+/* Cabecera */
+.bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px 28px;
+  padding-block: 14px;
+}
+.brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.brand svg { width: 42px; height: 42px; flex: none; }
+.brand .logo-stroke { stroke: var(--gold-ink); fill: none; stroke-width: 2.2; }
+.brand .logo-dot { fill: var(--accent); }
+.brand b { display: block; font: 700 1rem/1.1 var(--f-display); letter-spacing: 0.14em; text-transform: uppercase; }
+.brand small { display: block; font: 500 11px var(--f-mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); }
+
+.stats { display: flex; flex-wrap: wrap; gap: 12px 28px; margin: 0; }
+.stat dt { font: 500 10.5px var(--f-mono); letter-spacing: 0.16em; text-transform: uppercase; color: var(--dim); }
+.stat dd { margin: 2px 0 0; font: 600 13px var(--f-mono); letter-spacing: 0.04em; font-variant-numeric: tabular-nums; white-space: nowrap; }
+#status { color: var(--alert); }
+:root.restored #status { color: var(--gold-ink); }
+#passMini { color: var(--gold-ink); }
+
+/* Grecas decorativas griegas */
+.meander {
+  height: 20px;
+  background: var(--gold);
+  opacity: 0.5;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='20' viewBox='0 0 22 20'%3E%3Cpath d='M0 1H22M1 1V19M21 1V13H8V7H15V10' fill='none' stroke='black' stroke-width='2'/%3E%3C/svg%3E") repeat-x center/auto 100%;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='20' viewBox='0 0 22 20'%3E%3Cpath d='M0 1H22M1 1V19M21 1V13H8V7H15V10' fill='none' stroke='black' stroke-width='2'/%3E%3C/svg%3E") repeat-x center/auto 100%;
+}
+
+.ticker {
+  overflow: hidden;
+  border-block: 1px solid var(--line);
+  font: 500 12px/1 var(--f-mono);
+  letter-spacing: 0.04em;
+  color: var(--dim);
+  padding-block: 9px;
+  white-space: nowrap;
+  margin-top: 10px;
+}
+.track { display: flex; width: max-content; animation: tick 70s linear infinite; }
+.track span { padding-right: 3.2em; }
+.track b { color: var(--alert); font-weight: 600; }
+:root.restored .track b { color: var(--gold-ink); }
+@keyframes tick { to { transform: translateX(-50%); } }
+
+/* Hero y Encabezado */
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 640px);
+  gap: 32px 40px;
+  align-items: center;
+  padding-block: 32px 20px;
+}
+.kicker { font: 600 12px var(--f-mono); letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold-ink); margin: 0 0 16px; }
+h1.glitch {
+  position: relative;
+  margin: 0;
+  font-family: var(--f-display);
+  font-weight: 900;
+  font-size: clamp(2.4rem, 8vw, 4.2rem);
+  line-height: 0.98;
+  letter-spacing: 0.01em;
+  text-shadow: 2px 0 color-mix(in srgb, var(--alert) 55%, transparent), -2px 0 color-mix(in srgb, var(--accent) 55%, transparent);
+}
+:root.restored h1.glitch { text-shadow: none; }
+h1 .exe { display: block; color: var(--gold-ink); }
+
+.glitch::before, .glitch::after {
+  content: attr(data-text);
+  white-space: pre;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  clip-path: inset(0 0 100% 0);
+}
+.glitch::before { color: var(--accent); animation: gl1 5.4s steps(1) infinite; }
+.glitch::after { color: var(--alert); animation: gl2 5.4s steps(1) infinite 0.7s; }
+:root.restored .glitch::before, :root.restored .glitch::after { display: none; }
+
+@keyframes gl1 {
+  0%, 91%, 100% { clip-path: inset(0 0 100% 0); transform: none; }
+  92% { clip-path: inset(12% 0 58% 0); transform: translate(-5px, 0); }
+  94% { clip-path: inset(58% 0 12% 0); transform: translate(4px, 0); }
+  96% { clip-path: inset(30% 0 40% 0); transform: translate(-2px, 0); }
+}
+@keyframes gl2 {
+  0%, 90%, 100% { clip-path: inset(0 0 100% 0); transform: none; }
+  91% { clip-path: inset(40% 0 30% 0); transform: translate(5px, 0); }
+  93% { clip-path: inset(5% 0 75% 0); transform: translate(-4px, 0); }
+  95% { clip-path: inset(70% 0 5% 0); transform: translate(3px, 0); }
+}
+
+.sub { font: 600 clamp(0.85rem, 2.6vw, 1.05rem)/1.3 var(--f-display); letter-spacing: 0.16em; text-transform: uppercase; margin: 20px 0 0; }
+.lede { max-width: 52ch; margin: 16px 0 0; font-size: 1.08rem; }
+.mis { display: inline-block; transform: translate(-1px, 2px) skewX(-8deg); color: var(--alert); }
+.errbox {
+  margin: 18px 0 0;
+  padding: 10px 14px;
+  border: 1px solid var(--alert);
+  max-width: 52ch;
+  font: 500 12px/1.5 var(--f-mono);
+  color: var(--alert);
+  transform: translateX(3px);
+  background: color-mix(in srgb, var(--alert) 8%, transparent);
+}
+.hint { margin: 16px 0 0; font: 500 12px var(--f-mono); letter-spacing: 0.06em; color: var(--dim); }
+
+/* ==========================================================================
+   MAPA GEOGRÁFICO DE LA HÉLADE (ANTIGUA GRECIA)
+   ========================================================================== */
+.mapwrap {
+  position: relative;
+  width: 100%;
+  max-width: 640px;
+  justify-self: center;
+  border: 1px solid var(--line);
+  background: var(--map-sea);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+}
+
+.mapwrap-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: var(--panel);
+  border-bottom: 1px solid var(--line);
+  font: 600 11px var(--f-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold-ink);
+}
+
+.map-status-pill {
+  color: var(--alert);
+  border: 1px solid var(--alert);
+  padding: 1px 6px;
+  font-size: 10px;
+}
+:root.restored .map-status-pill {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+#map {
+  position: relative;
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Elementos vectoriales del mapa */
+.map-land { fill: var(--map-land); stroke: var(--map-coast); stroke-width: 1.6; stroke-linejoin: round; }
+.map-grid-line { stroke: var(--line); stroke-width: 0.8; stroke-dasharray: 2 6; opacity: 0.6; }
+.map-compass-line { stroke: var(--gold); stroke-width: 1.2; opacity: 0.7; }
+.map-compass-text { font: 700 11px var(--f-display); fill: var(--gold-ink); text-anchor: middle; dominant-baseline: central; }
+.map-region { font: 700 11px var(--f-display); fill: var(--dim); letter-spacing: 0.18em; opacity: 0.55; pointer-events: none; }
+
+/* Enlaces entre nodos en el mapa */
+.link { stroke: var(--alert); stroke-width: 1.6; stroke-dasharray: 4 6; opacity: 0.4; }
+.link.on { stroke: var(--gold); stroke-dasharray: none; opacity: 1; stroke-width: 2.4; filter: drop-shadow(0 0 4px var(--glow)); }
+
+/* Nodos interactivos */
+.node { cursor: pointer; outline: none; }
+.node .disc { fill: var(--bg2); stroke: var(--alert); stroke-width: 2; transition: transform 0.2s ease; }
+.node .num { font: 700 14px var(--f-display); fill: var(--text); text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+.node .halo { fill: none; stroke: var(--accent); stroke-width: 2; stroke-dasharray: 3 4; opacity: 0; }
+.node:hover .halo, .node:focus-visible .halo { opacity: 1; }
+.node:hover .disc, .node:focus-visible .disc { stroke: var(--accent); fill: var(--panel); }
+.node .lab { font: 500 10.5px var(--f-mono); letter-spacing: 0.04em; fill: var(--dim); dominant-baseline: central; pointer-events: none; }
+
+.node.done .disc { fill: var(--gold); stroke: var(--gold); filter: drop-shadow(0 0 8px var(--glow)); }
+.node.done .num { fill: var(--on-gold); }
+.node.done .lab { fill: var(--gold-ink); }
+
+/* Lectura de información central/inferior del mapa */
+.map-caption-bar {
+  padding: 10px 14px;
+  background: var(--panel);
+  border-top: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font: 500 12px var(--f-mono);
+  gap: 10px;
+}
+.map-caption-title { font-weight: 700; color: var(--gold-ink); font-family: var(--f-display); font-size: 13px; }
+.map-caption-tag { color: var(--alert); text-transform: uppercase; letter-spacing: 0.08em; }
+:root.restored .map-caption-tag { color: var(--accent); }
+
+/* Lista de trabajos */
+h2.sec { font: 700 1.35rem/1.2 var(--f-display); letter-spacing: 0.08em; text-transform: uppercase; margin: 0; }
+.secnote { margin: 6px 0 0; color: var(--dim); }
+.trials { margin-top: 44px; }
+.tl {
+  list-style: none;
+  margin: 18px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 310px), 1fr));
+  gap: 12px;
+}
+
+.tile {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  text-align: left;
+  font: inherit;
+  color: var(--text);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  cursor: pointer;
+}
+.tile:hover { border-color: var(--accent); }
+.tile:focus-visible, .btn:focus-visible, .opt:focus-visible, .line:focus-visible, .pair:focus-visible, .pad:focus-visible, .spot:focus-visible, .bird:focus-visible, .deer:focus-visible, .x:focus-visible, .cin:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.tgr {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--alert);
+  font: 700 1.25rem var(--f-display);
+}
+.tbody { display: flex; flex-direction: column; min-width: 0; }
+.tname { font: 600 1.05rem/1.25 var(--f-body); }
+.ttag { font: 500 11px var(--f-mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--dim); }
+.tst { font: 600 11px var(--f-mono); letter-spacing: 0.08em; color: var(--alert); text-align: right; }
+
+.tile.done { border-color: var(--gold); }
+.tile.done .tgr { background: var(--gold); color: var(--on-gold); border-color: var(--gold); }
+.tile.done .tst { color: var(--gold-ink); }
+
+/* Desbloqueo y Contraseña */
+.unlock { margin-top: 44px; padding: 24px; border: 1px solid var(--gold); background: var(--panel); }
+.unlock p { margin: 8px 0 0; max-width: 64ch; }
+.slots { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 6px; max-width: 780px; margin: 20px 0 18px; }
+.slot { display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 0; }
+.sin {
+  width: 100%;
+  min-width: 0;
+  height: 52px;
+  padding: 0;
+  text-align: center;
+  font: 600 1.15rem var(--f-mono);
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 0;
+  text-transform: uppercase;
+}
+.sin:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.sin.locked {
+  border-color: var(--gold);
+  color: var(--gold-ink);
+  background: color-mix(in srgb, var(--gold) 14%, var(--bg));
+}
+.sgr { font: 600 11px var(--f-display); color: var(--dim); }
+
+.actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.btn {
+  font: 700 0.95rem var(--f-display);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: var(--gold);
+  color: var(--on-gold);
+  border: 0;
+  border-radius: 0;
+  padding: 13px 22px;
+  min-height: 46px;
+  cursor: pointer;
+  box-shadow: 4px 4px 0 var(--line);
+}
+.btn:hover { transform: translate(-1px, -1px); }
+.btn.ghost { background: transparent; color: var(--text); border: 1px solid var(--line); box-shadow: none; }
+.btn:disabled { opacity: 0.5; cursor: default; }
+
+.msg { margin: 14px 0 0; min-height: 1.6em; font: 500 0.95rem var(--f-mono); }
+.msg.err { color: var(--alert); }
+.msg.ok { color: var(--gold-ink); }
+
+/* Sección Equipo */
+.team { margin-top: 48px; }
+.crew { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap: 24px 32px; margin: 18px 0 0; padding: 0; list-style: none; }
+.crew li { padding-top: 12px; border-top: 2px solid var(--gold); }
+.crew b { display: block; font: 700 1.05rem var(--f-display); letter-spacing: 0.06em; }
+.crew .role { display: block; margin: 2px 0 6px; font: 500 11.5px var(--f-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold-ink); }
+.crew p { margin: 0; color: var(--dim); font-size: 0.98rem; }
+.foot { margin: 36px 0 12px; font: 500 11.5px/1.6 var(--f-mono); letter-spacing: 0.04em; color: var(--dim); }
+
+/* Fogonazo de restauración */
+.flash { position: fixed; inset: 0; pointer-events: none; z-index: 60; opacity: 0; background: radial-gradient(circle at 50% 45%, #fffbe8, #f4b93a 55%, #fff6d6); }
+.flash.go { animation: flash 1.4s ease-out; }
+@keyframes flash { 0% { opacity: 0; } 30% { opacity: 1; } 100% { opacity: 0; } }
+
+.shake { animation: shake 0.35s; }
+@keyframes shake { 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+
+/* Diálogo modal de reto */
+dialog {
+  width: 100%;
+  max-width: min(680px, calc(100vw - 24px));
+  max-height: calc(100dvh - 24px);
+  overflow: auto;
+  padding: 0;
+  border: 1px solid var(--gold);
+  border-radius: 0;
+  background: var(--panel);
+  color: var(--text);
+  box-shadow: 0 0 40px var(--glow);
+}
+dialog::backdrop { background: rgba(5, 3, 12, 0.85); }
+.dhead { display: flex; align-items: center; gap: 14px; padding: 18px 20px 12px; }
+.dgr { flex: none; display: grid; place-items: center; width: 52px; height: 52px; border: 2px solid var(--gold); color: var(--gold-ink); font: 700 1.5rem var(--f-display); }
+.dhead > div { flex: 1; min-width: 0; }
+.dtag { margin: 0; font: 500 11px var(--f-mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--alert); }
+:root.restored .dtag { color: var(--accent); }
+.dhead h2 { margin: 2px 0 0; font: 700 1.3rem/1.2 var(--f-display); }
+.x { flex: none; width: 40px; height: 40px; background: transparent; color: var(--text); border: 1px solid var(--line); border-radius: 0; font: 400 1.4rem/1 var(--f-body); cursor: pointer; }
+.dstory { margin: 0; padding: 0 20px 14px; color: var(--dim); }
+.dbody { padding: 0 20px 8px; }
+.fb { margin: 0; padding: 6px 20px 18px; min-height: 2.4em; font: 500 0.9rem var(--f-mono); }
+.fb.err { color: var(--alert); }
+.fb.ok { color: var(--gold-ink); }
+
+/* Componentes de retos interactivos */
+.qlabel { margin: 0 0 6px; font: 500 11px var(--f-mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); }
+.q { margin: 0 0 10px; font-size: 1.05rem; }
+.code { margin: 0 0 12px; padding: 12px 14px; background: var(--bg); border: 1px solid var(--line); font: 400 13px/1.55 var(--f-mono); overflow-x: auto; white-space: pre; }
+.opts, .pool { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr)); gap: 8px; }
+.opt, .line, .pair { font: 500 0.92rem var(--f-mono); text-align: left; padding: 12px 14px; background: var(--bg); color: var(--text); border: 1px solid var(--line); border-radius: 0; cursor: pointer; min-height: 44px; }
+.line { white-space: pre; }
+.opt:hover:not(:disabled), .line:hover:not(:disabled), .pair:hover:not(:disabled) { border-color: var(--accent); }
+.opt.ok, .pair.ok { border-color: var(--gold); background: color-mix(in srgb, var(--gold) 20%, var(--bg)); }
+.opt.bad, .line.bad, .pair.bad { border-color: var(--alert); animation: shake 0.35s; }
+.opt.bad { color: var(--dim); text-decoration: line-through; }
+.line.used { opacity: 0.35; }
+.placed { min-height: 5.6em; }
+.meter { margin: 0 0 10px; font: 500 12px var(--f-mono); letter-spacing: 0.08em; color: var(--dim); }
+
+.arena { position: relative; height: 260px; overflow: hidden; border: 1px dashed var(--line); background: repeating-linear-gradient(90deg, transparent 0 23px, color-mix(in srgb, var(--line) 50%, transparent) 23px 24px); }
+.deer { position: absolute; left: 10px; top: 10px; width: 52px; height: 52px; padding: 8px; border: 2px solid var(--gold); border-radius: 50%; background: var(--bg); color: var(--gold-ink); cursor: pointer; transition: left 0.22s ease, top 0.22s ease; }
+.deer svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+.dirt { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 6px; touch-action: none; }
+.spot { padding: 12px 6px; font: 500 11px var(--f-mono); overflow-wrap: anywhere; color: var(--text); background: color-mix(in srgb, var(--alert) 18%, var(--bg)); border: 1px solid var(--alert); border-radius: 0; cursor: pointer; touch-action: none; }
+.spot.clean { opacity: 0.3; border-color: var(--gold); background: var(--bg); }
+
+.birds { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+.bird { font: 500 0.95rem var(--f-mono); padding: 10px 14px; color: var(--text); background: var(--bg); border: 1px solid var(--line); border-radius: 0; cursor: pointer; animation: flutter 3s ease-in-out infinite; animation-delay: var(--d, 0s); }
+.bird.caught { opacity: 0.35; text-decoration: line-through; border-color: var(--gold); animation: none; }
+@keyframes flutter { 50% { transform: translateY(-4px); } }
+
+.pads { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+.pad { --c: var(--gold); height: 84px; font: 700 0.9rem var(--f-display); letter-spacing: 0.1em; text-transform: uppercase; color: var(--c); background: var(--bg); border: 2px solid var(--c); border-radius: 0; cursor: pointer; }
+.pad.p0 { --c: var(--gold); }
+.pad.p1 { --c: var(--accent); }
+.pad.p2 { --c: var(--alert); }
+.pad.p3 { --c: var(--text); }
+.pad:disabled { opacity: 0.55; cursor: default; }
+.pad.lit { opacity: 1; background: var(--c); color: var(--bg); box-shadow: 0 0 22px var(--c); }
+
+.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.col { display: grid; gap: 8px; align-content: start; }
+.pair.sel { border-color: var(--gold); background: color-mix(in srgb, var(--gold) 14%, var(--bg)); }
+.pair.desc { font-family: var(--f-body); font-size: 0.98rem; }
+
+.cipher { margin: 0 0 10px; padding: 16px; text-align: center; font: 700 clamp(1.4rem, 7vw, 2rem) var(--f-mono); letter-spacing: 0.22em; color: var(--gold-ink); border: 1px dashed var(--line); }
+.dim { color: var(--dim); margin: 0 0 12px; }
+.cform { display: flex; flex-wrap: wrap; gap: 10px; }
+.cin { flex: 1 1 180px; min-width: 0; padding: 12px; font: 600 1rem var(--f-mono); text-transform: uppercase; color: var(--text); background: var(--bg); border: 1px solid var(--line); border-radius: 0; }
+
+.reward { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 18px; align-items: center; }
+.glyph { display: grid; place-items: center; width: 96px; height: 96px; border: 2px solid var(--gold); font: 900 4.2rem/1 var(--f-display); color: var(--gold-ink); box-shadow: 0 0 24px var(--glow); }
+.reward p { margin: 0 0 6px; }
+.reward .rt { font: 700 1.1rem var(--f-display); letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold-ink); }
+.reward .btn { grid-column: 1 / -1; justify-self: start; }
+
+@media (max-width: 900px) {
+  .hero { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 560px) {
+  .unlock { padding: 16px; }
+  .slots { gap: 4px 3px; }
+  .sin { font-size: 1rem; }
+  .cols { grid-template-columns: 1fr; }
+  .glyph { width: 72px; height: 72px; font-size: 3rem; }
+  .node .lab { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .track { width: auto; }
+}
+</style>
+</head>
+<body>
+
+<div class="flash" id="flash" aria-hidden="true"></div>
+
+<div class="wrap">
+  <!-- Cabecera -->
+  <header class="bar">
+    <div class="brand">
+      <svg viewBox="0 0 40 40" aria-hidden="true">
+        <path class="logo-stroke" d="M7 7H33M9 11H31M13 11V31M20 11V31M27 11V31M6 35H34M9 31H31"/>
+        <path class="logo-stroke" d="M7 7H3V15M33 7H37V15"/>
+        <circle class="logo-dot" cx="3" cy="17" r="2"/>
+        <circle class="logo-dot" cx="37" cy="17" r="2"/>
+      </svg>
+      <div><b>Olympus Tech Solutions</b><small>Grupo 4 // Escape Room DAW</small></div>
+    </div>
+    <dl class="stats">
+      <div class="stat"><dt>Sistema</dt><dd id="status">MALDECIDO / CORRUPTO</dd></div>
+      <div class="stat"><dt>Trabajos</dt><dd id="count">0/12</dd></div>
+      <div class="stat"><dt>Contraseña</dt><dd id="passMini">_ _ _ _ _ _ _ _ _ _ _ _</dd></div>
+    </dl>
+  </header>
+
+  <div class="meander" aria-hidden="true"></div>
+  <div class="ticker" aria-hidden="true"><div class="track" id="track"></div></div>
+
+  <main>
+    <!-- Hero con introducción y Mapa Geográfico de la Hélade -->
+    <section class="hero">
+      <div class="intro">
+        <p class="kicker">Los 12 trabajos del código</p>
+        <h1 class="glitch" data-text="HERACLES&#10;.EXE">HERACLES<span class="exe">.EXE</span></h1>
+        <p class="sub">
+          <span data-when="curse">El Olimpo Digital está maldito</span>
+          <span data-when="restored">El Olimpo Digital vuelve a brillar</span>
+        </p>
+        <p class="lede" data-when="curse">Un atacante de la antigüedad ha desatado una maldición algorítmica sobre el templo sagrado. Doce monstruos bloquean cada sección técnica del sistema y la pantalla se muestra como un <span class="mis">papiro averiado</span>. Supera los doce trabajos, reúne los doce caracteres de la contraseña y restaura el Olimpo.</p>
+        <p class="lede" data-when="restored">Las doce hazañas están cumplidas. La maldición se ha disipado, los estilos cargan de nuevo y el templo vuelve a estar en pie. Heracles puede descansar.</p>
+        <p class="errbox" data-when="curse" aria-hidden="true">ERROR 0x48 // MALEDICTIO.css no encontrado // PSI fuente desalineada en el friso</p>
+        <p class="hint" data-when="curse">Pulsa un nodo en el mapa geográfico o un trabajo de la lista para empezar.</p>
+      </div>
+
+      <!-- Contenedor del Mapa de Grecia / Hélade -->
+      <div class="mapwrap">
+        <div class="mapwrap-header">
+          <span>Mapa de la Hélade // Grecia Antigua</span>
+          <span class="map-status-pill" id="mapPill">12 Nodos Bloqueados</span>
+        </div>
+
+        <svg id="map" viewBox="0 0 840 600" role="group" aria-label="Mapa geográfico de los doce trabajos de Heracles en la Hélade">
+          <!-- Fondo de coordenadas y retícula marítima -->
+          <line x1="40" y1="120" x2="800" y2="120" class="map-grid-line" />
+          <line x1="40" y1="240" x2="800" y2="240" class="map-grid-line" />
+          <line x1="40" y1="360" x2="800" y2="360" class="map-grid-line" />
+          <line x1="40" y1="480" x2="800" y2="480" class="map-grid-line" />
+          <line x1="160" y1="40" x2="160" y2="560" class="map-grid-line" />
+          <line x1="320" y1="40" x2="320" y2="560" class="map-grid-line" />
+          <line x1="480" y1="40" x2="480" y2="560" class="map-grid-line" />
+          <line x1="640" y1="40" x2="640" y2="560" class="map-grid-line" />
+
+          <!-- Rosa de los vientos en el noroeste (Vector puro sin emojis) -->
+          <g transform="translate(85, 75)">
+            <circle cx="0" cy="0" r="32" fill="none" stroke="var(--line)" stroke-dasharray="2 4" />
+            <line x1="0" y1="-38" x2="0" y2="38" class="map-compass-line" />
+            <line x1="-38" y1="0" x2="38" y2="0" class="map-compass-line" />
+            <polygon points="0,-36 4,-10 0,0 -4,-10" fill="var(--gold-ink)" />
+            <polygon points="0,36 4,10 0,0 -4,10" fill="var(--dim)" />
+            <polygon points="36,0 10,4 0,0 10,-4" fill="var(--dim)" />
+            <polygon points="-36,0 -10,4 0,0 -10,-4" fill="var(--dim)" />
+            <text x="0" y="-44" class="map-compass-text">N</text>
+            <text x="46" y="1" class="map-compass-text">E</text>
+            <text x="0" y="47" class="map-compass-text">S</text>
+            <text x="-46" y="1" class="map-compass-text">O</text>
+          </g>
+
+          <!-- Geografía costera de Grecia continental y Tracia -->
+          <path class="map-land" d="
+            M 190,140
+            C 230,130 270,120 320,130
+            C 360,140 400,120 440,110
+            C 490,100 550,85 620,95
+            C 660,100 680,120 650,145
+            C 610,165 570,160 540,185
+            C 510,210 470,225 440,240
+            C 415,255 400,280 375,300
+            C 350,310 320,305 305,295
+            C 280,280 250,265 220,245
+            C 195,225 180,180 190,140 Z" />
+
+          <!-- Geografía de la Península del Peloponeso -->
+          <path class="map-land" d="
+            M 290,320
+            C 270,335 240,360 245,400
+            C 250,425 275,445 285,465
+            C 295,485 305,515 325,525
+            C 335,515 350,485 355,465
+            C 370,480 385,510 395,505
+            C 400,485 385,455 390,440
+            C 415,435 435,405 420,375
+            C 405,355 385,355 375,340
+            C 365,325 350,325 340,320
+            C 325,315 305,315 290,320 Z" />
+
+          <!-- Isla de Creta -->
+          <path class="map-land" d="
+            M 410,545
+            C 440,540 510,540 560,545
+            C 580,550 570,565 530,565
+            C 480,565 430,560 410,555
+            C 400,552 400,548 410,545 Z" />
+
+          <!-- Islas del Mar Egeo (Cícladas y Espóradas) -->
+          <circle cx="480" cy="350" r="10" class="map-land" />
+          <circle cx="515" cy="380" r="12" class="map-land" />
+          <circle cx="550" cy="410" r="9" class="map-land" />
+          <circle cx="460" cy="420" r="11" class="map-land" />
+          <circle cx="530" cy="330" r="8" class="map-land" />
+          <circle cx="610" cy="270" r="14" class="map-land" />
+
+          <!-- Recuadros de regiones remotas mitológicas (Occidente y Ponto Euxino) -->
+          <rect x="35" y="340" width="125" height="215" fill="none" stroke="var(--line)" stroke-dasharray="2 4" />
+          <text x="97" y="358" font-family="var(--f-mono)" font-size="9" fill="var(--dim)" text-anchor="middle">OCCIDENTE LEJANO</text>
+
+          <rect x="670" y="70" width="145" height="135" fill="none" stroke="var(--line)" stroke-dasharray="2 4" />
+          <text x="742" y="88" font-family="var(--f-mono)" font-size="9" fill="var(--dim)" text-anchor="middle">PONTO EUXINO</text>
+
+          <!-- Rótulos geográficos clásicos -->
+          <text x="340" y="220" class="map-region">H É L A D E</text>
+          <text x="310" y="420" class="map-region">PELOPONESO</text>
+          <text x="500" y="300" class="map-region">MAR EGEO</text>
+          <text x="475" y="580" class="map-region">CRETA</text>
+          <text x="560" y="125" class="map-region">TRACIA</text>
+
+          <!-- Capa de líneas que conectan los 12 trabajos -->
+          <g id="mapLinks"></g>
+
+          <!-- Capa de los 12 nodos mitológicos -->
+          <g id="mapNodes"></g>
+        </svg>
+
+        <!-- Barra inferior informativa del mapa al interactuar -->
+        <div class="map-caption-bar">
+          <div id="mapCapTitle" class="map-caption-title">Selecciona un trabajo en el mapa</div>
+          <div id="mapCapTag" class="map-caption-tag">[ PENDIENTE ]</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Lista de los 12 trabajos -->
+    <section class="trials" aria-labelledby="hTrials">
+      <h2 class="sec" id="hTrials">Los doce trabajos</h2>
+      <p class="secnote">Puedes resolverlos en cualquier orden. Cada uno entrega un carácter de la contraseña.</p>
+      <ul class="tl" id="list"></ul>
+    </section>
+
+    <!-- Zona de desbloqueo y contraseña -->
+    <section class="unlock" id="unlock" aria-labelledby="hUnlock">
+      <h2 class="sec" id="hUnlock">Zona de desbloqueo</h2>
+      <p>La contraseña final tiene 12 caracteres. Cada trabajo superado escribe el suyo en su casilla correspondiente. Las casillas libres se pueden rellenar a mano.</p>
+      <div class="slots" id="slots"></div>
+      <div class="actions">
+        <button class="btn" id="restore" type="button">Restaurar el Olimpo</button>
+        <button class="btn ghost" id="reset" type="button">Reiniciar demo</button>
+      </div>
+      <p class="msg" id="msg" role="status"></p>
+    </section>
+
+    <!-- Sección de equipo -->
+    <section class="team" aria-labelledby="hTeam">
+      <h2 class="sec" id="hTeam">Olympus Tech Solutions</h2>
+      <p class="secnote">Grupo 4 // Ixchel, Juan, Maialen y Paul</p>
+      <ul class="crew">
+        <li>
+          <b>Maialen</b>
+          <span class="role">Coordinación // IPE 2 // Frontend</span>
+          <p>Gestión del evento, narrativa del proyecto y propuesta de interfaz (DIW).</p>
+        </li>
+        <li>
+          <b>Paul</b>
+          <span class="role">Backend // DWES</span>
+          <p>Lógica en servidor con Flask, Jinja2 y ORM para validar los caracteres y la contraseña final.</p>
+        </li>
+        <li>
+          <b>Ixchel</b>
+          <span class="role">Frontend // DWEC // DIW</span>
+          <p>Interactividad del mapa de los 12 trabajos en JavaScript y efectos visuales de la web averiada.</p>
+        </li>
+        <li>
+          <b>Juan</b>
+          <span class="role">Despliegue y sistemas // DAW // SI</span>
+          <p>Máquina virtual, servidor web, copias de seguridad y conectividad del evento.</p>
+        </li>
+      </ul>
+      <p class="foot">Prototipo de interfaz DAW. La validación definitiva de la contraseña la realizará el servidor Flask.</p>
+    </section>
+  </main>
+
+  <div class="meander" aria-hidden="true"></div>
+</div>
+
+<!-- Diálogo modal para los retos de cada trabajo -->
+<dialog id="dlg" aria-labelledby="dTitle">
+  <div class="dhead">
+    <span class="dgr" id="dGr" aria-hidden="true"></span>
+    <div>
+      <p class="dtag" id="dTag"></p>
+      <h2 id="dTitle"></h2>
+    </div>
+    <button class="x" id="dClose" type="button" aria-label="Cerrar">&times;</button>
+  </div>
+  <p class="dstory" id="dStory"></p>
+  <div class="dbody" id="dBody"></div>
+  <p class="fb" id="dFb" role="status"></p>
+</dialog>
+
+<script>
+(()=>{
+'use strict';
+const PASS = 'HERACLES.EXE';
+const root = document.documentElement;
+const $ = s => document.querySelector(s);
+const rm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const NS = 'http://www.w3.org/2000/svg';
+
+function h(tag, attrs, ...kids) {
+  const e = document.createElement(tag);
+  for (const k in (attrs || {})) {
+    if (k === 'class') e.className = attrs[k];
+    else if (k.startsWith('on')) e.addEventListener(k.slice(2), attrs[k]);
+    else e.setAttribute(k, attrs[k]);
+  }
+  for (const x of kids.flat()) e.append(x);
+  return e;
+}
+
+function s(tag, attrs, ...kids) {
+  const e = document.createElementNS(NS, tag);
+  for (const k in (attrs || {})) e.setAttribute(k, attrs[k]);
+  kids.forEach(x => e.append(x));
+  return e;
+}
+
+const shuffle = a => {
+  const b = a.slice();
+  for (let i = b.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [b[i], b[j]] = [b[j], b[i]];
+  }
+  return b;
+};
+
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const shakeEl = el => {
+  el.classList.remove('shake');
+  void el.offsetWidth;
+  el.classList.add('shake');
+  setTimeout(() => el.classList.remove('shake'), 400);
+};
+
+/* ---------- Audio Sintetizado Web Audio API (Sin ficheros externos ni emojis) ---------- */
+class OlympusSfx {
+  constructor() {
+    this.ctx = null;
+  }
+  init() {
+    if (!this.ctx) {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      this.ctx = new AudioContext();
+    }
+    if (this.ctx.state === 'suspended') {
+      this.ctx.resume();
+    }
+  }
+  click() {
+    try {
+      this.init();
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(340, this.ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(180, this.ctx.currentTime + 0.07);
+      gain.gain.setValueAtTime(0.12, this.ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.07);
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      osc.start();
+      osc.stop(this.ctx.currentTime + 0.07);
+    } catch (e) {}
+  }
+  success() {
+    try {
+      this.init();
+      [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, this.ctx.currentTime + idx * 0.06);
+        gain.gain.setValueAtTime(0.14, this.ctx.currentTime + idx * 0.06);
+        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + idx * 0.06 + 0.45);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(this.ctx.currentTime + idx * 0.06);
+        osc.stop(this.ctx.currentTime + idx * 0.06 + 0.5);
+      });
+    } catch (e) {}
+  }
+  fanfare() {
+    try {
+      this.init();
+      const notes = [
+        { f: 523.25, d: 0.18, t: 0.0 },
+        { f: 659.25, d: 0.18, t: 0.18 },
+        { f: 783.99, d: 0.18, t: 0.36 },
+        { f: 1046.50, d: 0.45, t: 0.54 },
+        { f: 880.00, d: 0.22, t: 1.0 },
+        { f: 1046.50, d: 0.65, t: 1.25 }
+      ];
+      notes.forEach(n => {
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(n.f, this.ctx.currentTime + n.t);
+        gain.gain.setValueAtTime(0.2, this.ctx.currentTime + n.t);
+        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + n.t + n.d);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(this.ctx.currentTime + n.t);
+        osc.stop(this.ctx.currentTime + n.t + n.d + 0.05);
+      });
+    } catch (e) {}
+  }
+}
+const sfx = new OlympusSfx();
+
+/* ---------- Persistencia del progreso ---------- */
+const KEY = 'heracles-exe-done';
+const done = new Set();
+try {
+  const saved = JSON.parse(localStorage.getItem(KEY) || '[]');
+  if (Array.isArray(saved)) saved.forEach(v => {
+    if (Number.isInteger(v) && v >= 0 && v < 12) done.add(v);
+  });
+} catch (e) {}
+const save = () => {
+  try { localStorage.setItem(KEY, JSON.stringify([...done])); } catch (e) {}
+};
+
+/* ---------- Tipos de Desafíos Técnicos ---------- */
+function quiz(items) {
+  return ctx => {
+    let k = 0;
+    const show = () => {
+      const it = items[k];
+      const box = h('div', { class: 'quiz' });
+      box.append(h('p', { class: 'qlabel' }, it.label || `Pregunta ${k + 1} de ${items.length}`));
+      box.append(h('p', { class: 'q' }, it.q));
+      if (it.code) box.append(h('pre', { class: 'code' }, it.code));
+      const opts = h('div', { class: 'opts' });
+      it.opts.forEach((o, j) => {
+        const b = h('button', { class: 'opt', type: 'button' }, o);
+        b.addEventListener('click', () => {
+          sfx.click();
+          if (j === it.ans) {
+            b.classList.add('ok');
+            opts.querySelectorAll('button').forEach(x => x.disabled = true);
+            ctx.fb('Correcto.', 'ok');
+            ctx.later(() => {
+              k++;
+              if (k < items.length) { ctx.fb('', ''); show(); }
+              else ctx.win();
+            }, 700);
+          } else {
+            b.classList.add('bad');
+            b.disabled = true;
+            ctx.fb(it.hint || 'No es esa. Prueba otra opción.', 'err');
+          }
+        });
+        opts.append(b);
+      });
+      box.append(opts);
+      ctx.body.replaceChildren(box);
+    };
+    show();
+  };
+}
+
+function order(lines, hint) {
+  return ctx => {
+    let pos = 0;
+    let pool = shuffle(lines.map((t, i) => ({ t, i })));
+    let guard = 0;
+    while (pool.every((p, j) => p.i === j) && guard++ < 10) pool = shuffle(pool);
+    const placed = h('pre', { class: 'code placed' });
+    const refresh = () => {
+      placed.textContent = pos ? lines.slice(0, pos).join('\n') : '// El código aparecerá aquí';
+    };
+    refresh();
+    const wrap = h('div', { class: 'pool' });
+    pool.forEach(p => {
+      const b = h('button', { class: 'line', type: 'button' }, p.t);
+      b.addEventListener('click', () => {
+        sfx.click();
+        if (p.i === pos) {
+          pos++;
+          b.disabled = true;
+          b.classList.add('used');
+          refresh();
+          ctx.fb('', '');
+          if (pos === lines.length) {
+            ctx.fb('Hidra derrotada.', 'ok');
+            ctx.later(ctx.win, 800);
+          }
+        } else {
+          b.classList.add('bad');
+          ctx.fb(hint, 'err');
+          setTimeout(() => b.classList.remove('bad'), 400);
+        }
+      });
+      wrap.append(b);
+    });
+    ctx.body.replaceChildren(h('p', { class: 'q' }, 'Pulsa las líneas en el orden correcto.'), placed, wrap);
+  };
+}
+
+const ANTLER = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22V10M12 14C8 12 6 8 5 3M12 14C16 12 18 8 19 3M8.5 10L4 8M15.5 10L20 8"/></svg>';
+function deer(total) {
+  return ctx => {
+    let n = 0, delay = 1100, t = 0;
+    const count = h('p', { class: 'meter' }, `Capturas: 0/${total}`);
+    const arena = h('div', { class: 'arena' });
+    const b = h('button', { class: 'deer', type: 'button', 'aria-label': 'Cierva de Cerinea' });
+    b.innerHTML = ANTLER;
+    arena.append(b);
+    const jump = () => {
+      const w = Math.max(arena.clientWidth - 56, 0);
+      const hh = Math.max(arena.clientHeight - 56, 0);
+      b.style.left = Math.round(Math.random() * w) + 'px';
+      b.style.top = Math.round(Math.random() * hh) + 'px';
+    };
+    const loop = () => { jump(); t = setTimeout(loop, delay); };
+    b.addEventListener('click', () => {
+      sfx.click();
+      n++;
+      count.textContent = `Capturas: ${n}/${total}`;
+      clearTimeout(t);
+      if (n >= total) {
+        b.disabled = true;
+        ctx.fb('Cierva atrapada.', 'ok');
+        ctx.later(ctx.win, 800);
+        return;
+      }
+      delay = Math.max(480, delay - 110);
+      loop();
+    });
+    ctx.body.replaceChildren(count, arena);
+    ctx.fb('Haz clic en la cierva antes de que salte.', '');
+    loop();
+    ctx.reg(() => clearTimeout(t));
+  };
+}
+
+function dirt() {
+  return ctx => {
+    const JUNK = ['TODO', 'console.log', '// ???', 'var x', 'debugger', ';;', 'FIXME', 'temp2', 'alert()', '//old'];
+    const total = 24;
+    let left = total;
+    const meter = h('p', { class: 'meter' }, `Desecho restante: ${left}`);
+    const grid = h('div', { class: 'dirt' });
+    const clean = b => {
+      if (b.disabled) return;
+      sfx.click();
+      b.disabled = true;
+      b.classList.add('clean');
+      left--;
+      meter.textContent = left ? `Desecho restante: ${left}` : 'Todo limpio.';
+      if (!left) {
+        ctx.fb('Establos limpios.', 'ok');
+        ctx.later(ctx.win, 800);
+      }
+    };
+    for (let i = 0; i < total; i++) {
+      const b = h('button', { class: 'spot', type: 'button', 'aria-label': 'Mancha de código muerto' }, JUNK[i % JUNK.length]);
+      b.addEventListener('click', () => clean(b));
+      grid.append(b);
+    }
+    grid.addEventListener('pointermove', e => {
+      if (!(e.buttons & 1)) return;
+      const el = document.elementFromPoint(e.clientX, e.clientY);
+      if (el && el.classList && el.classList.contains('spot')) clean(el);
+    });
+    ctx.body.replaceChildren(meter, grid);
+    ctx.fb('Haz clic o arrastra sobre las manchas.', '');
+  };
+}
+
+function typos() {
+  return ctx => {
+    const items = shuffle([
+      ['fucntion', 1], ['consle.log', 1], ['retrun', 1], ['arr.lenght', 1], ['documnet', 1],
+      ['function', 0], ['console.log', 0], ['return', 0], ['arr.length', 0], ['document', 0], ['const', 0], ['addEventListener', 0]
+    ]);
+    let found = 0;
+    const meter = h('p', { class: 'meter' }, 'Erratas derribadas: 0/5');
+    const wrap = h('div', { class: 'birds' });
+    items.forEach(([t, bad], i) => {
+      const b = h('button', { class: 'bird', type: 'button', style: `--d:${(i % 5) * 0.4}s` }, t);
+      b.addEventListener('click', () => {
+        sfx.click();
+        if (bad) {
+          b.classList.add('caught');
+          b.disabled = true;
+          found++;
+          meter.textContent = `Erratas derribadas: ${found}/5`;
+          ctx.fb('', '');
+          if (found === 5) {
+            ctx.fb('Bandada derribada.', 'ok');
+            ctx.later(ctx.win, 800);
+          }
+        } else {
+          shakeEl(b);
+          ctx.fb('Esa palabra está bien escrita.', 'err');
+        }
+      });
+      wrap.append(b);
+    });
+    ctx.body.replaceChildren(meter, wrap);
+  };
+}
+
+function simon(len) {
+  return ctx => {
+    const names = ['Podargo', 'Lampón', 'Janto', 'Dinos'];
+    const seq = Array.from({ length: len }, () => Math.floor(Math.random() * 4));
+    let dead = false, lock = true, pos = 0;
+    ctx.reg(() => { dead = true; });
+    const pads = names.map((nm, k) => {
+      const b = h('button', { class: `pad p${k}`, type: 'button', disabled: 'true' }, nm);
+      b.addEventListener('click', () => press(k));
+      return b;
+    });
+    const play = async () => {
+      lock = true;
+      pos = 0;
+      pads.forEach(p => { p.disabled = true; });
+      ctx.fb('Memoriza el orden...', '');
+      await sleep(500);
+      for (const k of seq) {
+        if (dead) return;
+        pads[k].classList.add('lit');
+        sfx.click();
+        await sleep(520);
+        pads[k].classList.remove('lit');
+        await sleep(240);
+      }
+      if (dead) return;
+      pads.forEach(p => { p.disabled = false; });
+      lock = false;
+      ctx.fb('Tu turno.', '');
+    };
+    const press = async k => {
+      if (lock) return;
+      sfx.click();
+      pads[k].classList.add('lit');
+      setTimeout(() => pads[k].classList.remove('lit'), 180);
+      if (k === seq[pos]) {
+        pos++;
+        if (pos === len) {
+          lock = true;
+          ctx.fb('Las yeguas se calman.', 'ok');
+          ctx.later(ctx.win, 800);
+        }
+      } else {
+        lock = true;
+        ctx.fb('Orden incorrecto. Observa otra vez.', 'err');
+        await sleep(900);
+        if (!dead) play();
+      }
+    };
+    const start = h('button', { class: 'btn', type: 'button' }, `Empezar (${len} pasos)`);
+    start.addEventListener('click', () => { start.hidden = true; play(); });
+    ctx.body.replaceChildren(h('div', { class: 'pads' }, ...pads), start);
+  };
+}
+
+function pairs() {
+  return ctx => {
+    const P = [
+      ['<nav>', 'Menú de navegación'],
+      ['<footer>', 'Pie de página'],
+      ['<a>', 'Enlace a otra página'],
+      ['<img>', 'Imagen incrustada']
+    ];
+    let sel = null, left = P.length;
+    const L = h('div', { class: 'col' }), R = h('div', { class: 'col' });
+    const lb = P.map(([t], i) => {
+      const b = h('button', { class: 'pair', type: 'button' }, t);
+      b.addEventListener('click', () => {
+        if (b.disabled) return;
+        sfx.click();
+        lb.forEach(x => x.classList.remove('sel'));
+        sel = i;
+        b.classList.add('sel');
+        ctx.fb('', '');
+      });
+      L.append(b);
+      return b;
+    });
+    shuffle(P.map(([, d], i) => ({ d, i }))).forEach(o => {
+      const b = h('button', { class: 'pair desc', type: 'button' }, o.d);
+      b.addEventListener('click', () => {
+        if (b.disabled) return;
+        sfx.click();
+        if (sel === null) { ctx.fb('Elige primero una etiqueta.', 'err'); return; }
+        if (sel === o.i) {
+          lb[sel].disabled = true;
+          lb[sel].classList.remove('sel');
+          lb[sel].classList.add('ok');
+          b.disabled = true;
+          b.classList.add('ok');
+          sel = null;
+          left--;
+          ctx.fb('', '');
+          if (!left) {
+            ctx.fb('Cinturón entregado.', 'ok');
+            ctx.later(ctx.win, 800);
+          }
+        } else {
+          b.classList.add('bad');
+          ctx.fb('Esa no es su función.', 'err');
+          setTimeout(() => b.classList.remove('bad'), 400);
+        }
+      });
+      R.append(b);
+    });
+    ctx.body.replaceChildren(h('p', { class: 'q' }, 'Une cada etiqueta con su función.'), h('div', { class: 'cols' }, L, R));
+  };
+}
+
+function cipher(text, answer) {
+  return ctx => {
+    const inp = h('input', { id: 'cipherIn', class: 'cin', type: 'text', autocomplete: 'off', autocapitalize: 'characters', spellcheck: 'false', maxlength: '16', placeholder: 'Escribe el nombre', 'aria-label': 'Texto descifrado' });
+    const go = h('button', { class: 'btn', type: 'submit' }, 'Descifrar');
+    const form = h('form', { class: 'cform' }, inp, go);
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      sfx.click();
+      if (inp.value.trim().toUpperCase() === answer) {
+        inp.disabled = true;
+        go.disabled = true;
+        ctx.fb('Las manzanas son tuyas.', 'ok');
+        ctx.later(ctx.win, 800);
+      } else {
+        shakeEl(form);
+        ctx.fb('No coincide. Retrocede tres letras: la K pasa a ser H.', 'err');
+      }
+    });
+    ctx.body.replaceChildren(
+      h('p', { class: 'q' }, 'Texto cifrado:'),
+      h('p', { class: 'cipher' }, text),
+      h('p', { class: 'dim' }, 'Pista: cada letra avanzó 3 posiciones. Para descifrar, retrocede 3 (D vuelve a ser A).'),
+      form
+    );
+  };
+}
+
+/* ---------- Los 12 Trabajos de Heracles (Coordenadas en el Mapa Geográfico) ---------- */
+const T = [
+  { gr: 'Α', lab: 'León', name: 'El León de Nemea', tag: 'CSS', loc: 'Nemea (Argólida)',
+    mapX: 355, mapY: 360,
+    story: 'Ninguna flecha atraviesa la piel del león, y ninguna regla de estilo lo mueve de su guarida. Céntralo en el friso para debilitarlo.',
+    run: quiz([{ q: 'Falta la propiedad que centra al león en vertical dentro del contenedor flex.',
+      code: '.guarida {\n  display: flex;\n  justify-content: center;\n  ___: center;\n}',
+      opts: ['align-items', 'text-align', 'vertical-align', 'float'], ans: 0, hint: 'En flexbox, el eje cruzado se alinea con otra propiedad.' }]) },
+
+  { gr: 'Β', lab: 'Hidra', name: 'La Hidra de Lerna', tag: 'JavaScript // bucles', loc: 'Lerna (Golfo Argólico)',
+    mapX: 375, mapY: 395,
+    story: 'Por cada cabeza cortada nacen dos más, salvo que cada muñón se cauterice. Ordena el código para cortar las nueve cabezas.',
+    run: order(['for (let i = 0; i < 9; i++) {', '  cortarCabeza(i);', '  quemarMuñon(i);', '}'], 'Esa línea no va ahora. Primero se corta la cabeza y luego se quema el muñón.') },
+
+  { gr: 'Γ', lab: 'Cierva', name: 'La Cierva de Cerinea', tag: 'JavaScript // eventos', loc: 'Cerinea (Acaya)',
+    mapX: 320, mapY: 335,
+    story: 'La cierva corre más rápido que cualquier flecha y cada vez salta antes. Atrápala con un clic seis veces.',
+    run: deer(6) },
+
+  { gr: 'Δ', lab: 'Jabalí', name: 'El Jabalí de Erimanto', tag: 'HTML // accesibilidad', loc: 'Monte Erimanto',
+    mapX: 290, mapY: 365,
+    story: 'El jabalí arrasa el marcado y deja imágenes sin descripción. Repara la etiqueta para que un lector de pantalla pueda describirla.',
+    run: quiz([{ q: '¿Qué atributo falta en la imagen para que tenga texto alternativo?',
+      code: '<img src="jabali.png" ___="Jabalí de Erimanto">',
+      opts: ['alt', 'href', 'name', 'rel'], ans: 0, hint: 'Es el atributo que describe la imagen cuando no se puede ver.' }]) },
+
+  { gr: 'Ε', lab: 'Establos', name: 'Los Establos de Augías', tag: 'Código limpio', loc: 'Élide (Peloponeso)',
+    mapX: 255, mapY: 385,
+    story: 'Los establos acumulan décadas de código muerto. Barre todo el desecho: haz clic o arrastra sobre las manchas.',
+    run: dirt() },
+
+  { gr: 'Ζ', lab: 'Aves', name: 'Las Aves del Estínfalo', tag: 'Depuración', loc: 'Lago Estínfalo',
+    mapX: 340, mapY: 370,
+    story: 'Una bandada de aves de bronce ha anidado en el código. Derriba solo las cinco palabras mal escritas.',
+    run: typos() },
+
+  { gr: 'Η', lab: 'Toro', name: 'El Toro de Creta', tag: 'Flask // HTTP', loc: 'Isla de Creta',
+    mapX: 480, mapY: 545,
+    story: 'El toro se ha escapado del recinto y nadie sabe dónde está. Averigua qué responde el servidor cuando la ruta no existe.',
+    run: quiz([{ q: 'Un cliente pide /minotauro y esa ruta no está definida en la app Flask. ¿Qué código HTTP recibe?',
+      code: '@app.route("/toro")\ndef toro():\n    return "Mu", 200',
+      opts: ['200 OK', '301 Moved', '404 Not Found', '500 Server Error'], ans: 2, hint: 'La ruta no existe: el recurso no se encuentra.' }]) },
+
+  { gr: 'Θ', lab: 'Yeguas', name: 'Las Yeguas de Diomedes', tag: 'Memoria', loc: 'Tracia (Norte)',
+    mapX: 620, mapY: 125,
+    story: 'Las yeguas devoran a quien se distrae. Memoriza el orden en que se encabritan y repítelo.',
+    run: simon(5) },
+
+  { gr: 'Ι', lab: 'Cinturón', name: 'El Cinturón de Hipólita', tag: 'HTML semántico', loc: 'Temiscira (Ponto)',
+    mapX: 740, mapY: 145,
+    story: 'Hipólita entregará el cinturón si reconoces cada pieza del templo. Une cada etiqueta con su función.',
+    run: pairs() },
+
+  { gr: 'Κ', lab: 'Bueyes', name: 'Los Bueyes de Gerión', tag: 'JavaScript // tipos', loc: 'Eritia (Occidente)',
+    mapX: 95, mapY: 410,
+    story: 'Gerión tiene tres cuerpos y todos parecen el mismo buey. Descubre qué devuelve la comparación estricta.',
+    run: quiz([{ q: '¿Qué muestra la consola?', code: "console.log('3' === 3);",
+      opts: ['true', 'false', 'undefined', 'TypeError'], ans: 1, hint: 'El operador === compara el valor y también el tipo.' }]) },
+
+  { gr: 'Λ', lab: 'Manzanas', name: 'Las Manzanas de las Hespérides', tag: 'Criptografía', loc: 'Jardín del Atlas',
+    mapX: 95, mapY: 500,
+    story: 'El dragón Ladón vigila el jardín con un cifrado César. Descifra el nombre del héroe para entrar.',
+    run: cipher('KHUFXOHV', 'HERCULES') },
+
+  { gr: 'Μ', lab: 'Cerbero', name: 'Cerbero', tag: 'Python // SQL // Linux', loc: 'Cabo Ténaro (Hades)',
+    mapX: 355, mapY: 495,
+    story: 'El guardián del inframundo tiene tres cabezas y cada una exige una respuesta distinta. Calma a las tres.',
+    run: quiz([
+      { label: 'Cabeza 1 de 3 // Python', q: '¿Qué devuelve esta expresión?', code: 'len(["a", "b", "c"])', opts: ['2', '3', '4', 'Error'], ans: 1, hint: 'len cuenta los elementos de la lista.' },
+      { label: 'Cabeza 2 de 3 // SQL', q: '¿Qué palabra elimina las filas repetidas en un SELECT?', code: 'SELECT ___ nombre FROM monstruos;', opts: ['DISTINCT', 'UNIQUE', 'GROUP', 'DROP'], ans: 0, hint: 'Una de ellas se usa justo después de SELECT.' },
+      { label: 'Cabeza 3 de 3 // Linux', q: '¿Qué comando lista también los archivos ocultos?', opts: ['ls -a', 'ls -h', 'cd -a', 'rm -a'], ans: 0, hint: 'La opción viene de «all».' }
+    ]) }
+];
+
+/* ---------- Inicialización del Mapa Geográfico ---------- */
+const mapNodesG = $('#mapNodes');
+const mapLinksG = $('#mapLinks');
+const mapCapTitle = $('#mapCapTitle');
+const mapCapTag = $('#mapCapTag');
+const mapPill = $('#mapPill');
+
+const links = [];
+for (let i = 0; i < T.length; i++) {
+  const p1 = T[i];
+  const p2 = T[(i + 1) % T.length];
+  const l = s('line', { x1: p1.mapX, y1: p1.mapY, x2: p2.mapX, y2: p2.mapY, class: 'link' });
+  links.push(l);
+  mapLinksG.append(l);
+}
+
+const nodes = [];
+T.forEach((t, i) => {
+  const g = s('g', {
+    class: 'node',
+    transform: `translate(${t.mapX} ${t.mapY})`,
+    tabindex: '0',
+    role: 'button',
+    'aria-label': `Trabajo ${i + 1}: ${t.name}`
+  },
+    s('circle', { r: 24, class: 'halo' }),
+    s('circle', { r: 17, class: 'disc' }),
+    s('text', { class: 'num' }, t.gr),
+    s('text', { class: 'lab', x: 22, y: 1 }, t.lab)
+  );
+
+  const showCaption = () => {
+    mapCapTitle.textContent = `${t.gr} · ${t.name} (${t.loc})`;
+    mapCapTag.textContent = done.has(i) ? `[ RESUELTO: ${PASS[i]} ]` : `[ ${t.tag} ]`;
+  };
+  const clearCaption = () => {
+    mapCapTitle.textContent = 'Selecciona un trabajo en el mapa';
+    mapCapTag.textContent = '[ PENDIENTE ]';
+  };
+
+  g.addEventListener('click', () => { sfx.click(); openTrial(i); });
+  g.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      sfx.click();
+      openTrial(i);
+    }
+  });
+  g.addEventListener('pointerenter', showCaption);
+  g.addEventListener('pointerleave', clearCaption);
+  g.addEventListener('focus', showCaption);
+  g.addEventListener('blur', clearCaption);
+
+  nodes.push(g);
+  mapNodesG.append(g);
+});
+
+/* ---------- Lista de Trabajos (Grid) ---------- */
+const list = $('#list');
+const tiles = [];
+T.forEach((t, i) => {
+  const st = h('span', { class: 'tst' });
+  const b = h('button', { class: 'tile', type: 'button' },
+    h('span', { class: 'tgr' }, t.gr),
+    h('span', { class: 'tbody' },
+      h('span', { class: 'tname' }, t.name),
+      h('span', { class: 'ttag' }, `${t.tag} // ${t.loc}`)
+    ),
+    st
+  );
+  b.addEventListener('click', () => { sfx.click(); openTrial(i); });
+  tiles.push({ b, st });
+  list.append(h('li', {}, b));
+});
+
+/* ---------- Casillas de la Contraseña Divina ---------- */
+const slotsEl = $('#slots');
+const slots = [];
+function focusNext(i, d) {
+  let j = i + d;
+  while (j >= 0 && j < 12 && slots[j].readOnly) j += d;
+  if (j >= 0 && j < 12) slots[j].focus();
+}
+
+for (let i = 0; i < 12; i++) {
+  const inp = h('input', {
+    class: 'sin',
+    id: 'slot' + i,
+    type: 'text',
+    maxlength: '2',
+    autocomplete: 'off',
+    autocapitalize: 'characters',
+    spellcheck: 'false',
+    'aria-label': `Carácter ${i + 1} de 12`
+  });
+  inp.addEventListener('input', () => {
+    sfx.click();
+    inp.value = inp.value.slice(-1).toUpperCase();
+    if (inp.value) focusNext(i, 1);
+  });
+  inp.addEventListener('keydown', e => {
+    if (e.key === 'Backspace' && !inp.value) focusNext(i, -1);
+    else if (e.key === 'ArrowLeft') focusNext(i, -1);
+    else if (e.key === 'ArrowRight') focusNext(i, 1);
+    else if (e.key === 'Enter') restore();
+  });
+  inp.addEventListener('paste', e => {
+    const txt = ((e.clipboardData && e.clipboardData.getData('text')) || '').replace(/\s/g, '').toUpperCase();
+    if (!txt) return;
+    e.preventDefault();
+    sfx.click();
+    [...txt].slice(0, 12 - i).forEach((c, k) => {
+      const sl = slots[i + k];
+      if (!sl.readOnly) sl.value = c;
+    });
+  });
+  slots.push(inp);
+  slotsEl.append(h('label', { class: 'slot' }, inp, h('span', { class: 'sgr' }, T[i].gr)));
+}
+
+/* ---------- Estado y Ticker ---------- */
+const stEl = $('#status');
+const countEl = $('#count');
+const passEl = $('#passMini');
+const cursed = 'MALDECIDO / CORRUPTO';
+const ERR = [
+  ['ERR', '0x48 // hoja de estilos del templo no encontrada'],
+  ['WARN', 'fuente SIGMA desalineada en el friso principal'],
+  ['ERR', 'stack overflow en hidra.js:9'],
+  ['FATAL', 'el Olimpo Digital no responde'],
+  ['WARN', '12 monstruos bloquean 12 secciones del sistema']
+];
+const OKS = [
+  ['OK', '12/12 hazañas completadas'],
+  ['OK', 'hoja de estilos cargada'],
+  ['OK', 'fuentes alineadas'],
+  ['OK', 'el Olimpo Digital responde']
+];
+
+function ticker() {
+  const L = root.classList.contains('restored') ? OKS : ERR;
+  const mk = () => L.map(([k, t]) => h('span', {}, h('b', {}, k + ' '), t));
+  $('#track').replaceChildren(...mk(), ...mk());
+}
+
+function applyState() {
+  stEl.textContent = root.classList.contains('restored') ? 'PURIFICADO' : cursed;
+  ticker();
+}
+
+function update() {
+  const n = done.size;
+  countEl.textContent = `${n}/12`;
+  passEl.textContent = [...PASS].map((c, i) => done.has(i) ? c : '_').join(' ');
+
+  if (mapPill) {
+    mapPill.textContent = n === 12 ? '12 Nodos Restaurados' : `${12 - n} Nodos Bloqueados`;
+  }
+
+  nodes.forEach((g, i) => {
+    g.classList.toggle('done', done.has(i));
+    g.setAttribute('aria-label', `Trabajo ${i + 1}: ${T[i].name}. ${done.has(i) ? 'Superado' : 'Pendiente'}`);
+  });
+
+  links.forEach((l, i) => l.classList.toggle('on', done.has(i) && done.has((i + 1) % 12)));
+
+  tiles.forEach(({ b, st }, i) => {
+    b.classList.toggle('done', done.has(i));
+    st.textContent = done.has(i) ? `PURIFICADO [ ${PASS[i]} ]` : 'CORRUPTO';
+  });
+
+  slots.forEach((sl, i) => {
+    if (done.has(i)) {
+      sl.value = PASS[i];
+      sl.readOnly = true;
+      sl.classList.add('locked');
+    } else if (sl.classList.contains('locked')) {
+      sl.value = '';
+      sl.readOnly = false;
+      sl.classList.remove('locked');
+    }
+  });
+}
+
+/* ---------- Diálogo Modal y Recompensas ---------- */
+const dlg = $('#dlg'), dBody = $('#dBody'), dFb = $('#dFb');
+let cleanups = [];
+const fb = (t, k) => { dFb.textContent = t || ''; dFb.className = 'fb ' + (k || ''); };
+
+function reward(i, again) {
+  const c = PASS[i];
+  dBody.replaceChildren(h('div', { class: 'reward' },
+    h('div', { class: 'glyph', 'aria-hidden': 'true' }, c),
+    h('div', {},
+      h('p', { class: 'rt' }, again ? 'Trabajo ya superado' : 'Trabajo superado'),
+      h('p', {}, `Has obtenido ${c === '.' ? 'el punto' : 'el carácter'} [ ${c} ] para la casilla ${i + 1} de la contraseña.`),
+      h('p', { class: 'dim' }, done.size === 12 ? 'Tienes los doce caracteres. Dirígete a la zona de desbloqueo y restaura el Olimpo.' : `Llevas ${done.size} de 12 trabajos completados.`)
+    ),
+    h('button', { class: 'btn', type: 'button', onclick: () => dlg.close() }, 'Volver al mapa')
+  ));
+}
+
+function win(i) {
+  done.add(i);
+  save();
+  update();
+  cleanups.forEach(f => { try { f(); } catch (e) {} });
+  cleanups = [];
+  fb('', '');
+  sfx.success();
+  reward(i, false);
+}
+
+function openTrial(i) {
+  const t = T[i];
+  $('#dGr').textContent = t.gr;
+  $('#dTitle').textContent = t.name;
+  $('#dTag').textContent = `Trabajo ${i + 1} de 12 // ${t.tag} // ${t.loc}`;
+  $('#dStory').textContent = t.story;
+  cleanups.forEach(f => { try { f(); } catch (e) {} });
+  cleanups = [];
+  fb('', '');
+  if (!dlg.open) dlg.showModal();
+  if (done.has(i)) { reward(i, true); return; }
+  t.run({
+    body: dBody,
+    fb,
+    win: () => win(i),
+    reg: f => cleanups.push(f),
+    later: (f, ms) => { const x = setTimeout(f, ms); cleanups.push(() => clearTimeout(x)); }
+  });
+}
+
+dlg.addEventListener('close', () => {
+  cleanups.forEach(f => { try { f(); } catch (e) {} });
+  cleanups = [];
+  dBody.replaceChildren();
+  fb('', '');
+});
+$('#dClose').addEventListener('click', () => dlg.close());
+
+/* ---------- Restaurar y Reiniciar ---------- */
+const msgEl = $('#msg'), flash = $('#flash');
+const msg = (t, k) => { msgEl.textContent = t; msgEl.className = 'msg ' + (k || ''); };
+
+function restore() {
+  sfx.click();
+  if (root.classList.contains('restored')) {
+    msg('El Olimpo ya está restaurado.', 'ok');
+    return;
+  }
+  const v = slots.map(x => x.value.toUpperCase());
+  const filled = v.filter(Boolean).length;
+  if (filled < 12) {
+    msg(`Faltan ${12 - filled} caracteres. Supera más trabajos para revelarlos.`, 'err');
+    shakeEl(slotsEl);
+    return;
+  }
+  if (v.join('') !== PASS) {
+    msg('Esa contraseña no abre el templo. Revisa los caracteres escritos a mano.', 'err');
+    shakeEl(slotsEl);
+    return;
+  }
+  msg('Contraseña correcta. Las doce hazañas se cumplen...', 'ok');
+  sfx.fanfare();
+  flash.classList.add('go');
+  setTimeout(() => {
+    root.classList.add('restored');
+    applyState();
+  }, 420);
+  setTimeout(() => {
+    flash.classList.remove('go');
+    msg('El Olimpo ha sido restaurado.', 'ok');
+  }, 1500);
+}
+
+$('#restore').addEventListener('click', restore);
+$('#reset').addEventListener('click', () => {
+  sfx.click();
+  done.clear();
+  save();
+  slots.forEach(sl => {
+    sl.value = '';
+    sl.readOnly = false;
+    sl.classList.remove('locked');
+  });
+  root.classList.remove('restored');
+  msg('Demo reiniciada. La maldición ha vuelto.', '');
+  applyState();
+  update();
+});
+
+/* ---------- Efecto de texto corrupto en el status ---------- */
+function scramble() {
+  if (rm || root.classList.contains('restored')) return;
+  const g = 'SIGMAXIPSIOMEDELTATHETA#%';
+  let f = 0;
+  const iv = setInterval(() => {
+    f++;
+    if (f > 5) {
+      clearInterval(iv);
+      stEl.textContent = root.classList.contains('restored') ? 'PURIFICADO' : cursed;
+      return;
+    }
+    stEl.textContent = [...cursed].map(c => c === ' ' || c === '/' ? c : Math.random() < 0.35 ? g[Math.floor(Math.random() * g.length)] : c).join('');
+  }, 70);
+}
+setInterval(scramble, 4200);
+
+applyState();
+update();
+})();
+</script>
+
+</body>
+</html>

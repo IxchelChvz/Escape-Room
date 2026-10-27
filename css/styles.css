@@ -1,0 +1,1727 @@
+/* ==========================================================================
+   HERACLES DAW: The 12 Digital Labors - Hoja de Estilos Maestra
+   Paleta: Mármol (#F4F1EA), Bronce (#8B5A2B), Rojo Maldición (#D32F2F), Oro (#FFD700)
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Cinzel+Decorative:wght@700;900&family=Fira+Code:wght@400;600;700&display=swap');
+
+:root {
+    --color-marble: #F4F1EA;
+    --color-marble-dark: #D8D2C5;
+    --color-bronze: #8B5A2B;
+    --color-bronze-light: #B87D4B;
+    --color-curse-red: #D32F2F;
+    --color-curse-dark: #6D0B0B;
+    --color-gold: #FFD700;
+    --color-gold-glow: rgba(255, 215, 0, 0.45);
+    --color-dark-bg: #120e0c;
+    --color-dark-surface: #1d1613;
+    --color-dark-surface-2: #281e19;
+    --color-text-main: #F4F1EA;
+    --color-text-muted: #B3A89D;
+    --font-epic: 'Cinzel', serif;
+    --font-decorative: 'Cinzel Decorative', cursive;
+    --font-code: 'Fira Code', 'Courier New', monospace;
+    --shadow-epic: 0 10px 30px rgba(0, 0, 0, 0.6);
+    --shadow-gold: 0 0 25px rgba(255, 215, 0, 0.5);
+    --shadow-curse: 0 0 25px rgba(211, 47, 47, 0.6);
+    --transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* Base & Reset */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--color-dark-bg);
+    color: var(--color-text-main);
+    font-family: var(--font-epic);
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+    line-height: 1.6;
+    transition: background-color 0.8s ease, color 0.8s ease;
+}
+
+/* Canvas de lluvia de código griego corrupto */
+#matrix-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.22;
+}
+
+/* Barra de Navegación Neoclásica Superior */
+.olympus-navbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 2rem;
+    background: rgba(18, 14, 12, 0.94);
+    backdrop-filter: blur(8px);
+    border-bottom: 2px solid var(--color-bronze);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    cursor: pointer;
+}
+
+.brand-icon {
+    font-size: 1.8rem;
+    filter: drop-shadow(0 0 5px var(--color-gold));
+}
+
+.brand-title {
+    font-family: var(--font-decorative);
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--color-gold);
+    letter-spacing: 2px;
+}
+
+.brand-sub {
+    font-family: var(--font-code);
+    font-size: 0.75rem;
+    color: var(--color-curse-red);
+    background: rgba(211, 47, 47, 0.15);
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid var(--color-curse-red);
+}
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.nav-btn {
+    background: transparent;
+    border: 1px solid var(--color-bronze);
+    color: var(--color-marble);
+    font-family: var(--font-epic);
+    font-size: 0.85rem;
+    padding: 0.45rem 0.9rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: var(--transition-smooth);
+}
+
+.nav-btn:hover {
+    background: var(--color-bronze);
+    color: #fff;
+    box-shadow: 0 0 10px rgba(139, 90, 43, 0.6);
+}
+
+.btn-timer-pill {
+    background: rgba(255, 215, 0, 0.1);
+    border: 1px solid var(--color-gold);
+    color: var(--color-gold);
+    font-family: var(--font-code);
+    font-size: 0.9rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+}
+
+/* Pantallas (SPA Container) */
+.screen-view {
+    display: none;
+    position: relative;
+    z-index: 10;
+    padding: 2rem 1.5rem;
+    max-width: 1300px;
+    margin: 0 auto;
+    animation: fadeIn 0.4s ease forwards;
+}
+
+.screen-view.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================================================
+   PANTALLA A: LANDING PAGE - EL TEMPLO AVERIADO
+   ========================================================================== */
+.broken-temple-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    min-height: 80vh;
+}
+
+/* Friso Roto Header */
+.broken-frieze {
+    width: 100%;
+    max-width: 950px;
+    background: linear-gradient(135deg, #2b1f1a 0%, #17110e 100%);
+    border: 2px solid var(--color-curse-red);
+    position: relative;
+    padding: 1.5rem 2rem;
+    text-align: center;
+    box-shadow: var(--shadow-curse);
+    margin-bottom: 2.5rem;
+    overflow: hidden;
+}
+
+/* Cenefa de grecas griegas */
+.broken-frieze::before {
+    content: "🏛️ ⚡ 🏛️ ⚡ 🏛️ ⚡ 🏛️ ⚡ 🏛️ ⚡ 🏛️ ⚡ 🏛️ ⚡ 🏛️ ⚡ 🏛️ ⚡ 🏛️";
+    display: block;
+    font-size: 0.8rem;
+    opacity: 0.35;
+    letter-spacing: 8px;
+    margin-bottom: 0.5rem;
+}
+
+.glitch-frieze-title {
+    font-family: var(--font-decorative);
+    font-size: clamp(1.4rem, 3.5vw, 2.5rem);
+    color: var(--color-curse-red);
+    text-shadow: 2px 2px #000, 0 0 15px rgba(211, 47, 47, 0.8);
+    position: relative;
+    animation: glitchText 3s infinite alternate;
+}
+
+@keyframes glitchText {
+    0% { transform: translate(0); text-shadow: 2px 0 #D32F2F, -2px 0 #8B5A2B; }
+    20% { transform: translate(-2px, 1px); text-shadow: 3px 0 #FFD700, -1px 0 #D32F2F; }
+    40% { transform: translate(1px, -1px); }
+    60% { transform: translate(-1px, 2px); }
+    80% { transform: translate(2px, -1px); }
+    100% { transform: translate(0); }
+}
+
+.frieze-sub {
+    font-family: var(--font-code);
+    font-size: clamp(0.75rem, 1.8vw, 0.95rem);
+    color: var(--color-marble);
+    margin-top: 0.4rem;
+    letter-spacing: 2px;
+}
+
+/* Altar de Piedra Esculpida con Terminal */
+.altar-stone {
+    width: 100%;
+    max-width: 780px;
+    background: radial-gradient(circle at 50% 20%, #2f231e, #18120f 85%);
+    border: 3px solid var(--color-bronze);
+    border-radius: 8px;
+    padding: 2.5rem 2rem;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8), inset 0 0 30px rgba(0,0,0,0.7);
+    text-align: center;
+    position: relative;
+}
+
+.altar-stone::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    border: 1px dashed rgba(211, 47, 47, 0.3);
+    pointer-events: none;
+    margin: 6px;
+    border-radius: 4px;
+}
+
+.altar-crest {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+    filter: drop-shadow(0 0 10px rgba(211, 47, 47, 0.7));
+}
+
+.altar-title {
+    font-family: var(--font-decorative);
+    font-size: 1.8rem;
+    color: var(--color-marble);
+    margin-bottom: 0.8rem;
+}
+
+.altar-narrative {
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+    max-width: 620px;
+    margin: 0 auto 1.8rem auto;
+}
+
+/* Terminal incrustada en el altar */
+.embedded-terminal {
+    background: #0d0a09;
+    border: 1px solid var(--color-bronze);
+    border-left: 4px solid var(--color-curse-red);
+    padding: 1.2rem;
+    border-radius: 4px;
+    text-align: left;
+    margin-bottom: 1.8rem;
+    font-family: var(--font-code);
+}
+
+.term-header {
+    font-size: 0.75rem;
+    color: var(--color-curse-red);
+    border-bottom: 1px solid #291e19;
+    padding-bottom: 0.4rem;
+    margin-bottom: 0.8rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.term-body label {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--color-gold);
+    margin-bottom: 0.5rem;
+}
+
+.term-input-group {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.term-input {
+    flex: 1;
+    background: #18120f;
+    border: 1px solid var(--color-bronze);
+    color: var(--color-gold);
+    font-family: var(--font-code);
+    font-size: 1.1rem;
+    padding: 0.6rem 0.8rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+
+.term-input:focus {
+    outline: none;
+    border-color: var(--color-gold);
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+}
+
+.term-submit {
+    background: var(--color-bronze);
+    color: #fff;
+    border: none;
+    font-family: var(--font-epic);
+    font-weight: 700;
+    padding: 0 1.2rem;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+}
+
+.term-submit:hover {
+    background: var(--color-gold);
+    color: #000;
+}
+
+/* Botón Principal: Mármol Agrietado con Parpadeo Rojo */
+.btn-enter-hellas {
+    background: linear-gradient(135deg, #441717 0%, #290e0e 50%, #150606 100%);
+    border: 2px solid var(--color-curse-red);
+    color: var(--color-marble);
+    font-family: var(--font-decorative);
+    font-size: clamp(1rem, 2.2vw, 1.35rem);
+    padding: 1.1rem 2.5rem;
+    cursor: pointer;
+    border-radius: 6px;
+    letter-spacing: 2px;
+    box-shadow: 0 0 20px rgba(211, 47, 47, 0.5);
+    position: relative;
+    overflow: hidden;
+    animation: pulseCurse 2s infinite ease-in-out;
+    transition: var(--transition-smooth);
+}
+
+@keyframes pulseCurse {
+    0%, 100% {
+        box-shadow: 0 0 15px rgba(211, 47, 47, 0.4), inset 0 0 10px rgba(211, 47, 47, 0.3);
+        border-color: var(--color-curse-red);
+    }
+    50% {
+        box-shadow: 0 0 35px rgba(211, 47, 47, 0.85), inset 0 0 20px rgba(211, 47, 47, 0.6);
+        border-color: #ff5252;
+    }
+}
+
+.btn-enter-hellas:hover {
+    transform: scale(1.03);
+    background: linear-gradient(135deg, #641d1d, #3c1212);
+    color: #fff;
+}
+
+/* Papiros Adhesivos en las esquinas */
+.papyri-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1050px;
+    margin-top: 2.5rem;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.papyri-note {
+    flex: 1;
+    min-width: 250px;
+    background: #d8c29d;
+    background: radial-gradient(circle, #f3e5cb 0%, #d8be96 100%);
+    color: #2b1f17;
+    padding: 1.2rem 1.4rem;
+    border-radius: 2px;
+    box-shadow: 5px 8px 20px rgba(0,0,0,0.6);
+    position: relative;
+    border-left: 3px solid #8B5A2B;
+    transform: rotate(-1.5deg);
+    transition: var(--transition-smooth);
+}
+
+.papyri-note:nth-child(2) {
+    transform: rotate(2deg);
+}
+.papyri-note:nth-child(3) {
+    transform: rotate(-0.8deg);
+}
+
+.papyri-note:hover {
+    transform: rotate(0deg) scale(1.02);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.8);
+    z-index: 5;
+}
+
+.pin {
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 16px;
+    height: 16px;
+    background: radial-gradient(circle, #c4392f 40%, #5e110b 100%);
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+}
+
+.papyri-title {
+    font-family: var(--font-decorative);
+    font-size: 1rem;
+    font-weight: 700;
+    color: #5c3516;
+    margin-bottom: 0.4rem;
+    border-bottom: 1px dashed rgba(92, 53, 22, 0.4);
+    padding-bottom: 0.3rem;
+}
+
+.papyri-note p, .papyri-note ul {
+    font-size: 0.85rem;
+    color: #382415;
+    line-height: 1.4;
+}
+
+.papyri-note ul {
+    padding-left: 1.2rem;
+    margin-top: 0.3rem;
+}
+
+/* ==========================================================================
+   PANTALLA B: MAPA INTERACTIVO (LA HÉLADE / GRECIA ANTIGUA)
+   ========================================================================== */
+.map-screen-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.map-header-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(29, 22, 19, 0.95);
+    border: 2px solid var(--color-bronze);
+    padding: 1rem 1.5rem;
+    border-radius: 6px;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.map-header-titles h2 {
+    font-family: var(--font-decorative);
+    font-size: 1.6rem;
+    color: var(--color-gold);
+}
+
+.map-header-titles p {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+}
+
+.progress-widget {
+    min-width: 260px;
+}
+
+.progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    font-family: var(--font-code);
+    margin-bottom: 0.3rem;
+    color: var(--color-marble);
+}
+
+.progress-track {
+    width: 100%;
+    height: 10px;
+    background: #100b09;
+    border: 1px solid var(--color-bronze);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--color-bronze) 0%, var(--color-gold) 100%);
+    box-shadow: 0 0 10px var(--color-gold);
+    transition: width 0.5s ease;
+}
+
+/* HUD de Ranuras de Contraseña (12 caracteres) */
+.password-hud {
+    background: #140e0b;
+    border: 1px solid var(--color-bronze);
+    padding: 0.9rem 1.2rem;
+    border-radius: 6px;
+    text-align: center;
+}
+
+.hud-label {
+    font-family: var(--font-epic);
+    font-size: 0.85rem;
+    color: var(--color-marble-dark);
+    margin-bottom: 0.6rem;
+    letter-spacing: 1px;
+}
+
+.slots-grid {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.pwd-slot {
+    width: 44px;
+    height: 52px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: var(--transition-smooth);
+}
+
+.pwd-slot.slot-locked {
+    background: #201713;
+    border: 1px dashed var(--color-curse-red);
+    color: #723434;
+}
+
+.pwd-slot.slot-revealed {
+    background: linear-gradient(135deg, #2b220d, #423512);
+    border: 2px solid var(--color-gold);
+    color: var(--color-gold);
+    box-shadow: 0 0 12px var(--color-gold-glow);
+    animation: slotUnlock 0.5s ease-out;
+}
+
+@keyframes slotUnlock {
+    0% { transform: scale(1.3); }
+    100% { transform: scale(1); }
+}
+
+.slot-idx {
+    font-size: 0.65rem;
+    font-family: var(--font-code);
+    opacity: 0.7;
+}
+
+.slot-letter {
+    font-family: var(--font-code);
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+
+/* Lienzo del Mapa Pergamino de Grecia */
+.parchment-map-container {
+    position: relative;
+    width: 100%;
+    min-height: 580px;
+    background: 
+        radial-gradient(circle at 50% 50%, rgba(224, 202, 163, 0.92) 0%, rgba(184, 153, 110, 0.96) 80%, rgba(120, 90, 50, 0.98) 100%),
+        url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h40v40H0z' fill='%23634524' fill-opacity='0.05'/%3E%3C/svg%3E");
+    border: 8px solid #573a20;
+    box-shadow: inset 0 0 80px rgba(50, 30, 10, 0.8), var(--shadow-epic);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Mar Egeo estilizado de fondo con líneas mitológicas */
+.greece-geo-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.35;
+    background-image: 
+        radial-gradient(ellipse at 80% 30%, rgba(35, 75, 115, 0.3) 0%, transparent 60%),
+        radial-gradient(ellipse at 40% 80%, rgba(35, 75, 115, 0.4) 0%, transparent 60%);
+}
+
+.geo-label {
+    position: absolute;
+    font-family: var(--font-decorative);
+    font-size: 1.2rem;
+    color: rgba(70, 45, 20, 0.4);
+    letter-spacing: 4px;
+    pointer-events: none;
+    user-select: none;
+}
+
+.compass-rose {
+    position: absolute;
+    top: 20px;
+    left: 25px;
+    pointer-events: none;
+    filter: drop-shadow(0 2px 5px rgba(0,0,0,0.3));
+}
+
+.geo-aegean { top: 35%; right: 20%; transform: rotate(-15deg); }
+.geo-peloponnese { top: 58%; left: 32%; }
+.geo-crete { bottom: 8%; right: 35%; }
+.geo-thrace { top: 10%; right: 25%; }
+.geo-olympus { top: 22%; left: 38%; color: rgba(139, 90, 43, 0.6); }
+
+/* Nodos interactivos en el Mapa */
+.map-nodes-layer {
+    position: absolute;
+    inset: 0;
+}
+
+.map-node {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+    z-index: 20;
+    transition: transform 0.25s ease;
+}
+
+.map-node:hover {
+    transform: translate(-50%, -50%) scale(1.22);
+    z-index: 30;
+}
+
+.node-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    position: relative;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+}
+
+.node-broken .node-icon {
+    background: radial-gradient(circle, #5a1515, #240808);
+    border: 2px solid var(--color-curse-red);
+    font-size: 1.4rem;
+    animation: flamePulse 2s infinite ease-in-out;
+}
+
+@keyframes flamePulse {
+    0%, 100% { box-shadow: 0 0 10px rgba(211, 47, 47, 0.6); }
+    50% { box-shadow: 0 0 22px rgba(255, 60, 60, 0.9); }
+}
+
+.flame-spark {
+    position: absolute;
+    top: -8px;
+    right: -4px;
+    font-size: 0.9rem;
+}
+
+.node-solved .node-icon {
+    background: radial-gradient(circle, #fff3a8, #c99e1a);
+    border: 2px solid var(--color-gold);
+    box-shadow: 0 0 20px var(--color-gold);
+    font-size: 1.5rem;
+}
+
+.node-badge-char {
+    position: absolute;
+    bottom: -8px;
+    background: #000;
+    color: var(--color-gold);
+    border: 1px solid var(--color-gold);
+    font-family: var(--font-code);
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 1px 5px;
+    border-radius: 3px;
+}
+
+/* Tooltip al pasar cursor por el nodo */
+.node-tooltip {
+    position: absolute;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #18120e;
+    color: var(--color-marble);
+    border: 1px solid var(--color-bronze);
+    padding: 0.6rem 0.8rem;
+    border-radius: 4px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.8);
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.node-tooltip::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 6px;
+    border-style: solid;
+    border-color: #18120e transparent transparent transparent;
+}
+
+.map-node:hover .node-tooltip {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-6px);
+}
+
+.tooltip-num {
+    font-size: 0.65rem;
+    color: var(--color-curse-red);
+    font-family: var(--font-code);
+}
+
+.tooltip-title {
+    font-size: 0.9rem;
+    color: var(--color-marble);
+}
+
+.tooltip-module {
+    font-size: 0.75rem;
+    color: var(--color-gold);
+}
+
+.tooltip-status {
+    font-size: 0.7rem;
+    font-family: var(--font-code);
+}
+
+/* ==========================================================================
+   MODAL DE RETO TÉCNICO INTERACTIVO
+   ========================================================================== */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(6px);
+    z-index: 200;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+.modal-card {
+    background: #1a1310;
+    border: 2px solid var(--color-bronze);
+    border-radius: 8px;
+    width: 100%;
+    max-width: 900px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.9);
+    position: relative;
+    animation: modalPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes modalPop {
+    from { transform: scale(0.92); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.modal-header {
+    background: #241b16;
+    border-bottom: 2px solid var(--color-bronze);
+    padding: 1.2rem 1.6rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h3 {
+    font-family: var(--font-decorative);
+    font-size: 1.4rem;
+    color: var(--color-gold);
+}
+
+.challenge-module-pill {
+    font-family: var(--font-code);
+    font-size: 0.75rem;
+    color: var(--color-marble);
+    background: rgba(139, 90, 43, 0.3);
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid var(--color-bronze);
+    margin-top: 4px;
+    display: inline-block;
+}
+
+.btn-close-modal {
+    background: transparent;
+    border: 1px solid var(--color-bronze);
+    color: var(--color-marble);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-smooth);
+}
+
+.btn-close-modal:hover {
+    background: var(--color-curse-red);
+    border-color: var(--color-curse-red);
+    color: #fff;
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+/* Layout del reto: 2 columnas */
+.challenge-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .challenge-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+.challenge-story {
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+    margin-bottom: 1rem;
+    line-height: 1.5;
+}
+
+.code-box-header {
+    font-family: var(--font-code);
+    font-size: 0.8rem;
+    color: var(--color-gold);
+    background: #110d0b;
+    padding: 0.4rem 0.8rem;
+    border: 1px solid var(--color-bronze);
+    border-bottom: none;
+    border-radius: 4px 4px 0 0;
+}
+
+.editor-pane {
+    background: #0d0a08;
+    border: 1px solid var(--color-bronze);
+    padding: 1rem;
+    border-radius: 0 0 4px 4px;
+    font-family: var(--font-code);
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+}
+
+.challenge-arena {
+    background: #150f0c;
+    border: 1px solid #33241c;
+    border-radius: 6px;
+    padding: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    min-height: 250px;
+}
+
+.arena-title {
+    font-family: var(--font-epic);
+    font-size: 0.85rem;
+    color: var(--color-marble-dark);
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #281d17;
+    padding-bottom: 0.4rem;
+}
+
+.feedback-msg {
+    margin-top: 1rem;
+    font-family: var(--font-code);
+    font-size: 0.85rem;
+    min-height: 24px;
+}
+
+.txt-success { color: #4caf50; font-weight: 600; }
+.txt-danger { color: #f44336; font-weight: 600; }
+.txt-warning { color: #ff9800; }
+.txt-gold { color: var(--color-gold); }
+
+/* Botones de acción dentro de los retos */
+.btn-action {
+    background: linear-gradient(135deg, var(--color-bronze), #693e18);
+    border: 1px solid var(--color-gold);
+    color: #fff;
+    font-family: var(--font-epic);
+    font-size: 0.9rem;
+    padding: 0.65rem 1.2rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    margin-top: 0.5rem;
+}
+
+.btn-action:hover {
+    background: var(--color-gold);
+    color: #000;
+    box-shadow: 0 0 15px var(--color-gold);
+}
+
+.btn-secondary {
+    background: #2b201a;
+    border: 1px solid var(--color-bronze);
+    color: var(--color-marble);
+    font-family: var(--font-epic);
+    font-size: 0.85rem;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.btn-secondary:hover {
+    background: #3e2e26;
+}
+
+.hint-text {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    margin-top: 0.8rem;
+}
+
+/* Banner de éxito al resolver un reto */
+.success-banner {
+    background: rgba(255, 215, 0, 0.1);
+    border: 1px solid var(--color-gold);
+    padding: 1.2rem;
+    border-radius: 6px;
+    text-align: center;
+    animation: fadeIn 0.4s ease;
+}
+
+.trophy-char {
+    font-size: 1.2rem;
+    color: var(--color-gold);
+    margin-bottom: 0.5rem;
+}
+
+/* Reto 1: CSS Nemea */
+.reliquia-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 1.5rem 0;
+}
+
+.reliquia-box {
+    text-align: center;
+    padding: 1.5rem;
+    border: 2px dashed var(--color-bronze);
+    border-radius: 6px;
+    background: rgba(0,0,0,0.3);
+    transition: all 0.3s ease;
+}
+
+.reliquia-box.blocked-by-css {
+    border-color: var(--color-curse-red);
+}
+
+.reliquia-box.unlocked-by-css {
+    border-color: var(--color-gold);
+    box-shadow: 0 0 25px var(--color-gold-glow);
+}
+
+.lion-icon {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+}
+
+.lion-label {
+    font-size: 0.9rem;
+    margin-bottom: 0.8rem;
+}
+
+.btn-claim {
+    background: var(--color-gold);
+    color: #000;
+    font-family: var(--font-epic);
+    font-weight: 700;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.css-prop-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.3rem 0;
+}
+
+.badge-curse {
+    font-size: 0.65rem;
+    background: rgba(211, 47, 47, 0.3);
+    color: var(--color-curse-red);
+    padding: 1px 4px;
+    border-radius: 2px;
+}
+
+/* Reto 2: Hidra de Lerna */
+.hydra-swamp {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    padding: 1rem 0;
+    min-height: 120px;
+    align-content: flex-start;
+}
+
+.hydra-head {
+    background: #1f301d;
+    border: 1px solid #488042;
+    color: #92e08b;
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: var(--font-code);
+    font-size: 0.8rem;
+    user-select: none;
+    transition: transform 0.2s ease;
+}
+
+.hydra-head:hover {
+    transform: scale(1.08);
+}
+
+.core-head {
+    background: #3b1c1c;
+    border-color: var(--color-curse-red);
+    color: #ff9191;
+    font-weight: 700;
+}
+
+.hydra-vulnerable {
+    animation: flamePulse 1s infinite alternate;
+    border-color: var(--color-gold);
+    color: var(--color-gold);
+}
+
+/* Reto 3: Cierva de Cerinea */
+.arena-cerinea {
+    min-height: 280px;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-cierva {
+    position: absolute;
+    top: 50px;
+    left: 40px;
+    background: linear-gradient(135deg, #c79730, #735414);
+    border: 2px solid var(--color-gold);
+    color: #fff;
+    font-family: var(--font-epic);
+    font-size: 0.8rem;
+    padding: 0.6rem 1rem;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: transform 0.1s linear;
+}
+
+.cierva-captured {
+    background: #2a5a27 !important;
+    border-color: #5cee52 !important;
+    cursor: pointer !important;
+}
+
+.input-with-btn {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.input-with-btn input {
+    flex: 1;
+    background: #110d0b;
+    border: 1px solid var(--color-bronze);
+    color: var(--color-marble);
+    font-family: var(--font-code);
+    padding: 0.5rem;
+}
+
+/* Reto 4: Regex Jabalí */
+.regex-editor-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 0.4rem;
+}
+
+.regex-delim {
+    font-size: 1.4rem;
+    color: var(--color-curse-red);
+    font-weight: 700;
+}
+
+.input-code {
+    flex: 1;
+    background: #110d0b;
+    border: 1px solid var(--color-bronze);
+    color: var(--color-gold);
+    font-family: var(--font-code);
+    padding: 0.5rem;
+}
+
+.input-text {
+    width: 100%;
+    background: #110d0b;
+    border: 1px solid var(--color-bronze);
+    color: var(--color-marble);
+    font-family: var(--font-code);
+    padding: 0.5rem;
+    margin-top: 0.3rem;
+}
+
+/* Reto 5: SQL Establos de Augías */
+.sql-area {
+    width: 100%;
+    background: #110d0b;
+    border: 1px solid var(--color-bronze);
+    color: var(--color-gold);
+    font-family: var(--font-code);
+    font-size: 0.85rem;
+    padding: 0.6rem;
+    resize: vertical;
+}
+
+.db-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-code);
+    font-size: 0.75rem;
+}
+
+.db-table th, .db-table td {
+    border: 1px solid #33241c;
+    padding: 0.4rem 0.6rem;
+    text-align: left;
+}
+
+.db-table th {
+    background: #201713;
+    color: var(--color-gold);
+}
+
+.badge-corrupt {
+    color: var(--color-curse-red);
+    font-weight: 700;
+}
+
+.badge-clean {
+    color: #4caf50;
+}
+
+/* Reto 6: Router Aves */
+.route-select {
+    background: #110d0b;
+    border: 1px solid var(--color-bronze);
+    color: var(--color-gold);
+    font-family: var(--font-code);
+    padding: 0.4rem;
+    border-radius: 4px;
+    width: 100%;
+    margin-top: 0.3rem;
+}
+
+.traffic-monitor {
+    background: #090605;
+    border: 1px solid #33241c;
+    padding: 0.8rem;
+    font-family: var(--font-code);
+    font-size: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.req-log {
+    padding: 2px 4px;
+    border-radius: 2px;
+}
+
+.req-err { color: #f44336; background: rgba(244, 67, 54, 0.1); }
+.req-ok { color: #4caf50; background: rgba(76, 175, 80, 0.1); }
+
+/* Reto 7: CORS Fetch */
+.browser-console {
+    background: #0d0a08;
+    border: 1px solid #33241c;
+    padding: 0.8rem;
+    font-family: var(--font-code);
+    font-size: 0.75rem;
+    line-height: 1.4;
+    min-height: 100px;
+}
+
+/* Reto 9: DevTools Amazonas */
+.devtools-mock {
+    background: #181514;
+    border: 1px solid #443229;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.devtools-tabs {
+    display: flex;
+    background: #0f0c0b;
+    border-bottom: 1px solid #443229;
+}
+
+.dtab {
+    background: transparent;
+    border: none;
+    color: #8c7b72;
+    padding: 0.5rem 1rem;
+    font-family: var(--font-code);
+    font-size: 0.75rem;
+    cursor: pointer;
+}
+
+.dtab.active {
+    color: var(--color-gold);
+    border-bottom: 2px solid var(--color-gold);
+    background: #181514;
+}
+
+.dtab-content {
+    display: none;
+    padding: 0.8rem;
+    font-family: var(--font-code);
+    font-size: 0.8rem;
+}
+
+.dtab-content.active {
+    display: block;
+}
+
+.input-char {
+    width: 60px;
+    font-size: 1.5rem;
+    text-align: center;
+    background: #110d0b;
+    border: 1px solid var(--color-gold);
+    color: var(--color-gold);
+    font-family: var(--font-code);
+    font-weight: 700;
+}
+
+/* Reto 10: Herencia Gerión */
+.gerion-status {
+    padding: 1rem;
+    border-radius: 4px;
+    font-family: var(--font-code);
+    font-size: 0.85rem;
+}
+
+.gerion-status.broken {
+    background: rgba(211, 47, 47, 0.15);
+    border: 1px solid var(--color-curse-red);
+    color: #ff9191;
+}
+
+.gerion-status.assembled {
+    background: rgba(76, 175, 80, 0.15);
+    border: 1px solid #4caf50;
+    color: #a5d6a7;
+}
+
+/* Reto 11: Accesibilidad Hespérides */
+.tree-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 1.5rem 0;
+}
+
+.tree-node {
+    background: #2b201a;
+    border: 2px solid #523b2e;
+    color: var(--color-marble);
+    padding: 0.8rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: var(--font-epic);
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+}
+
+.tree-node:focus {
+    outline: 3px solid var(--color-gold);
+    box-shadow: 0 0 15px var(--color-gold);
+    background: #473225;
+}
+
+.golden-apple {
+    background: radial-gradient(circle, #ffe66d, #b8860b);
+    color: #000;
+    border-color: #ffd700;
+    font-weight: 700;
+}
+
+.aria-announcer {
+    margin-top: 0.8rem;
+    background: #0c0908;
+    border-left: 3px solid var(--color-gold);
+    padding: 0.5rem 0.8rem;
+    font-family: var(--font-code);
+    font-size: 0.75rem;
+    color: var(--color-gold);
+}
+
+.badge-aria {
+    display: inline-block;
+    background: #1b3820;
+    border: 1px solid #4caf50;
+    color: #81c784;
+    font-family: var(--font-code);
+    font-size: 0.7rem;
+    padding: 2px 6px;
+    border-radius: 3px;
+    margin-bottom: 0.5rem;
+}
+
+/* Reto 12: Cerbero */
+.cerberus-status {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+.cerberus-head {
+    background: #2b1111;
+    border: 1px solid var(--color-curse-red);
+    color: #ff9e9e;
+    font-family: var(--font-code);
+    font-size: 0.8rem;
+    padding: 0.4rem 0.6rem;
+    border-radius: 4px;
+}
+
+.discovered-password-display {
+    background: #0d0908;
+    border: 2px solid var(--color-gold);
+    color: var(--color-gold);
+    font-family: var(--font-code);
+    font-size: 1.4rem;
+    padding: 0.6rem 1rem;
+    letter-spacing: 5px;
+    text-align: center;
+    border-radius: 4px;
+    margin-top: 0.5rem;
+}
+
+.input-cerberus {
+    width: 100%;
+    background: #110d0b;
+    border: 2px solid var(--color-curse-red);
+    color: var(--color-gold);
+    font-family: var(--font-code);
+    font-size: 1.3rem;
+    padding: 0.7rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.btn-purification {
+    background: linear-gradient(135deg, #7c1a1a, #bd2c2c);
+    border: 2px solid var(--color-gold);
+    color: #fff;
+    font-family: var(--font-decorative);
+    font-size: 1rem;
+    padding: 1rem;
+    width: 100%;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-top: 1rem;
+    transition: var(--transition-smooth);
+}
+
+.btn-purification:hover {
+    background: var(--color-gold);
+    color: #000;
+    box-shadow: 0 0 25px var(--color-gold);
+}
+
+/* ==========================================================================
+   PANTALLA C: EL OLIMPO RESTAURADO (PANTALLA DE VICTORIA)
+   ========================================================================== */
+body.mode-restored {
+    background: radial-gradient(ellipse at 50% 20%, #ffffff 0%, #f4f1ea 40%, #e2dac8 100%);
+    color: #2b231d;
+}
+
+body.mode-restored .olympus-navbar {
+    background: rgba(244, 241, 234, 0.95);
+    border-bottom: 2px solid var(--color-gold);
+}
+
+body.mode-restored .nav-btn {
+    border-color: var(--color-bronze);
+    color: #3b281b;
+}
+
+body.mode-restored .brand-title {
+    color: var(--color-bronze);
+}
+
+body.mode-restored .brand-sub {
+    color: #2e7d32;
+    background: rgba(46, 125, 50, 0.15);
+    border-color: #2e7d32;
+}
+
+.divine-flash {
+    position: fixed;
+    inset: 0;
+    background: #fff;
+    z-index: 9999;
+    animation: divineFlashAnim 1.2s ease-out forwards;
+}
+
+@keyframes divineFlashAnim {
+    0% { opacity: 1; }
+    100% { opacity: 0; pointer-events: none; }
+}
+
+.restored-container {
+    text-align: center;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+.parthenon-hero {
+    position: relative;
+    padding: 3rem 1.5rem;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(244, 241, 234, 0.95) 100%);
+    border: 3px solid var(--color-gold);
+    border-radius: 12px;
+    box-shadow: 0 15px 45px rgba(184, 125, 75, 0.25), 0 0 30px rgba(255, 215, 0, 0.3);
+    margin-bottom: 2.5rem;
+}
+
+.parthenon-sun {
+    font-size: 4rem;
+    margin-bottom: 0.5rem;
+    animation: sunPulse 3s infinite alternate ease-in-out;
+}
+
+@keyframes sunPulse {
+    0% { transform: scale(1); filter: drop-shadow(0 0 10px #FFD700); }
+    100% { transform: scale(1.15); filter: drop-shadow(0 0 30px #FFA500); }
+}
+
+.victory-title {
+    font-family: var(--font-decorative);
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    color: var(--color-bronze);
+    text-shadow: 0 2px 10px rgba(255, 215, 0, 0.6);
+    margin-bottom: 0.8rem;
+}
+
+.victory-sub {
+    font-size: 1.1rem;
+    color: #5c4434;
+    max-width: 700px;
+    margin: 0 auto 1.5rem auto;
+}
+
+.victory-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.2rem;
+    margin: 2rem 0;
+}
+
+.stat-card {
+    background: #fff;
+    border: 2px solid var(--color-bronze-light);
+    padding: 1.2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+}
+
+.stat-icon {
+    font-size: 2rem;
+    margin-bottom: 0.3rem;
+}
+
+.stat-val {
+    font-family: var(--font-code);
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--color-bronze);
+}
+
+.stat-desc {
+    font-size: 0.8rem;
+    color: #7a6352;
+}
+
+/* Leaderboard de Grupos */
+.leaderboard-section {
+    background: #fff;
+    border: 2px solid var(--color-bronze);
+    border-radius: 8px;
+    padding: 2rem;
+    margin-bottom: 2.5rem;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+}
+
+.leaderboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--color-gold);
+    padding-bottom: 0.8rem;
+    margin-bottom: 1.2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.leaderboard-header h3 {
+    font-family: var(--font-decorative);
+    font-size: 1.5rem;
+    color: var(--color-bronze);
+}
+
+.team-register-box {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.team-register-box input {
+    background: #f4f1ea;
+    border: 1px solid var(--color-bronze);
+    padding: 0.4rem 0.8rem;
+    font-family: var(--font-epic);
+    font-size: 0.85rem;
+    border-radius: 4px;
+}
+
+.leaderboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-epic);
+    font-size: 0.9rem;
+}
+
+.leaderboard-table th, .leaderboard-table td {
+    padding: 0.8rem 1rem;
+    border-bottom: 1px solid #ebd9c5;
+    text-align: left;
+}
+
+.leaderboard-table th {
+    background: #fbf9f4;
+    color: var(--color-bronze);
+    font-weight: 700;
+}
+
+.highlight-row {
+    background: rgba(255, 215, 0, 0.15) !important;
+    font-weight: 700;
+}
+
+.badge-time {
+    font-family: var(--font-code);
+    font-size: 0.85rem;
+    color: #2e7d32;
+    background: #e8f5e9;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+/* Acciones de la pantalla restaurada */
+.restored-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1.2rem;
+    flex-wrap: wrap;
+}
+
+/* ==========================================================================
+   MODAL DE FICHA TÉCNICA Y LIBRO DE ESTILO (DOCUMENTO DE PROPUESTA)
+   ========================================================================== */
+.tech-doc-card {
+    max-width: 980px;
+}
+
+.tech-section {
+    margin-bottom: 2rem;
+    border-bottom: 1px solid #33241c;
+    padding-bottom: 1.5rem;
+}
+
+.tech-section:last-child {
+    border-bottom: none;
+}
+
+.tech-section h4 {
+    font-family: var(--font-decorative);
+    font-size: 1.2rem;
+    color: var(--color-gold);
+    margin-bottom: 0.8rem;
+}
+
+/* Paleta de colores interactiva */
+.color-palette-showcase {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.color-swatch {
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid var(--color-bronze);
+}
+
+.swatch-color {
+    height: 70px;
+}
+
+.swatch-info {
+    padding: 0.6rem;
+    background: #110d0b;
+    font-family: var(--font-code);
+    font-size: 0.75rem;
+}
+
+.swatch-name {
+    font-weight: 700;
+    color: var(--color-marble);
+}
+
+.swatch-hex {
+    color: var(--color-gold);
+}
+
+/* Tabla de Mapeo de Módulos DAW */
+.daw-mapping-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+    margin-top: 1rem;
+    font-family: var(--font-code);
+}
+
+.daw-mapping-table th, .daw-mapping-table td {
+    border: 1px solid #38271e;
+    padding: 0.6rem;
+    text-align: left;
+}
+
+.daw-mapping-table th {
+    background: #251a14;
+    color: var(--color-gold);
+}
+
+.daw-mapping-table tr:nth-child(even) {
+    background: #150f0c;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .olympus-navbar {
+        padding: 0.8rem 1rem;
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+    .nav-actions {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .papyri-container {
+        flex-direction: column;
+    }
+    .slots-grid {
+        gap: 0.25rem;
+    }
+    .pwd-slot {
+        width: 32px;
+        height: 42px;
+    }
+    .slot-letter {
+        font-size: 1rem;
+    }
+    .parchment-map-container {
+        min-height: 480px;
+    }
+    .node-icon {
+        width: 38px;
+        height: 38px;
+        font-size: 1.1rem;
+    }
+}
