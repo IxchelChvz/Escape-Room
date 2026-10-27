@@ -50,7 +50,7 @@ class HeraclesApp {
         document.getElementById("nav-sound-toggle")?.addEventListener("click", () => {
             const isMuted = window.olympusAudio?.toggleMute();
             const btn = document.getElementById("nav-sound-toggle");
-            btn.innerHTML = isMuted ? "🔇 Sonido: OFF" : "🔊 Sonido: ON";
+            btn.innerHTML = isMuted ? "[MUTED] Sonido: OFF" : "[AUDIO] Sonido: ON";
         });
 
         // Cerrar modal de reto
@@ -163,11 +163,11 @@ class HeraclesApp {
             nodeEl.innerHTML = `
                 <div class="node-icon">
                     ${isSolved ? `
-                        <div class="gold-amphora">🏺</div>
+                        <div class="gold-amphora">[ANFORA]</div>
                         <div class="node-badge-char">${labor.character}</div>
                     ` : `
-                        <div class="broken-column">🏛️</div>
-                        <div class="flame-spark">🔥</div>
+                        <div class="broken-column">[TEMPLO]️</div>
+                        <div class="flame-spark">[FUEGO]</div>
                     `}
                 </div>
                 <div class="node-tooltip">
@@ -245,7 +245,7 @@ class HeraclesApp {
             window.olympusAudio?.playError();
             const msg = document.getElementById("altar-feedback");
             if (msg) {
-                msg.innerHTML = `<span class="txt-danger">❌ La contraseña sagrada rechaza la entrada. Completa los trabajos en la Hélade para recolectar las 12 letras.</span>`;
+                msg.innerHTML = `<span class="txt-danger">[ERROR] La contraseña sagrada rechaza la entrada. Completa los trabajos en la Hélade para recolectar las 12 letras.</span>`;
             }
         }
     }

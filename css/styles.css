@@ -184,7 +184,7 @@ body {
 
 /* Cenefa de grecas griegas */
 .broken-frieze::before {
-    content: "🏛️ ⚡ 🏛️ ⚡ 🏛️ ⚡ 🏛️ ⚡ 🏛️ ⚡ 🏛️ ⚡ 🏛️ ⚡ 🏛️ ⚡ 🏛️ ⚡ 🏛️";
+    content: "[TEMPLO]️ [RAYO] [TEMPLO]️ [RAYO] [TEMPLO]️ [RAYO] [TEMPLO]️ [RAYO] [TEMPLO]️ [RAYO] [TEMPLO]️ [RAYO] [TEMPLO]️ [RAYO] [TEMPLO]️ [RAYO] [TEMPLO]️ [RAYO] [TEMPLO]️";
     display: block;
     font-size: 0.8rem;
     opacity: 0.35;

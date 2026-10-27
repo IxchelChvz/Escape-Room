@@ -287,13 +287,13 @@ class LaborsManager {
                             <span class="css-selector">}</span>
                         </div>
                     </div>
-                    <p class="hint-text">💡 <em>Módulo DIW:</em> Desactiva las propiedades que impiden la interacción del usuario en el árbol renderizado.</p>
+                    <p class="hint-text">[PISTA] <em>Módulo DIW:</em> Desactiva las propiedades que impiden la interacción del usuario en el árbol renderizado.</p>
                 </div>
                 <div class="challenge-arena arena-nemea">
                     <div class="arena-title">Altar de Nemea</div>
                     <div class="reliquia-wrapper">
                         <div id="target-reliquia" class="reliquia-box blocked-by-css">
-                            <div class="lion-icon">🦁</div>
+                            <div class="lion-icon">[LEON]</div>
                             <div class="lion-label">Manto del León de Nemea</div>
                             <button id="btn-claim-nemea" class="btn-claim">ARRANCAR PIEL IMPENETRABLE</button>
                         </div>
@@ -322,11 +322,11 @@ class LaborsManager {
             if (!chkPointer.checked && !chkZIndex.checked) {
                 reliquia.classList.remove("blocked-by-css");
                 reliquia.classList.add("unlocked-by-css");
-                feedback.innerHTML = `<span class="txt-success">⚡ Escudo CSS disuelto. ¡Pulsa el botón ahora!</span>`;
+                feedback.innerHTML = `<span class="txt-success">[RAYO] Escudo CSS disuelto. ¡Pulsa el botón ahora!</span>`;
             } else {
                 reliquia.classList.add("blocked-by-css");
                 reliquia.classList.remove("unlocked-by-css");
-                feedback.innerHTML = `<span class="txt-warning">⚠️ La piel aún es impenetrable por las reglas CSS activas.</span>`;
+                feedback.innerHTML = `<span class="txt-warning">[AVISO]️ La piel aún es impenetrable por las reglas CSS activas.</span>`;
             }
         };
 
@@ -353,21 +353,21 @@ class LaborsManager {
 const hydra = document.getElementById("hydra-core");
 
 hydra.addEventListener("click", function(event) {
-    // ⚠️ Bucle que satura el DOM
+    // [AVISO]️ Bucle que satura el DOM
     for (let i = 0; i < 2; i++) {
         spawnNewHead();
     }
 });</code></pre>
                     </div>
                     <div class="action-buttons-group">
-                        <button id="btn-fire-cauterize" class="btn-action">🔥 Aplicar Fuego Sagrado (e.stopPropagation() y clearInterval)</button>
+                        <button id="btn-fire-cauterize" class="btn-action">[FUEGO] Aplicar Fuego Sagrado (e.stopPropagation() y clearInterval)</button>
                         <button id="btn-reset-hydra" class="btn-secondary">Reiniciar Hidra</button>
                     </div>
                 </div>
                 <div class="challenge-arena">
                     <div class="arena-title">Pantano de Lerna - Cabezas Vivas: <span id="hydra-count">1</span> / Límite: 10</div>
                     <div id="hydra-swamp" class="hydra-swamp">
-                        <div class="hydra-head core-head" data-head="core">🐉 Cabeza Principal</div>
+                        <div class="hydra-head core-head" data-head="core">[HIDRA] Cabeza Principal</div>
                     </div>
                     <div id="hydra-feedback" class="feedback-msg">Haz clic en la cabeza principal para comprobar el descontrol del bucle.</div>
                 </div>
@@ -389,7 +389,7 @@ hydra.addEventListener("click", function(event) {
             countSpan.textContent = headCount;
             const head = document.createElement("div");
             head.className = "hydra-head clone-head";
-            head.innerHTML = `🐍 Cabeza #${headCount}`;
+            head.innerHTML = `[SERPIENTE] Cabeza #${headCount}`;
             head.addEventListener("click", (e) => {
                 if (!cauterized) {
                     window.olympusAudio?.playGlitch();
@@ -399,7 +399,7 @@ hydra.addEventListener("click", function(event) {
             });
             swamp.appendChild(head);
             if (headCount >= 10 && !cauterized) {
-                feedback.innerHTML = `<span class="txt-danger">💥 ¡ALERTA DE DESBORDAMIENTO DE MEMORIA! ¡Aplica fuego con e.stopPropagation()!</span>`;
+                feedback.innerHTML = `<span class="txt-danger">[IMPACTO] ¡ALERTA DE DESBORDAMIENTO DE MEMORIA! ¡Aplica fuego con e.stopPropagation()!</span>`;
             }
         };
 
@@ -417,7 +417,7 @@ hydra.addEventListener("click", function(event) {
         btnFire.addEventListener("click", () => {
             cauterized = true;
             window.olympusAudio?.playClick();
-            feedback.innerHTML = `<span class="txt-success">🔥 ¡e.stopPropagation() activado! Ahora haz clic en la Cabeza Principal para asestar el golpe final.</span>`;
+            feedback.innerHTML = `<span class="txt-success">[FUEGO] ¡e.stopPropagation() activado! Ahora haz clic en la Cabeza Principal para asestar el golpe final.</span>`;
             btnFire.disabled = true;
             btnFire.style.opacity = "0.5";
             coreHead.classList.add("hydra-vulnerable");
@@ -427,7 +427,7 @@ hydra.addEventListener("click", function(event) {
             cauterized = false;
             headCount = 1;
             countSpan.textContent = 1;
-            swamp.innerHTML = `<div class="hydra-head core-head" data-head="core">🐉 Cabeza Principal</div>`;
+            swamp.innerHTML = `<div class="hydra-head core-head" data-head="core">[HIDRA] Cabeza Principal</div>`;
             feedback.innerHTML = `La hidra se ha regenerado. Intenta cauterizarla adecuadamente.`;
             btnFire.disabled = false;
             btnFire.style.opacity = "1";
@@ -455,11 +455,11 @@ ciervaBtn.addEventListener("mouseenter", (e) => {
                             <button id="btn-exec-cmd" class="btn-action">Ejecutar</button>
                         </div>
                     </div>
-                    <p class="hint-text">💡 Pista: Escribe <code>cierva.removeEventListener()</code> o <code>freeze</code> para neutralizar su velocidad.</p>
+                    <p class="hint-text">[PISTA] Pista: Escribe <code>cierva.removeEventListener()</code> o <code>freeze</code> para neutralizar su velocidad.</p>
                 </div>
                 <div class="challenge-arena arena-cerinea" id="cerinea-boundary">
                     <div class="arena-title">Bosque de Cerinea</div>
-                    <button id="cierva-target" class="btn-cierva">🦌 CIERVA DE PEZUÑAS DE BRONCE</button>
+                    <button id="cierva-target" class="btn-cierva">[CIERVA] CIERVA DE PEZUÑAS DE BRONCE</button>
                     <div id="cerinea-feedback" class="feedback-msg">Intenta tocar a la cierva con el cursor.</div>
                 </div>
             </div>
@@ -483,7 +483,7 @@ ciervaBtn.addEventListener("mouseenter", (e) => {
             const randY = Math.max(40, Math.floor(Math.random() * maxY));
 
             cierva.style.transform = `translate(${randX}px, ${randY}px)`;
-            feedback.innerHTML = `<span class="txt-warning">💨 ¡La cierva huyó esquivando el puntero!</span>`;
+            feedback.innerHTML = `<span class="txt-warning">[VELOZ] ¡La cierva huyó esquivando el puntero!</span>`;
         };
 
         cierva.addEventListener("mouseenter", moveCierva);
@@ -493,7 +493,7 @@ ciervaBtn.addEventListener("mouseenter", (e) => {
             cierva.removeEventListener("mouseenter", moveCierva);
             cierva.classList.add("cierva-captured");
             cierva.style.transform = "translate(50px, 60px)";
-            feedback.innerHTML = `<span class="txt-success">❄️ ¡Script de huida revocado! Haz clic sobre la cierva para consagrarla.</span>`;
+            feedback.innerHTML = `<span class="txt-success">[HIELO]️ ¡Script de huida revocado! Haz clic sobre la cierva para consagrarla.</span>`;
             window.olympusAudio?.playSuccess();
         };
 
@@ -503,7 +503,7 @@ ciervaBtn.addEventListener("mouseenter", (e) => {
                 freezeCierva();
             } else {
                 window.olympusAudio?.playError();
-                feedback.innerHTML = `<span class="txt-danger">❌ Comando no reconocido. Prueba: cierva.removeEventListener('mouseenter') o freeze</span>`;
+                feedback.innerHTML = `<span class="txt-danger">[ERROR] Comando no reconocido. Prueba: cierva.removeEventListener('mouseenter') o freeze</span>`;
             }
         });
 
@@ -562,13 +562,13 @@ ciervaBtn.addEventListener("mouseenter", (e) => {
                     this.handleSuccess(labor, "¡Expresión Regular corregida! El jabalí ha sido acorralado en las nieves.");
                 } else if (!matches) {
                     window.olympusAudio?.playError();
-                    feedback.innerHTML = `<span class="txt-danger">❌ Fallo de validación: El texto "${text}" NO coincide con el patrón /${rawRegex}/</span>`;
+                    feedback.innerHTML = `<span class="txt-danger">[ERROR] Fallo de validación: El texto "${text}" NO coincide con el patrón /${rawRegex}/</span>`;
                 } else {
-                    feedback.innerHTML = `<span class="txt-warning">⚠️ El patrón es demasiado laxo o no cumple el requisito HERACLES-\\d{4}</span>`;
+                    feedback.innerHTML = `<span class="txt-warning">[AVISO]️ El patrón es demasiado laxo o no cumple el requisito HERACLES-\\d{4}</span>`;
                 }
             } catch (err) {
                 window.olympusAudio?.playError();
-                feedback.innerHTML = `<span class="txt-danger">💥 Sintaxis de RegExp inválida: ${err.message}</span>`;
+                feedback.innerHTML = `<span class="txt-danger">[IMPACTO] Sintaxis de RegExp inválida: ${err.message}</span>`;
             }
         });
     }
@@ -583,8 +583,8 @@ ciervaBtn.addEventListener("mouseenter", (e) => {
                     <div class="editor-pane">
                         <textarea id="sql-query" class="sql-area" rows="4">DELETE FROM establos WHERE estado = 'corrupto' OR tipo_residuo = 'estiercol';</textarea>
                     </div>
-                    <button id="btn-run-sql" class="btn-action">🌊 Desviar Ríos Alfeo y Peneo (Ejecutar SQL)</button>
-                    <p class="hint-text">💡 <em>Módulo DWES:</em> Elimina la basura sin borrar los registros con <code>estado = 'sagrado'</code>.</p>
+                    <button id="btn-run-sql" class="btn-action">[AGUA] Desviar Ríos Alfeo y Peneo (Ejecutar SQL)</button>
+                    <p class="hint-text">[PISTA] <em>Módulo DWES:</em> Elimina la basura sin borrar los registros con <code>estado = 'sagrado'</code>.</p>
                 </div>
                 <div class="challenge-arena">
                     <div class="arena-title">Tabla: <code>establos_augias</code></div>
@@ -617,7 +617,7 @@ ciervaBtn.addEventListener("mouseenter", (e) => {
 
             if (query.includes("DROP TABLE") || query.includes("DELETE FROM ESTABLOS;") || (query.startsWith("DELETE FROM ESTABLOS") && !query.includes("WHERE"))) {
                 window.olympusAudio?.playError();
-                feedback.innerHTML = `<span class="txt-danger">❌ ¡Cuidado! ¡Ibas a borrar a las vacas sagradas sin una cláusula WHERE!</span>`;
+                feedback.innerHTML = `<span class="txt-danger">[ERROR] ¡Cuidado! ¡Ibas a borrar a las vacas sagradas sin una cláusula WHERE!</span>`;
                 return;
             }
 
@@ -637,7 +637,7 @@ ciervaBtn.addEventListener("mouseenter", (e) => {
                 }, 700);
             } else {
                 window.olympusAudio?.playError();
-                feedback.innerHTML = `<span class="txt-warning">⚠️ Sentencia no válida. Usa DELETE FROM establos WHERE estado = 'corrupto'</span>`;
+                feedback.innerHTML = `<span class="txt-warning">[AVISO]️ Sentencia no válida. Usa DELETE FROM establos WHERE estado = 'corrupto'</span>`;
             }
         });
     }
@@ -651,14 +651,14 @@ ciervaBtn.addEventListener("mouseenter", (e) => {
                     <div class="code-box-header">Configuración del Enrutador (DWES / Express / Laravel)</div>
                     <div class="editor-pane">
                         <div class="router-row">
-                            <code>GET /api/oraculo</code> ➔ 
+                            <code>GET /api/oraculo</code> -> 
                             <select id="route-oraculo" class="route-select">
                                 <option value="404">Controlador Inexistente (404)</option>
                                 <option value="200">OraculoController@consultar (200 OK)</option>
                             </select>
                         </div>
                         <div class="router-row">
-                            <code>POST /api/crotalos</code> ➔ 
+                            <code>POST /api/crotalos</code> -> 
                             <select id="route-crotalos" class="route-select">
                                 <option value="500">NullPointerCrash (500 Error)</option>
                                 <option value="200">CrotalosAtenea@ahuyentar (200 OK)</option>
@@ -670,9 +670,9 @@ ciervaBtn.addEventListener("mouseenter", (e) => {
                 <div class="challenge-arena">
                     <div class="arena-title">Monitor de Tráfico de Red</div>
                     <div id="traffic-monitor" class="traffic-monitor">
-                        <div class="req-log req-err">GET /api/oraculo ➔ 404 Not Found 💥</div>
-                        <div class="req-log req-err">POST /api/crotalos ➔ 500 Internal Error 💥</div>
-                        <div class="req-log req-err">GET /api/oraculo ➔ 404 Not Found 💥</div>
+                        <div class="req-log req-err">GET /api/oraculo -> 404 Not Found [IMPACTO]</div>
+                        <div class="req-log req-err">POST /api/crotalos -> 500 Internal Error [IMPACTO]</div>
+                        <div class="req-log req-err">GET /api/oraculo -> 404 Not Found [IMPACTO]</div>
                     </div>
                     <div id="router-feedback" class="feedback-msg">Alinea los endpoints con sus controladores válidos.</div>
                 </div>
@@ -688,14 +688,14 @@ ciervaBtn.addEventListener("mouseenter", (e) => {
         btnDeploy.addEventListener("click", () => {
             if (selOraculo.value === "200" && selCrotalos.value === "200") {
                 monitor.innerHTML = `
-                    <div class="req-log req-ok">GET /api/oraculo ➔ 200 OK (0.12ms) ✅</div>
-                    <div class="req-log req-ok">POST /api/crotalos ➔ 200 OK (Crotalos de bronce resonando) ✅</div>
-                    <div class="req-log req-ok">STATUS: TODAS LAS AVES EN RETIRADA ✅</div>
+                    <div class="req-log req-ok">GET /api/oraculo -> 200 OK (0.12ms) [OK]</div>
+                    <div class="req-log req-ok">POST /api/crotalos -> 200 OK (Crotalos de bronce resonando) [OK]</div>
+                    <div class="req-log req-ok">STATUS: TODAS LAS AVES EN RETIRADA [OK]</div>
                 `;
                 this.handleSuccess(labor, "¡Las aves del Estínfalo han huido ante el enrutamiento perfecto!");
             } else {
                 window.olympusAudio?.playError();
-                feedback.innerHTML = `<span class="txt-danger">❌ La tormenta de 404s y 500s continúa. Corrige todos los selectores.</span>`;
+                feedback.innerHTML = `<span class="txt-danger">[ERROR] La tormenta de 404s y 500s continúa. Corrige todos los selectores.</span>`;
             }
         });
     }
@@ -735,16 +735,16 @@ ciervaBtn.addEventListener("mouseenter", (e) => {
         btnFetch.addEventListener("click", () => {
             if (chkCors.checked && chkAuth.checked) {
                 consoleBox.innerHTML = `
-                    <span class="txt-success">➔ Fetch resolved with status: 200 OK</span><br>
+                    <span class="txt-success">-> Fetch resolved with status: 200 OK</span><br>
                     <span class="txt-success">Response body: { "status": "DOMINADO", "toro": "Llevado a Micenas ante Euristeo" }</span>
                 `;
                 this.handleSuccess(labor, "¡El Toro de Creta ha sido amansado al satisfacer la política CORS!");
             } else {
                 window.olympusAudio?.playGlitch();
                 consoleBox.innerHTML = `
-                    <span class="txt-danger">💥 Uncaught (in promise) TypeError: Failed to fetch: Headers insuficientes para cruzar el mar Egeo.</span>
+                    <span class="txt-danger">[IMPACTO] Uncaught (in promise) TypeError: Failed to fetch: Headers insuficientes para cruzar el mar Egeo.</span>
                 `;
-                feedback.innerHTML = `<span class="txt-warning">⚠️ Faltan cabeceras CORS o el Token de Autorización.</span>`;
+                feedback.innerHTML = `<span class="txt-warning">[AVISO]️ Faltan cabeceras CORS o el Token de Autorización.</span>`;
             }
         });
     }
@@ -780,11 +780,11 @@ ciervaBtn.addEventListener("mouseenter", (e) => {
             const isPDO = container.querySelector('input[name="sqli-mode"]:checked').value === "pdo";
 
             if (isPDO) {
-                feedback.innerHTML = `<span class="txt-success">🛡️ Prepared Statement neutralizó la inyección. El input fue tratado como string literal.</span>`;
+                feedback.innerHTML = `<span class="txt-success">[ESCUDO]️ Prepared Statement neutralizó la inyección. El input fue tratado como string literal.</span>`;
                 this.handleSuccess(labor, "¡Las Yeguas de Diomedes han sido domadas con parámetros seguros!");
             } else {
                 window.olympusAudio?.playError();
-                feedback.innerHTML = `<span class="txt-danger">💥 ¡VULNERABILIDAD EXPLOTADA! Las yeguas devoraron toda la tabla de usuarios: <code>SELECT * FROM establo WHERE id = '' OR '1'='1'</code></span>`;
+                feedback.innerHTML = `<span class="txt-danger">[IMPACTO] ¡VULNERABILIDAD EXPLOTADA! Las yeguas devoraron toda la tabla de usuarios: <code>SELECT * FROM establo WHERE id = '' OR '1'='1'</code></span>`;
             }
         });
     }
@@ -855,7 +855,7 @@ server: AmazonasGuard/3.1</code></pre>
                 this.handleSuccess(labor, "¡Hipólita te entrega el Cinto Sagrado con solemnidad!");
             } else {
                 window.olympusAudio?.playError();
-                feedback.innerHTML = `<span class="txt-danger">❌ Token erróneo. Lee el comentario HTML en Elements o en Network Headers.</span>`;
+                feedback.innerHTML = `<span class="txt-danger">[ERROR] Token erróneo. Lee el comentario HTML en Elements o en Network Headers.</span>`;
             }
         });
     }
@@ -890,9 +890,9 @@ server: AmazonasGuard/3.1</code></pre>
                 <div class="challenge-arena">
                     <div class="arena-title">Estado de los 3 Cuerpos de Gerión</div>
                     <div id="gerion-status-box" class="gerion-status broken">
-                        <p>⚠️ Fragmento 1: Cabeza aislada</p>
-                        <p>⚠️ Fragmento 2: Torso sin layout</p>
-                        <p>⚠️ Fragmento 3: Piernas desvinculadas</p>
+                        <p>[AVISO]️ Fragmento 1: Cabeza aislada</p>
+                        <p>[AVISO]️ Fragmento 2: Torso sin layout</p>
+                        <p>[AVISO]️ Fragmento 3: Piernas desvinculadas</p>
                     </div>
                     <div id="tpl-feedback" class="feedback-msg">Configura la herencia con extends y block.</div>
                 </div>
@@ -909,14 +909,14 @@ server: AmazonasGuard/3.1</code></pre>
             if (selExt.value === "extends" && selBlk.value === "block") {
                 statusBox.className = "gerion-status assembled";
                 statusBox.innerHTML = `
-                    <p>✅ <code>base.html</code> adoptado con éxito</p>
-                    <p>✅ <code>{% block contenido %}</code> inyectado en el layout maestro</p>
-                    <p>✨ Ganado de Gerión unificado y pacificado</p>
+                    <p>[OK] <code>base.html</code> adoptado con éxito</p>
+                    <p>[OK] <code>{% block contenido %}</code> inyectado en el layout maestro</p>
+                    <p>[BRILLO] Ganado de Gerión unificado y pacificado</p>
                 `;
                 this.handleSuccess(labor, "¡La herencia de plantillas unificó a los tres cuerpos de Gerión!");
             } else {
                 window.olympusAudio?.playError();
-                feedback.innerHTML = `<span class="txt-danger">❌ La vista sigue rota. Una vista hija debe extender con {% extends %} y encapsularse en {% block %}.</span>`;
+                feedback.innerHTML = `<span class="txt-danger">[ERROR] La vista sigue rota. Una vista hija debe extender con {% extends %} y encapsularse en {% block %}.</span>`;
             }
         });
     }
@@ -933,17 +933,17 @@ server: AmazonasGuard/3.1</code></pre>
                     </div>
                     <div class="assistive-nav">
                         <button id="btn-tab-sim" class="btn-secondary">Simular Pulsar TAB</button>
-                        <button id="btn-screen-reader" class="btn-secondary">🔊 Lector de Pantalla (ARIA)</button>
+                        <button id="btn-screen-reader" class="btn-secondary">[AUDIO] Lector de Pantalla (ARIA)</button>
                     </div>
                     <div id="aria-announcer" class="aria-announcer" aria-live="polite">Lector: En espera...</div>
                 </div>
                 <div class="challenge-arena arena-hesperides">
                     <div class="arena-title">Árbol de Oro de las Hespérides</div>
                     <div class="tree-container">
-                        <button tabindex="1" class="tree-node leaf" aria-label="Hojas de sauce del jardín">🌿 Hoja</button>
-                        <button tabindex="2" class="tree-node branch" aria-label="Rama custodiada por el dragón Ladón">🐉 Rama</button>
-                        <button tabindex="3" id="golden-apple-btn" class="tree-node golden-apple" aria-label="Manzana dorada de la inmortalidad. Pulsa Enter para cosechar." role="button">🍎 MANZANA DORADA</button>
-                        <button tabindex="4" class="tree-node leaf" aria-label="Flor nocturna">🌸 Flor</button>
+                        <button tabindex="1" class="tree-node leaf" aria-label="Hojas de sauce del jardín">[RAMA] Hoja</button>
+                        <button tabindex="2" class="tree-node branch" aria-label="Rama custodiada por el dragón Ladón">[HIDRA] Rama</button>
+                        <button tabindex="3" id="golden-apple-btn" class="tree-node golden-apple" aria-label="Manzana dorada de la inmortalidad. Pulsa Enter para cosechar." role="button">[MANZANA] MANZANA DORADA</button>
+                        <button tabindex="4" class="tree-node leaf" aria-label="Flor nocturna">[FLOR] Flor</button>
                     </div>
                     <div id="hesperides-feedback" class="feedback-msg">Enfoca la manzana dorada y actívala mediante teclado.</div>
                 </div>
@@ -958,7 +958,7 @@ server: AmazonasGuard/3.1</code></pre>
         let currentIndex = 0;
 
         const announce = (text) => {
-            announcer.textContent = `🔊 Lector de Pantalla: ${text}`;
+            announcer.textContent = `[AUDIO] Lector de Pantalla: ${text}`;
             window.olympusAudio?.playClick();
         };
 
@@ -1000,9 +1000,9 @@ server: AmazonasGuard/3.1</code></pre>
                 <div class="challenge-desc">
                     <p class="challenge-story">${labor.lore}</p>
                     <div class="cerberus-status">
-                        <div class="cerberus-head">🐺 Cabeza 1: DWEC</div>
-                        <div class="cerberus-head">🐺 Cabeza 2: DWES</div>
-                        <div class="cerberus-head">🐺 Cabeza 3: DIW / DAW</div>
+                        <div class="cerberus-head">[CERBERO] Cabeza 1: DWEC</div>
+                        <div class="cerberus-head">[CERBERO] Cabeza 2: DWES</div>
+                        <div class="cerberus-head">[CERBERO] Cabeza 3: DIW / DAW</div>
                     </div>
                     <p class="hint-text">Has completado <strong>${solvedCount} de 11</strong> trabajos previos. Tu contraseña reconstruida hasta ahora es:</p>
                     <div class="discovered-password-display">${currentPass}</div>
@@ -1013,7 +1013,7 @@ server: AmazonasGuard/3.1</code></pre>
                         <label for="cerberus-pwd">Introduce la Contraseña Divina de 12 Caracteres:</label>
                         <input type="text" id="cerberus-pwd" class="input-cerberus" maxlength="12" placeholder="HERACLESDAW!" value="${currentPass.replace(/_/g, '')}">
                     </div>
-                    <button id="btn-purge-curse" class="btn-purification">⚔️ SOMETER A CERBERO Y RESTAURAR EL OLIMPO</button>
+                    <button id="btn-purge-curse" class="btn-purification">[ESPADA]️ SOMETER A CERBERO Y RESTAURAR EL OLIMPO</button>
                     <div id="cerberus-feedback" class="feedback-msg">Cada trabajo mitológico corresponde a una letra.</div>
                 </div>
             </div>
@@ -1032,7 +1032,7 @@ server: AmazonasGuard/3.1</code></pre>
                 window.app?.triggerRestoration();
             } else {
                 window.olympusAudio?.playError();
-                feedback.innerHTML = `<span class="txt-danger">❌ Cerbero ruge con furia. La contraseña '${val}' es incorrecta. Pista: H-E-R-A-C-L-E-S-D-A-W-!</span>`;
+                feedback.innerHTML = `<span class="txt-danger">[ERROR] Cerbero ruge con furia. La contraseña '${val}' es incorrecta. Pista: H-E-R-A-C-L-E-S-D-A-W-!</span>`;
             }
         });
     }
@@ -1044,7 +1044,7 @@ server: AmazonasGuard/3.1</code></pre>
         if (feedback) {
             feedback.innerHTML = `
                 <div class="success-banner">
-                    <div class="trophy-char">✨ ¡CARÁCTER OBTENIDO: <strong>'${labor.character}'</strong> (Posición ${labor.position}/12)! ✨</div>
+                    <div class="trophy-char">[BRILLO] ¡CARÁCTER OBTENIDO: <strong>'${labor.character}'</strong> (Posición ${labor.position}/12)! [BRILLO]</div>
                     <p>${message}</p>
                     <button class="btn-action" onclick="window.app.closeModalAndRefresh()">Volver al Mapa de la Hélade</button>
                 </div>
