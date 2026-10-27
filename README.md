@@ -191,7 +191,7 @@ Para levantar el entorno completo con base de datos SQLite y plantillas de servi
 ## 8. Estructura de Ficheros del Repositorio
 
 ```text
-sharp-bose/
+Escape-room/
 ├── index.html               # Aplicacion cliente con mapa vectorial de la Helade
 ├── server.js                # Servidor local Node.js con API REST integrada
 ├── README.md                # Memoria explicativa del proyecto
