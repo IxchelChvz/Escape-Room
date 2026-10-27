@@ -138,36 +138,24 @@ El servidor Flask se iniciara en `http://localhost:5000` con:
 
 ```text
 sharp-bose/
-├── index.html                   # Aplicacion principal (Landing + Mapa + Altar + Retos)
-├── server.js                    # Servidor local Node.js con API REST
-├── README.md                    # Documentacion curricular y tecnica
-├── Escape-Room/                 # Directorio del paquete exportable
-│   ├── index.html
-│   ├── server.js
-│   ├── README.md
-│   ├── css/
-│   │   └── style.css            # Estilos desacoplados (opcional)
-│   ├── js/
-│   │   └── app.js               # Logica desacoplada (opcional)
-│   ├── assets/                  # Recursos graficos y cartografia
-│   └── backend/
-│       ├── app.py               # Entrada principal de Flask
-│       ├── config.py            # Configuracion de base de datos y JWT
-│       ├── seed.py              # Semilla de datos mitologicos
-│       ├── requirements.txt     # Dependencias (Flask, SQLAlchemy, Jinja2)
-│       ├── models/              # Modelos de base de datos SQLAlchemy
-│       │   ├── __init__.py
-│       │   ├── trial.py
-│       │   ├── team.py
-│       │   └── log.py
-│       ├── routes/              # Endpoints API y vistas Jinja2
-│       │   ├── __init__.py
-│       │   ├── api.py
-│       │   └── views.py
-│       └── templates/           # Vistas Jinja2 con herencia modular
-│           ├── base.html
-│           ├── map.html
-│           └── leaderboard.html
+├── index.html               # Aplicacion cliente con mapa vectorial de la Helade
+├── server.js                # Servidor local Node.js con API REST integrada
+├── README.md                # Memoria explicativa del proyecto
+└── backend/
+    ├── app.py               # Fabrica de la aplicacion Flask y configuracion
+    ├── models.py            # Modelos ORM SQLAlchemy (Labor, Team, GameSession, LaborAttempt)
+    ├── seed.py              # Script de sembrado de los 12 trabajos en SQLite
+    ├── requirements.txt     # Dependencias de Python (Flask, SQLAlchemy, Jinja2, CORS)
+    ├── routes/
+    │   ├── views.py         # Rutas de vistas Jinja2 (/, /leaderboard, /admin)
+    │   └── api.py           # Rutas del servicio REST asincrono
+    ├── static/
+    │   └── css/main.css     # Estilos neoclasicos para las plantillas Jinja2
+    └── templates/
+        ├── base.html        # Plantilla maestra Jinja2 con herencia
+        ├── index.html       # Vista principal con consulta de base de datos
+        ├── leaderboard.html # Tabla de clasificacion generada por el servidor
+        └── admin.html       # Panel docente de auditoria y control
 ```
 
 ---
