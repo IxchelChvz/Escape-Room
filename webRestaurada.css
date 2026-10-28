@@ -1,55 +1,25 @@
-/* Olimpo Digital · web restaurada · estilo alineado con el mapa (Heracles.exe) */
+    /* Olimpo Digital · web restaurada · estilo alineado con el mapa (Heracles.exe) */
 
 :root {
-    --bg: #15100b;
-    --bg2: #1d150d;
-    --panel: #221810;
-    --line: #4d3b24;
-    --text: #eadbb4;
-    --dim: #b4a27c;
-    --accent: #6fc2ad;
-    --alert: #e5603f;
-    --gold: #e0a82e;
-    --gold-ink: #ebbd55;
+    --bg: #e8d9b0;
+    --bg2: #efe3c2;
+    --panel: #f4e9cc;
+    --line: #b79b62;
+    --text: #2a1c0d;
+    --dim: #5e4a2c;
+    --accent: #1f4a6b;
+    --alert: #9b2f1f;
+    --gold: #b9821a;
+    --gold-ink: #7a4f00;
     --on-gold: #1a1204;
-    --glow: rgba(235, 189, 85, .5);
+    --glow: rgba(185, 130, 26, .45);
     --f-display: 'Cinzel', 'Trajan Pro', Georgia, serif;
     --f-body: 'Alegreya Sans', 'Segoe UI', system-ui, sans-serif;
     --f-mono: 'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace;
-    color-scheme: dark;
+    color-scheme: light;
     box-sizing: border-box;
     padding-top: env(safe-area-inset-top, 0px);
     padding-bottom: env(safe-area-inset-bottom, 0px);
-}
-
-
-/* ---- Portada centrada ---- */
-
-.intro {
-    justify-items: center;
-    text-align: center;
-}
-
-.lede {
-    margin-inline: auto;
-}
-
-.cols {
-    justify-content: center;
-}
-
-.notice {
-    max-width: 760px;
-    margin-inline: auto;
-    text-align: center;
-}
-
-.notice p {
-    margin-inline: auto;
-}
-
-.notice .actions {
-    justify-content: center;
 }
 
 *,
@@ -164,7 +134,7 @@ body {
 .meander {
     height: 20px;
     background: var(--gold);
-    opacity: .45;
+    opacity: .6;
     -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='20' viewBox='0 0 22 20'%3E%3Cpath d='M0 1H22M1 1V19M21 1V13H8V7H15V10' fill='none' stroke='black' stroke-width='2'/%3E%3C/svg%3E") repeat-x center/auto 100%;
     mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='20' viewBox='0 0 22 20'%3E%3Cpath d='M0 1H22M1 1V19M21 1V13H8V7H15V10' fill='none' stroke='black' stroke-width='2'/%3E%3C/svg%3E") repeat-x center/auto 100%;
 }
@@ -179,50 +149,54 @@ body {
     text-transform: uppercase;
 }
 
-.ticker {
-    overflow: hidden;
-    border-block: 1px solid var(--line);
-    font: 500 12px/1 var(--f-mono);
-    letter-spacing: .04em;
-    color: var(--dim);
-    padding-block: 9px;
-    white-space: nowrap;
-    margin-top: 10px;
+.menu a {
+    color: var(--text);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    padding-block: 8px;
 }
 
-.track {
-    display: flex;
-    width: max-content;
-    animation: tick 70s linear infinite;
-}
-
-.track span {
-    padding-right: 3.2em;
-}
-
-@keyframes tick {
-    to {
-        transform: translateX(-50%);
-    }
+.menu a:hover {
+    color: var(--accent);
+    border-color: var(--accent);
 }
 
 
-/* Portada */
+/* Portada (centrada) */
 
 .intro {
     padding-block: 26px 10px;
     display: grid;
     gap: 12px;
+    justify-items: center;
+    text-align: center;
+}
+
+.cols {
+    display: flex;
+    justify-content: center;
+    gap: clamp(8px, 3vw, 24px);
+    margin-bottom: 6px;
+}
+
+.cols i {
+    width: clamp(14px, 4vw, 24px);
+    height: clamp(48px, 10vw, 84px);
+    background: linear-gradient(90deg, #d9c48c, #f6ecd0, #d9c48c);
+    border-top: 6px solid var(--gold);
+    border-bottom: 6px solid var(--gold);
+    box-shadow: 0 4px 10px rgba(122, 79, 0, .25);
 }
 
 .title {
     margin: 0;
     font: 900 clamp(2rem, 7vw, 3.4rem)/1.1 var(--f-display);
     letter-spacing: .05em;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, .5);
 }
 
 .lede {
-    margin: 0;
+    margin: 0 auto;
     max-width: 70ch;
     font-size: 1.12rem;
 }
@@ -234,16 +208,26 @@ h2.sec {
     text-transform: uppercase;
 }
 
+
+/* Aviso */
+
 .notice {
-    margin-top: 26px;
+    max-width: 760px;
+    margin: 26px auto 0;
     padding: 24px;
     border: 1px solid var(--gold);
     background: var(--panel);
+    text-align: center;
+    box-shadow: 0 6px 24px rgba(122, 79, 0, .18);
     scroll-margin-top: 16px;
 }
 
+.notice h2 {
+    color: var(--gold-ink);
+}
+
 .notice p {
-    margin: 8px 0 0;
+    margin: 8px auto 0;
     max-width: 62ch;
 }
 
@@ -253,6 +237,10 @@ h2.sec {
     gap: 12px;
     align-items: center;
     margin-top: 18px;
+}
+
+.notice .actions {
+    justify-content: center;
 }
 
 .btn {
@@ -280,7 +268,7 @@ h2.sec {
 .btn.ghost {
     background: transparent;
     color: var(--text);
-    border: 1px solid var(--line);
+    border: 1px solid var(--dim);
     box-shadow: none;
 }
 
@@ -312,6 +300,11 @@ h2.sec {
     padding: 12px 14px;
     background: var(--panel);
     border: 1px solid var(--line);
+    transition: border-color .2s;
+}
+
+.tile:hover {
+    border-color: var(--accent);
 }
 
 .tgr {
@@ -319,7 +312,9 @@ h2.sec {
     place-items: center;
     width: 42px;
     height: 42px;
-    border: 1px solid var(--alert);
+    background: var(--gold);
+    color: var(--on-gold);
+    border: 1px solid var(--gold);
     font: 700 1.15rem var(--f-display);
 }
 
@@ -333,6 +328,11 @@ h2.sec {
     font: 600 1rem/1.25 var(--f-body);
 }
 
+.tdesc {
+    font-size: .95rem;
+    color: var(--dim);
+}
+
 .ttag {
     font: 500 11px var(--f-mono);
     letter-spacing: .1em;
@@ -344,7 +344,7 @@ h2.sec {
 .tst {
     font: 600 10.5px var(--f-mono);
     letter-spacing: .08em;
-    color: var(--alert);
+    color: var(--gold-ink);
     text-align: right;
 }
 
@@ -356,109 +356,15 @@ h2.sec {
     margin-top: 18px;
 }
 
-.msg {
-    margin: 0;
-    min-height: 1.6em;
-    font: 500 .92rem var(--f-mono);
-    color: var(--alert);
-}
-
-.foot {
-    margin: 36px 0 12px;
-    font: 500 11.5px/1.6 var(--f-mono);
-    letter-spacing: .04em;
-    color: var(--dim);
-    text-align: center;
-}
-
-.foot small {
-    display: block;
-}
-
-@media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-        animation: none !important;
-        transition: none !important;
-    }
-    .track span+span {
-        display: none;
-    }
-}
-
-
-/* ---- Lo restaurado ---- */
-
 .ok {
     color: var(--gold-ink);
 }
 
-.menu a {
-    color: var(--text);
-    text-decoration: none;
-    border-bottom: 1px solid transparent;
-    padding-block: 8px;
-}
 
-.menu a:hover {
-    color: var(--accent);
-    border-color: var(--accent);
-}
+/* Oráculo */
 
-.track b {
-    color: var(--gold-ink);
-    font-weight: 600;
-}
-
-.cols {
-    display: flex;
-    gap: clamp(8px, 3vw, 24px);
-    margin-bottom: 6px;
-}
-
-.cols i {
-    width: clamp(14px, 4vw, 24px);
-    height: clamp(48px, 10vw, 84px);
-    background: linear-gradient(90deg, #4d3b24, #8a6d22, #4d3b24);
-    border-top: 6px solid var(--gold);
-    border-bottom: 6px solid var(--gold);
-    box-shadow: 0 0 18px var(--glow);
-}
-
-.title {
-    text-shadow: 0 0 28px var(--glow);
-}
-
-.notice {
-    box-shadow: 0 0 40px color-mix(in srgb, var(--gold) 25%, transparent);
-}
-
-.notice h2 {
-    color: var(--gold-ink);
-}
-
-.tile {
-    transition: border-color .2s;
-}
-
-.tile:hover {
-    border-color: var(--accent);
-}
-
-.tgr {
-    background: var(--gold);
-    color: var(--on-gold);
-    border-color: var(--gold);
-}
-
-.tst {
-    color: var(--gold-ink);
-}
-
-.tdesc {
-    font-size: .95rem;
-    color: var(--dim);
+.section {
+    margin-top: 44px;
 }
 
 .crew {
@@ -486,9 +392,8 @@ h2.sec {
     color: var(--dim);
 }
 
-.section {
-    margin-top: 44px;
-}
+
+/* Formulario */
 
 .field {
     margin: 16px 0 0;
@@ -509,38 +414,4 @@ textarea {
     max-width: 520px;
     padding: 12px;
     font: 1rem var(--f-body);
-    color: var(--text);
-    background: var(--bg);
-    border: 1px solid var(--line);
-    border-radius: 0;
-}
-
-.msg {
-    color: var(--gold-ink);
-}
-
-.msg.bad {
-    color: var(--alert);
-}
-
-.flash {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 60;
-    opacity: 0;
-    background: radial-gradient(circle at 50% 45%, #fffbe8, #f4b93a 55%, #fff6d6);
-    animation: flash 1.4s ease-out;
-}
-
-@keyframes flash {
-    0% {
-        opacity: 0;
-    }
-    30% {
-        opacity: .8;
-    }
-    100% {
-        opacity: 0;
-    }
-}
+    color:
