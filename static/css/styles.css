@@ -9,7 +9,7 @@
 }
 
 html {
-  scroll-padding-top: env(safe-area-inset-top, 0px);
+  scroll-padding-top: calc(64px + env(safe-area-inset-top, 0px));
 }
 
 body {
@@ -1168,5 +1168,108 @@ dialog .cin:focus-visible {
   }
   .track {
     width: auto;
+  }
+}
+
+/* ==========================================================================
+   NAVBAR (estilo Olimpo Digital): cabecera, panel de estado y menú
+   ========================================================================== */
+.bar {
+  padding-block: 18px 14px;
+}
+
+.logo {
+  display: block;
+  margin: 0;
+  font: 900 1.6rem/1.1 var(--f-display);
+  letter-spacing: .06em;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.logo span {
+  color: var(--gold-ink);
+}
+
+.brand small {
+  margin-top: 3px;
+}
+
+.stats {
+  gap: 0;
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--panel) 80%, transparent);
+}
+
+.stat {
+  padding: 8px 18px;
+}
+
+.stat + .stat {
+  border-left: 1px solid var(--line);
+}
+
+#status::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 7px;
+  border-radius: 50%;
+  background: var(--alert);
+  vertical-align: 1px;
+  animation: blink 1.4s steps(1) infinite;
+}
+
+:root.restored #status::before {
+  background: var(--gold);
+  box-shadow: 0 0 8px var(--glow);
+  animation: none;
+}
+
+@keyframes blink {
+  50% {
+    opacity: .15;
+  }
+}
+
+.menu {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2px 8px;
+  padding: 6px 0;
+  margin-top: 4px;
+  font: 500 12px var(--f-mono);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 60%, transparent);
+}
+
+.menu a {
+  color: var(--text);
+  text-decoration: none;
+  padding: 10px 16px;
+  border-bottom: 2px solid transparent;
+  transition: color .2s, border-color .2s;
+}
+
+.menu a:hover {
+  color: var(--gold-ink);
+  border-color: var(--gold);
+}
+
+@media (max-width: 480px) {
+  .stat {
+    padding: 8px 12px;
+  }
+  .menu a {
+    padding: 10px 12px;
   }
 }

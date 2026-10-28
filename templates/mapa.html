@@ -14,9 +14,7 @@
     <div class="wrap">
         <header class="bar">
             <div class="brand">
-                <a class="cta" href="/" target="_blank" rel="noopener">
-                <h1>Heracles<span>.exe</span></h1>
-            </a>
+                <h1><a class="logo" href="/">Heracles<span>.exe</span></a></h1>
                 <small>Olympus Tech Solutions - Grupo 4</small>
             </div>
             <dl class="stats">
@@ -25,6 +23,14 @@
                 <div class="stat"><dt>Contraseña</dt><dd id="passMini">_ _ _ _ _ _ _ _ _ _ _ _</dd></div>
             </dl>
         </header>
+        <div class="meander" aria-hidden="true"></div>
+
+        <nav class="menu" aria-label="Menú principal">
+            <a href="/">Inicio</a>
+            <a href="#map">Mapa</a>
+            <a href="#list">Trabajos</a>
+            <a href="#unlock">Desbloqueo</a>
+        </nav>
 
         <main>
             <section class="intro">
@@ -62,14 +68,14 @@
     </div>
 
     <!-- Modal de diálogos para las pruebas -->
-    <dialog id="dlg">
+    <dialog id="dlg" aria-labelledby="dTitle">
         <div class="dhead">
-            <span class="dgr" id="dGr"></span>
+            <span class="dgr" id="dGr" aria-hidden="true"></span>
             <div>
                 <p class="dtag" id="dTag"></p>
                 <h2 id="dTitle"></h2>
             </div>
-            <button class="x" id="dClose" type="button">×</button>
+            <button class="x" id="dClose" type="button" aria-label="Cerrar">×</button>
         </div>
         <p class="dstory" id="dStory"></p>
         <div class="dbody" id="dBody"></div>

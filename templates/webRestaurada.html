@@ -5,60 +5,140 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>Olimpo Digital · Restaurado</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:wght@400;500;700&family=Cinzel:wght@600;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/webRestaurada.css">
 </head>
 
 <body>
     <script>
-    // Verificar si se completaron los 12 trabajos antes de permitir el acceso
-    try {
-        const done = JSON.parse(localStorage.getItem('heracles-mapa-done') || '[]');
-        if (!Array.isArray(done) || done.length < 12) {
-            alert("Acceso denegado: Primero debes descifrar los 12 caracteres en el mapa.");
-            window.location.href = "/mapa"; // Redirige de vuelta al mapa si no ha terminado
+        // Verificar si se completaron los 12 trabajos antes de permitir el acceso
+        try {
+            const done = JSON.parse(localStorage.getItem('heracles-mapa-done') || '[]');
+            if (!Array.isArray(done) || done.length < 12) {
+                alert("Acceso denegado: Primero debes descifrar los 12 caracteres en el mapa.");
+                window.location.href = "/mapa"; // Redirige de vuelta al mapa si no ha terminado
+            }
+        } catch(e) {
+            window.location.href = "/mapa";
         }
-    } catch(e) {
-        window.location.href = "/mapa";
-    }
-</script>
-    <div class="bar" role="status">✔ ΕΠΙΤΥΧΙΑ 0x00 · SISTEMA RESTAURADO · 12/12 SECCIONES DESBLOQUEADAS</div>
-    <nav class="nav" aria-label="Menú principal"><b>Ὄλυμπος.exe</b><a href="#inicio">Inicio</a><a href="#secciones">Dioses</a><a href="#oraculo">Oráculo</a><a href="#contacto">Contacto</a></nav>
-    <main id="inicio">
-        <section class="hero">
-            <h1>Olimpo Digital</h1>
-            <div class="tag">Portal oficial de los dioses · versión 1.0</div>
-            <p>Los doce monstruos de Heracles han sido derrotados. La maldición se ha roto, el templo vuelve a brillar y cada sección funciona.</p>
-        </section>
+    </script>
+    <div class="flash" aria-hidden="true"></div>
+    <a class="skip" href="#contenido">Saltar al contenido</a>
+    <div class="wrap">
+        <header class="bar">
+            <div class="brand">
+                <a class="logo" href="#inicio">Olimpo<span>.digital</span></a>
+                <small>Portal oficial · build 1.0.0</small>
+            </div>
+            <dl class="stats">
+                <div class="stat"><dt>Sistema</dt>
+                    <dd class="ok">RESTAURADO</dd>
+                </div>
+                <div class="stat"><dt>Secciones</dt>
+                    <dd>12/12</dd>
+                </div>
+                <div class="stat"><dt>HTTP</dt>
+                    <dd class="ok">200</dd>
+                </div>
+            </dl>
+        </header>
+        <div class="meander" aria-hidden="true"></div>
 
-        <section class="fix" aria-labelledby="fx">
-            <h2 id="fx">✅ WEB RESTAURADA</h2>
-            <p id="who">Habéis superado las pruebas del mapa y reunido los <b>12 caracteres</b> de la contraseña. El Olimpo Digital vuelve a ser vuestro.</p>
-            <a class="cta" href="/mapa">Volver al mapa de pruebas</a>
-        </section>
+        <nav class="menu" aria-label="Menú principal">
+            <a href="#inicio">Inicio</a>
+            <a href="#secciones">Dioses</a>
+            <a href="#oraculo">Oráculo</a>
+            <a href="#contacto">Contacto</a>
+        </nav>
 
-        <div class="tools" id="secciones"><label for="q" style="position:absolute;left:-9999px">Buscar sección</label><input id="q" type="search" placeholder="Buscar sección o monstruo…"></div>
-        <div class="grid" id="grid"></div>
-        <p id="none">No hay ninguna sección que coincida con la búsqueda.</p>
-        <p class="done">✔ Todas las secciones cargadas correctamente.</p>
+        <main id="contenido">
+            <section class="intro" id="inicio">
+                <svg class="temple" viewBox="0 0 360 170" role="img" aria-label="Templo griego iluminado">
+                    <defs>
+                        <linearGradient id="shaft" x1="0" x2="1"><stop offset="0" stop-color="#d9c48c"/><stop offset=".5" stop-color="#fbf3da"/><stop offset="1" stop-color="#d9c48c"/></linearGradient>
+                    </defs>
+                    <polygon class="ped" points="20,52 180,6 340,52"/>
+                    <polygon class="ped-in" points="62,48 180,14 298,48"/>
+                    <circle class="sun" cx="180" cy="38" r="7"/>
+                    <rect class="ent" x="24" y="54" width="312" height="12"/>
+                    <g class="shafts">
+                        <rect x="40" y="70" width="22" height="78"/><rect x="100" y="70" width="22" height="78"/><rect x="169" y="70" width="22" height="78"/><rect x="238" y="70" width="22" height="78"/><rect x="298" y="70" width="22" height="78"/>
+                    </g>
+                    <g class="caps">
+                        <rect x="36" y="66" width="30" height="6"/><rect x="96" y="66" width="30" height="6"/><rect x="165" y="66" width="30" height="6"/><rect x="234" y="66" width="30" height="6"/><rect x="294" y="66" width="30" height="6"/>
+                    </g>
+                    <rect class="step" x="20" y="148" width="320" height="7"/>
+                    <rect class="step" x="10" y="155" width="340" height="7"/>
+                    <rect class="step" x="0" y="162" width="360" height="7"/>
+                </svg>
+                <h1 class="title">Olimpo <br class="br">Digital</h1>
+                <p class="lede">
+                    La maldición se ha roto. Los doce monstruos de Heracles han sido derrotados y el templo vuelve a brillar con todas sus secciones operativas.
+                </p>
+            </section>
 
-        <h2 class="sec" id="oraculo">Oráculo · cómo se restauró el templo</h2>
-        <div class="steps">
-            <div><b>1. Inspeccionar</b><br>El código fuente guardaba la nota del León.</div>
-            <div><b>2. Depurar</b><br>La consola reveló el enigma de la Hidra.</div>
-            <div><b>3. Corregir</b><br>Las herramientas de desarrollo sacaron a la luz el elemento que el CSS escondía.</div>
-            <div><b>4. Unir las piezas</b><br>Cada carácter ocupó su posición y la contraseña purificó la web.</div>
-        </div>
+            <section class="notice" aria-labelledby="nt">
+                <h2 class="sec" id="nt">Web restaurada</h2>
+                <p id="who">
+                    Habéis superado las pruebas del mapa y reunido los <b>12 caracteres</b> de la contraseña. El Olimpo Digital vuelve a estar en línea.
+                </p>
+                <div class="actions"><a class="btn" href="#secciones">Explorar el templo</a><a class="btn ghost" href="/mapa">Volver al mapa</a></div>
+            </section>
 
-        <h2 class="sec" id="contacto">Contacto</h2>
-        <p>¿Quieres un escape room como este para tu centro? Escríbenos.</p>
-        <form id="f" novalidate>
-            <p><label for="n">Nombre</label><br><input id="n"></p>
-            <p><label for="m">Mensaje</label><br><textarea id="m" rows="3"></textarea></p>
-            <button class="btn" type="submit">Enviar a los dioses</button>
-            <div id="thanks" role="status"></div>
-        </form>
-    </main>
-    <footer>© Dódeka · Los 12 Trabajos del Código<br>Aprende programando, juega depurando.</footer>
+            <section class="trials" id="secciones" aria-labelledby="sec">
+                <h2 class="sec" id="sec">Secciones del portal</h2>
+                <div class="tools">
+                    <label for="q" class="sr-only">Buscar sección</label>
+                    <input id="q" type="search" placeholder="Buscar sección o monstruo…">
+                </div>
+                <ul class="tl" id="grid"></ul>
+                <p id="none">No hay ninguna sección que coincida con la búsqueda.</p>
+            </section>
+
+            <section class="section" id="oraculo" aria-labelledby="or">
+                <h2 class="sec" id="or">Oráculo · cómo se restauró</h2>
+                <ol class="crew">
+                    <li><b>1. Inspeccionar</b>
+                        <p>El código fuente guardaba la nota del León.</p>
+                    </li>
+                    <li><b>2. Depurar</b>
+                        <p>La consola reveló el enigma de la Hidra.</p>
+                    </li>
+                    <li><b>3. Corregir</b>
+                        <p>Las herramientas de desarrollo sacaron a la luz el elemento que el CSS escondía.</p>
+                    </li>
+                    <li><b>4. Unir las piezas</b>
+                        <p>Cada carácter ocupó su posición y la contraseña purificó la web.</p>
+                    </li>
+                </ol>
+            </section>
+
+            <section class="section" id="contacto" aria-labelledby="ct">
+                <div class="contact">
+                <div class="contact-text">
+                    <h2 class="sec" id="ct">Contacto</h2>
+                    <p>¿Quieres un escape room como este para tu centro? Escríbenos.</p>
+                </div>
+                <form id="f" novalidate>
+                    <div class="field"><label for="n">Nombre</label><input id="n" autocomplete="name"></div>
+                    <div class="field"><label for="m">Mensaje</label><textarea id="m" rows="4"></textarea></div>
+                    <div class="actions"><button class="btn" type="submit">Enviar mensaje</button></div>
+                    <p class="msg" id="thanks" role="status"></p>
+                </form>
+                </div>
+            </section>
+        </main>
+
+        <div class="meander" aria-hidden="true"></div>
+        <p class="foot">
+            © Dódeka · Los 12 Trabajos del Código
+            <small>Aprende programando, juega depurando.</small>
+        </p>
+    </div>
+
     <script src="/static/js/webRestaurada_2.js"></script>
 </body>
+
 </html>

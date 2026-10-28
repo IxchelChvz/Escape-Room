@@ -1,45 +1,35 @@
-/* Web averiada: rellena la rejilla con las 12 secciones bloqueadas. */
+/* Web averiada: rellena la lista con las 12 secciones bloqueadas. */
 var S = [
-    ["León de Nemea", "Noticias", "🦁", "Últimas noticias del templo: ΣΦΑΛΜΑ al cargar el feed."],
-    ["Hidra de Lerna", "Galería", "🐍", "Imágenes no disponibles: la Hidra ha mordido el servidor."],
-    ["Cierva de Cerinea", "Mapa del sitio", "🦌", "El mapa del sitio no responde."],
-    ["Jabalí de Erimanto", "Buscador", "🐗", "Buscando… el jabalí ha arrasado el índice."],
-    ["Establos de Augías", "Archivo", "🐴", "Archivo ilegible: demasiado código basura."],
-    ["Aves del Estínfalo", "Chat", "🐦", "Chat de los dioses sin conexión."],
-    ["Toro de Creta", "Tienda", "🐂", "Tienda cerrada: el toro ha roto el carrito."],
-    ["Yeguas de Diomedes", "Eventos", "🐎", "El calendario se ha bloqueado."],
-    ["Cinturón de Hipólita", "Perfil", "👑", "Perfil de usuario no encontrado (404)."],
-    ["Bueyes de Gerión", "Foro", "🐄", "Foro caído: los bueyes han pisado los hilos."],
-    ["Manzanas de las Hespérides", "Premios", "🍎", "Premios no disponibles."],
-    ["Cerbero", "Acceso final", "🐕", "Puerta final cerrada."]
+    ["León de Nemea", "Noticias"],
+    ["Hidra de Lerna", "Galería"],
+    ["Cierva de Cerinea", "Mapa del sitio"],
+    ["Jabalí de Erimanto", "Buscador"],
+    ["Establos de Augías", "Archivo"],
+    ["Aves del Estínfalo", "Chat"],
+    ["Toro de Creta", "Tienda"],
+    ["Yeguas de Diomedes", "Eventos"],
+    ["Cinturón de Hipólita", "Perfil"],
+    ["Bueyes de Gerión", "Foro"],
+    ["Manzanas de las Hespérides", "Premios"],
+    ["Cerbero", "Acceso final"]
 ];
+var G = ["Α", "Β", "Γ", "Δ", "Ε", "Ζ", "Η", "Θ", "Ι", "Κ", "Λ", "Μ"];
+var g = document.getElementById("grid");
 
-var grid = document.getElementById("grid");
+// "León de Nemea" -> "ERR_LEON_DE_NEMEA"
+function code(n) {
+    return "ERR_" + n.normalize("NFD").replace(/[̀-ͯ]/g, "")
+        .toUpperCase().replace(/[^A-Z]+/g, "_");
+}
 
 S.forEach(function (s, i) {
-    var card = document.createElement("article");
-    card.className = "card";
-
-    var title = document.createElement("h3");
-    title.textContent = s[1];
-
-    var img = document.createElement("div");
-    img.className = "img";
-    img.textContent = "imagen_" + (i + 1) + ".png ✖ 404";
-
-    var text = document.createElement("p");
-    text.textContent = s[3];
-
-    var lock = document.createElement("div");
-    lock.className = "lock";
-    lock.innerHTML = "<span aria-hidden='true'>🔒</span><div>BLOQUEADA</div>";
-    var by = document.createElement("div");
-    by.textContent = "por: " + s[0];
-    lock.appendChild(by);
-
-    card.appendChild(title);
-    card.appendChild(img);
-    card.appendChild(text);
-    card.appendChild(lock);
-    grid.appendChild(card);
+    var li = document.createElement("li");
+    li.className = "tile";
+    li.innerHTML = "<span class='tgr' aria-hidden='true'></span>" +
+        "<span class='tbody'><span class='tname'></span><span class='ttag'></span></span>" +
+        "<span class='tst'>ΣΦΑΛΜΑ 403</span>";
+    li.querySelector(".tgr").textContent = G[i];
+    li.querySelector(".tname").textContent = s[1];
+    li.querySelector(".ttag").textContent = "Bloqueada · " + code(s[0]);
+    g.appendChild(li);
 });

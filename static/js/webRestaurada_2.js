@@ -1,48 +1,41 @@
 // Quita las tildes para que buscar «leon» encuentre «León».
 function norm(t) {
-    return String(t).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    return String(t).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 }
 
 /* --------------- Grid Restaurado ----------------- */
 var S = [
-    ["León de Nemea", "Noticias", "🦁", "Su piel invulnerable cedió: ya se pueden leer las novedades del templo."],
-    ["Hidra de Lerna", "Galería", "🐍", "Cada cabeza cortada devolvió una imagen. La galería carga de nuevo."],
-    ["Cierva de Cerinea", "Mapa del sitio", "🦌", "Atrapada con paciencia: el mapa vuelve a guiar por todo el templo."],
-    ["Jabalí de Erimanto", "Buscador", "🐗", "Capturado en la nieve: el buscador encuentra cualquier contenido."],
-    ["Establos de Augías", "Archivo", "🐴", "Limpiados en un día: el archivo está ordenado y sin código basura."],
-    ["Aves del Estínfalo", "Chat", "🐦", "Ahuyentadas con ruido: el chat de los dioses está en línea."],
-    ["Toro de Creta", "Tienda", "🐂", "Domado: la tienda de reliquias funciona otra vez."],
-    ["Yeguas de Diomedes", "Eventos", "🐎", "Calmadas: el calendario de eventos ya no se bloquea."],
-    ["Cinturón de Hipólita", "Perfil", "👑", "Recuperado: los perfiles de usuario vuelven a abrirse."],
-    ["Bueyes de Gerión", "Foro", "🐄", "Reunido: el foro de debate está abierto a todos."],
-    ["Manzanas de las Hespérides", "Premios", "🍎", "Conseguidas: los diplomas y premios están disponibles."],
-    ["Cerbero", "Acceso final", "🐕", "Vencido: la última puerta del templo está abierta."]
+    ["León de Nemea", "Noticias", "Las novedades del templo vuelven a poder leerse."],
+    ["Hidra de Lerna", "Galería", "Todas las imágenes cargan de nuevo."],
+    ["Cierva de Cerinea", "Mapa del sitio", "El mapa guía otra vez por todo el portal."],
+    ["Jabalí de Erimanto", "Buscador", "El buscador encuentra cualquier contenido."],
+    ["Establos de Augías", "Archivo", "Archivo ordenado y sin código basura."],
+    ["Aves del Estínfalo", "Chat", "El chat de los dioses está en línea."],
+    ["Toro de Creta", "Tienda", "La tienda de reliquias funciona otra vez."],
+    ["Yeguas de Diomedes", "Eventos", "El calendario de eventos ya no se bloquea."],
+    ["Cinturón de Hipólita", "Perfil", "Los perfiles de usuario vuelven a abrirse."],
+    ["Bueyes de Gerión", "Foro", "El foro de debate está abierto a todos."],
+    ["Manzanas de las Hespérides", "Premios", "Diplomas y premios disponibles."],
+    ["Cerbero", "Acceso final", "La última puerta del templo está abierta."]
 ];
+var G = ["Α", "Β", "Γ", "Δ", "Ε", "Ζ", "Η", "Θ", "Ι", "Κ", "Λ", "Μ"];
 
 var g = document.getElementById("grid");
 
 if (g) {
     g.innerHTML = ""; // Limpia cualquier contenido previo
     S.forEach(function(s, i) {
-        var d = document.createElement("article");
-        d.className = "card";
-        var h = document.createElement("h3");
-        h.textContent = s[1];
-        var im = document.createElement("div");
-        im.className = "img";
-        im.innerHTML = "<span aria-hidden='true'></span>imagen_" + (i + 1) + ".png ✔";
-        im.firstChild.textContent = s[2];
-        var p = document.createElement("p");
-        p.textContent = s[3];
-        var st = document.createElement("div");
-        st.className = "st";
-        st.textContent = "✔ Desbloqueada · vencido: " + s[0];
-        d.appendChild(h);
-        d.appendChild(im);
-        d.appendChild(p);
-        d.appendChild(st);
-        d.dataset.t = norm(s[0] + " " + s[1] + " " + s[3]);
-        g.appendChild(d);
+        var li = document.createElement("li");
+        li.className = "tile";
+        li.innerHTML = "<span class='tgr' aria-hidden='true'></span>" +
+            "<span class='tbody'><span class='tname'></span><span class='tdesc'></span><span class='ttag'></span></span>" +
+            "<span class='tst'>HTTP 200</span>";
+        li.querySelector(".tgr").textContent = G[i];
+        li.querySelector(".tname").textContent = s[1];
+        li.querySelector(".tdesc").textContent = s[2];
+        li.querySelector(".ttag").textContent = "Liberada de " + s[0];
+        li.dataset.t = norm(s[0] + " " + s[1] + " " + s[2]);
+        g.appendChild(li);
     });
 }
 
@@ -71,11 +64,11 @@ if (form) {
             m = document.getElementById("m").value.trim(),
             t = document.getElementById("thanks");
         if (!n || !m) {
-            t.style.color = "#b3261e";
+            t.className = "msg bad";
             t.textContent = "Rellena tu nombre y el mensaje.";
             return;
         }
-        t.style.color = "";
+        t.className = "msg";
         t.textContent = "¡Gracias, " + n + "! (Prototipo: el mensaje no se envía a ningún sitio.)";
         this.reset();
     };
