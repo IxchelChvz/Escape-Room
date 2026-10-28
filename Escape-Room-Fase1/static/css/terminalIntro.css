@@ -1,0 +1,334 @@
+/* ==========================================================================
+   TERMINAL INTRO // ULTRA-CRT RETRO EXPERIENCE
+   Encendido de tubo, haz de electrones, curvatura de cristal, scanlines, 
+   resplandor de fosforo, aberracion cromatica y colapso CRT al cargar
+   (Cero emojis)
+   ========================================================================== */
+
+/* Capa completa del monitor CRT */
+.intro-terminal-overlay {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 10000000;
+    background: #020202;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2vh 2.5vw;
+    box-sizing: border-box;
+    overflow: hidden;
+    font-family: 'JetBrains Mono', 'Consolas', 'Courier New', monospace;
+    /* Animacion de encendido inicial del tubo catodico */
+    animation: crtWarmUp 0.65s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+/* Animacion clasica de encendido de tubo CRT */
+@keyframes crtWarmUp {
+    0% {
+        transform: scale(1, 0.003);
+        filter: brightness(25);
+        opacity: 0.9;
+    }
+    40% {
+        transform: scale(1, 0.008);
+        filter: brightness(15);
+    }
+    75% {
+        transform: scale(1.02, 1.05);
+        filter: brightness(2.2);
+    }
+    100% {
+        transform: scale(1, 1);
+        filter: brightness(1);
+        opacity: 1;
+    }
+}
+
+/* Colapso clasico al apagarse / entrar a la web */
+.intro-terminal-overlay.crt-turn-off {
+    animation: crtShutDown 0.65s cubic-bezier(0.23, 1, 0.32, 1) forwards !important;
+}
+
+@keyframes crtShutDown {
+    0% {
+        transform: scale(1, 1);
+        filter: brightness(1);
+        opacity: 1;
+    }
+    45% {
+        transform: scale(1, 0.004);
+        filter: brightness(20);
+        background: #ffffff;
+        opacity: 1;
+    }
+    85% {
+        transform: scale(0.004, 0.004);
+        filter: brightness(35);
+        background: #ffffff;
+        opacity: 1;
+    }
+    100% {
+        transform: scale(0, 0);
+        opacity: 0;
+        pointer-events: none;
+    }
+}
+
+/* Marco exterior y curvatura convexa del cristal del tubo (Ojo de Pez) */
+.intro-crt-bezel {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 100;
+    box-shadow: 
+        inset 0 0 0 12px #0a0a0d,
+        inset 0 0 0 18px #18181e,
+        inset 0 0 80px rgba(0, 0, 0, 0.96),
+        inset 0 0 150px rgba(0, 0, 0, 0.9);
+    border-radius: 40px / 30px;
+}
+
+/* Lente de cristal con reflejo oblicuo y viñeta de tubo esferico */
+.intro-crt-glass {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 95;
+    background: 
+        radial-gradient(ellipse at 50% 50%, transparent 50%, rgba(0, 0, 0, 0.55) 78%, rgba(0, 0, 0, 0.95) 98%, #000000 100%),
+        linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.015) 22%, transparent 45%);
+}
+
+/* Lineas de escaneo horizontales continuas y mascara de fosforo RGB */
+.intro-crt-scanlines {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 90;
+    background: 
+        linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.4) 50%),
+        linear-gradient(90deg, rgba(255, 0, 0, 0.04), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.04));
+    background-size: 100% 3px, 6px 100%;
+}
+
+/* Haz de barrido vertical (Electron Beam sweep) */
+.intro-crt-beam {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 90px;
+    background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+    pointer-events: none;
+    z-index: 92;
+    animation: crtBeamRoll 4.8s linear infinite;
+}
+
+@keyframes crtBeamRoll {
+    0% { transform: translateY(-100px); }
+    100% { transform: translateY(100vh); }
+}
+
+/* Parpadeo continuo de 60Hz caracteristico de monitor CRT */
+@keyframes crtFlicker60 {
+    0% { opacity: 0.975; }
+    20% { opacity: 1; }
+    45% { opacity: 0.96; }
+    60% { opacity: 0.99; }
+    85% { opacity: 0.97; }
+    100% { opacity: 1; }
+}
+
+.intro-crt-tube-content {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 920px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: crtFlicker60 0.14s infinite;
+}
+
+/* ==========================================================================
+   FASE 1: TERMINAL VERDE FOSFORO (P1 / P39 PHOSPHOR)
+   ========================================================================== */
+.intro-terminal-overlay.phase-green {
+    background: radial-gradient(ellipse at 50% 50%, #031407 0%, #010803 65%, #000000 100%);
+    color: #33ff33;
+}
+
+.intro-terminal-overlay.phase-green .intro-log-line {
+    color: #33ff33;
+    /* Resplandor de fosforo verde intenso con aberracion cromatica */
+    text-shadow: 
+        0 0 3px #00ff66,
+        0 0 8px rgba(0, 255, 102, 0.8),
+        0 0 16px rgba(0, 255, 102, 0.4),
+        -1px 0 rgba(0, 255, 0, 0.6),
+        1px 0 rgba(0, 200, 255, 0.4);
+}
+
+/* ==========================================================================
+   FASE 2 Y 3: COLOR BURDEOS Y RESPLANDOR CARMESI PROFUNDO
+   ========================================================================== */
+.intro-terminal-overlay.phase-burgundy {
+    background: radial-gradient(ellipse at 50% 50%, #2b040c 0%, #160105 65%, #040001 100%);
+    color: #ff3355;
+    /* Breve sacudida de sincronia vertical al inyectar */
+    animation: crtGlitchShift 0.25s ease-out;
+}
+
+@keyframes crtGlitchShift {
+    0% { transform: translate(0, 0); filter: hue-rotate(90deg) brightness(2); }
+    20% { transform: translate(-6px, 3px); }
+    40% { transform: translate(6px, -3px); filter: contrast(180%); }
+    60% { transform: translate(-3px, -1px); }
+    100% { transform: translate(0, 0); filter: none; }
+}
+
+.intro-terminal-overlay.phase-burgundy .intro-log-line {
+    color: #ff3355;
+    /* Resplandor burdeos profundo con aberracion cromatica roja/azul */
+    text-shadow: 
+        0 0 4px #ff2255,
+        0 0 12px rgba(255, 34, 85, 0.85),
+        0 0 24px rgba(180, 0, 40, 0.5),
+        -1.5px 0 rgba(255, 0, 50, 0.7),
+        1.5px 0 rgba(255, 0, 200, 0.4);
+}
+
+/* Caja de consola de texto */
+.intro-console-box {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.intro-log-line {
+    font-size: 1.15rem;
+    line-height: 1.6;
+    margin: 5px 0;
+    white-space: pre-wrap;
+    word-break: break-all;
+    font-weight: 700;
+}
+
+.intro-log-line.alert-red {
+    color: #ff1744 !important;
+    background: rgba(255, 23, 68, 0.2);
+    padding: 2px 10px;
+    border-left: 5px solid #ff1744;
+}
+
+.intro-log-line.glitch-flash {
+    animation: introGlitch 0.15s ease-in-out infinite;
+}
+
+@keyframes introGlitch {
+    0% { transform: translateX(0); }
+    50% { transform: translateX(-4px); color: #ffffff; }
+    100% { transform: translateX(4px); }
+}
+
+/* Barra de progreso de la inyeccion */
+.intro-progress-wrap {
+    width: 100%;
+    margin-top: 10px;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #ff3355;
+    text-shadow: 0 0 8px #ff2255;
+}
+
+/* ==========================================================================
+   FASE 3: ARAÑA ASCII RETRO CRT
+   ========================================================================== */
+.intro-spider-container {
+    display: none;
+    position: relative;
+    z-index: 10;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    animation: introSpiderAppear 0.35s ease-out forwards;
+}
+
+@keyframes introSpiderAppear {
+    0% { transform: scale(0.94); filter: brightness(3) contrast(200%); opacity: 0; }
+    60% { transform: scale(1.02); filter: brightness(1.5); }
+    100% { transform: scale(1); filter: brightness(1); opacity: 1; }
+}
+
+.intro-spider-title {
+    font-size: clamp(0.9rem, 1.8vh, 1.25rem);
+    font-weight: 900;
+    color: #ff2244;
+    text-shadow: 0 0 8px #ff2244, 0 0 16px rgba(255, 34, 68, 0.7);
+    margin-bottom: 4px;
+    letter-spacing: 1.5px;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.intro-spider-pre {
+    font-family: 'Courier New', monospace;
+    font-size: clamp(3px, 0.76vh, 8.5px);
+    line-height: clamp(3px, 0.76vh, 8.5px);
+    letter-spacing: -0.5px;
+    white-space: pre;
+    color: #ff3355;
+    text-shadow: 
+        0 0 4px #ff2255,
+        0 0 10px rgba(255, 34, 85, 0.8),
+        -1px 0 rgba(255, 0, 50, 0.5),
+        1px 0 rgba(255, 0, 200, 0.3);
+    margin: 0;
+    padding: 0;
+    user-select: none;
+}
+
+.intro-spider-footer {
+    font-size: clamp(0.85rem, 1.6vh, 1.15rem);
+    font-weight: 800;
+    color: #ffffff;
+    background: #800020;
+    border: 2px solid #ff3355;
+    padding: 6px 18px;
+    margin-top: 8px;
+    text-shadow: none;
+    letter-spacing: 0.5px;
+    text-align: center;
+    box-shadow: 0 0 25px rgba(128, 0, 32, 0.9);
+}
+
+/* Boton para saltar la intro */
+.intro-skip-btn {
+    position: absolute;
+    top: 1.2rem;
+    right: 1.5rem;
+    z-index: 120;
+    background: rgba(10, 10, 15, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: #bbbbbb;
+    font-family: 'JetBrains Mono', 'Consolas', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 6px 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-radius: 4px;
+}
+
+.intro-skip-btn:hover {
+    background: #ff2244;
+    color: #ffffff;
+    border-color: #ff2244;
+    box-shadow: 0 0 12px #ff2244;
+}

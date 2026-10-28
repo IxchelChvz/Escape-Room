@@ -1,0 +1,312 @@
+/* ==========================================================================
+   PANTALLA DE COLAPSO CRT RETRO // OJO DE PEZ (FISHEYE) AJUSTADO A PANTALLA
+   Maxima legibilidad (letras nitidas sin borrosidad) y efecto de tubo convexo
+   ========================================================================== */
+
+/* Bloqueo del scroll del body cuando la pantalla de colapso esta activa */
+html.crt-active, body.crt-active {
+    overflow: hidden !important;
+    height: 100vh !important;
+}
+
+/* Contenedor principal: Ocupa toda la pantalla (100vw x 100vh) con scroll nativo limpio */
+.crt-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 999999;
+    background: radial-gradient(ellipse at 50% 50%, #1a0303 0%, #0d0101 60%, #000000 100%);
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-sizing: border-box;
+    font-family: 'JetBrains Mono', 'Consolas', 'Courier New', monospace;
+    color: #ff4444;
+}
+
+/* ==========================================================================
+   EFECTO OJO DE PEZ (FISHEYE) & PANTALLA CRT ANTIGUA
+   ========================================================================== */
+
+/* Chasis y marco abombado del monitor CRT alrededor de la pantalla completa */
+.crt-fisheye-frame {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 100;
+    /* Bisel exterior que curva las 4 esquinas simulando un tubo catodico abombado */
+    box-shadow: 
+        inset 0 0 0 10px #111115,
+        inset 0 0 0 16px #08080a,
+        inset 0 0 60px rgba(0, 0, 0, 0.95),
+        inset 0 0 120px rgba(0, 0, 0, 0.9);
+    border-radius: 36px;
+}
+
+/* Lente de cristal convexa (Ojo de Pez) con viñeta esferica y reflejos */
+.crt-fisheye-lens {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 95;
+    background: 
+        /* Viñeta esferica pronunciada de lente ojo de pez */
+        radial-gradient(ellipse at 50% 50%, transparent 55%, rgba(0, 0, 0, 0.5) 75%, rgba(0, 0, 0, 0.92) 92%, #000000 100%),
+        /* Resplandor central esferico */
+        radial-gradient(circle at 50% 45%, rgba(255, 30, 30, 0.08) 0%, transparent 60%),
+        /* Reflejo de luz blanca en el cristal abombado superior izquierdo */
+        linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.015) 25%, transparent 50%);
+}
+
+/* Lineas de escaneo sutiles (Scanlines) de monitor de fosforo */
+.crt-scanlines {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 90;
+    background: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0) 50%, 
+        rgba(0, 0, 0, 0.25) 50%
+    );
+    background-size: 100% 4px;
+}
+
+/* Haz de barrido vertical continuo de tubo catodico */
+.crt-sweep-line {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: linear-gradient(180deg, transparent, rgba(255, 50, 50, 0.06), transparent);
+    pointer-events: none;
+    z-index: 92;
+    animation: crtSweep 6s linear infinite;
+}
+
+@keyframes crtSweep {
+    0% { transform: translateY(-90px); }
+    100% { transform: translateY(100vh); }
+}
+
+/* ==========================================================================
+   CONTENIDO Y TIPOGRAFIA NITIDA (LETRAS 100% LEGIBLES)
+   ========================================================================== */
+
+/* Envoltorio de contenido con flujo vertical nativo (sin saltos al hacer scroll) */
+.crt-content-wrap {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 3rem 2rem 5rem 2rem;
+    box-sizing: border-box;
+}
+
+/* Banner de alerta superior rojo (Estilo ransomware / NotPetya de Imagen 1) */
+.crt-banner {
+    background: #ff2a2a;
+    color: #000000;
+    font-weight: 900;
+    font-size: 1.35rem;
+    padding: 14px 20px;
+    line-height: 1.35;
+    letter-spacing: 0.5px;
+    margin-bottom: 1.4rem;
+    border: 2px solid #ff7777;
+    box-shadow: 0 0 25px rgba(255, 42, 42, 0.45);
+    text-transform: uppercase;
+    border-radius: 4px;
+}
+
+/* Linea separadora retro */
+.crt-sep {
+    color: #ff3333;
+    font-size: 1rem;
+    margin: 1rem 0;
+    user-select: none;
+    white-space: nowrap;
+    overflow: hidden;
+    opacity: 0.75;
+}
+
+/* Parrafo principal */
+.crt-lead {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #ff5555;
+    line-height: 1.55;
+    margin: 1.2rem 0;
+}
+
+/* Parrafos secundarios nitidos */
+.crt-content-wrap p {
+    font-size: 1.05rem;
+    line-height: 1.65;
+    color: #ff6666;
+    margin: 0.9rem 0;
+}
+
+/* Cuadro de despedida */
+.crt-farewell {
+    background: rgba(255, 30, 30, 0.12);
+    border-left: 6px solid #ff2a2a;
+    padding: 1.1rem 1.4rem;
+    margin: 1.5rem 0;
+    color: #ffffff;
+    font-size: 1.2rem;
+    font-weight: 700;
+    line-height: 1.55;
+    border-radius: 0 4px 4px 0;
+}
+
+/* Caja de telemetria estilo retro (Imagen 2) */
+.crt-telemetry {
+    background: rgba(5, 0, 0, 0.9);
+    border: 2px solid #ff3333;
+    padding: 1.3rem 1.6rem;
+    margin: 1.6rem 0;
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: #ff8888;
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.9);
+    border-radius: 4px;
+}
+
+.crt-telemetry-header {
+    text-align: center;
+    border-bottom: 1px solid #ff3333;
+    padding-bottom: 6px;
+    margin-bottom: 8px;
+    color: #ffffff;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.crt-telemetry-row {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px dotted rgba(255, 51, 51, 0.3);
+    padding: 5px 0;
+}
+
+.crt-telemetry-row:last-child {
+    border-bottom: none;
+}
+
+.crt-telemetry-label {
+    color: #ff6666;
+    font-weight: 600;
+}
+
+.crt-telemetry-val {
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.crt-telemetry-val.bad {
+    color: #ff3333;
+}
+
+/* Linea de comandos con cursor parpadeante */
+.crt-cli {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: 1.4rem;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #ff5555;
+}
+
+.crt-cursor {
+    display: inline-block;
+    width: 10px;
+    height: 1.2em;
+    background: #ff3333;
+    animation: crtBlink 0.7s infinite;
+    vertical-align: middle;
+}
+
+@keyframes crtBlink {
+    0%, 49% { opacity: 1; }
+    50%, 100% { opacity: 0; }
+}
+
+/* Botonera de acciones retro */
+.crt-actions {
+    display: flex;
+    gap: 1.2rem;
+    flex-wrap: wrap;
+    margin-top: 1.8rem;
+}
+
+.crt-btn {
+    font-family: 'JetBrains Mono', 'Consolas', monospace;
+    font-size: 0.95rem;
+    font-weight: 800;
+    padding: 14px 22px;
+    cursor: pointer;
+    border: 2px solid #ff3333;
+    background: #1c0202;
+    color: #ff5555;
+    transition: all 0.15s ease-in-out;
+    border-radius: 4px;
+}
+
+.crt-btn:hover {
+    background: #ff2a2a;
+    color: #000000;
+    box-shadow: 0 0 20px rgba(255, 42, 42, 0.7);
+}
+
+.crt-btn-secondary {
+    border-color: #662222;
+    color: #aa5555;
+    background: #0d0101;
+}
+
+.crt-btn-secondary:hover {
+    background: #441111;
+    color: #ffffff;
+    box-shadow: 0 0 14px rgba(68, 17, 17, 0.8);
+}
+
+/* Boton flotante permanente para volver a abrir la pantalla si se cerro */
+.crt-reopen-pill {
+    position: fixed;
+    bottom: 1.2rem;
+    right: 1.2rem;
+    z-index: 99999;
+    background: #ff2a2a;
+    color: #000000;
+    border: 2px solid #ffffff;
+    font-family: 'JetBrains Mono', 'Consolas', monospace;
+    font-size: 0.8rem;
+    padding: 10px 16px;
+    cursor: pointer;
+    font-weight: 800;
+    box-shadow: 0 0 20px rgba(255, 42, 42, 0.8);
+    animation: crtPillPulse 1.5s infinite;
+    border-radius: 4px;
+}
+
+@keyframes crtPillPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.04); }
+}
+
+/* Scrollbar retro estilizado */
+.crt-overlay::-webkit-scrollbar {
+    width: 9px;
+}
+.crt-overlay::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.8);
+}
+.crt-overlay::-webkit-scrollbar-thumb {
+    background: #ff2a2a;
+    border-radius: 4px;
+}
