@@ -43,8 +43,25 @@
 
         <main id="contenido">
             <section class="intro" id="inicio">
-                <div class="cols" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
-                <h1 class="title">Olimpo Digital</h1>
+                <svg class="temple" viewBox="0 0 360 170" role="img" aria-label="Templo griego iluminado">
+                    <defs>
+                        <linearGradient id="shaft" x1="0" x2="1"><stop offset="0" stop-color="#d9c48c"/><stop offset=".5" stop-color="#fbf3da"/><stop offset="1" stop-color="#d9c48c"/></linearGradient>
+                    </defs>
+                    <polygon class="ped" points="20,52 180,6 340,52"/>
+                    <polygon class="ped-in" points="62,48 180,14 298,48"/>
+                    <circle class="sun" cx="180" cy="38" r="7"/>
+                    <rect class="ent" x="24" y="54" width="312" height="12"/>
+                    <g class="shafts">
+                        <rect x="40" y="70" width="22" height="78"/><rect x="100" y="70" width="22" height="78"/><rect x="169" y="70" width="22" height="78"/><rect x="238" y="70" width="22" height="78"/><rect x="298" y="70" width="22" height="78"/>
+                    </g>
+                    <g class="caps">
+                        <rect x="36" y="66" width="30" height="6"/><rect x="96" y="66" width="30" height="6"/><rect x="165" y="66" width="30" height="6"/><rect x="234" y="66" width="30" height="6"/><rect x="294" y="66" width="30" height="6"/>
+                    </g>
+                    <rect class="step" x="20" y="148" width="320" height="7"/>
+                    <rect class="step" x="10" y="155" width="340" height="7"/>
+                    <rect class="step" x="0" y="162" width="360" height="7"/>
+                </svg>
+                <h1 class="title">Olimpo <br class="br">Digital</h1>
                 <p class="lede">
                     La maldición se ha roto. Los doce monstruos de Heracles han sido derrotados y el templo vuelve a brillar con todas sus secciones operativas.
                 </p>
@@ -85,17 +102,22 @@
             </section>
 
             <section class="section" id="contacto" aria-labelledby="ct">
-                <h2 class="sec" id="ct">Contacto</h2>
-                <p>¿Quieres un escape room como este para tu centro? Escríbenos.</p>
+                <div class="contact">
+                <div class="contact-text">
+                    <h2 class="sec" id="ct">Contacto</h2>
+                    <p>¿Quieres un escape room como este para tu centro? Escríbenos.</p>
+                </div>
                 <form id="f" novalidate>
                     <div class="field"><label for="n">Nombre</label><input id="n" autocomplete="name"></div>
                     <div class="field"><label for="m">Mensaje</label><textarea id="m" rows="4"></textarea></div>
                     <div class="actions"><button class="btn" type="submit">Enviar mensaje</button></div>
                     <p class="msg" id="msg" role="status"></p>
                 </form>
+                </div>
             </section>
         </main>
 
+        <div class="meander" aria-hidden="true"></div>
         <p class="foot">
             © Dódeka · Los 12 Trabajos del Código
             <small>Aprende programando, juega depurando.</small>

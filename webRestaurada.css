@@ -1,9 +1,11 @@
-    /* Olimpo Digital · web restaurada · estilo alineado con el mapa (Heracles.exe) */
+/* Olimpo Digital · web restaurada · mismo lenguaje que el mapa (Heracles.exe)
+   Pergamino y oro sobre el que se apoya el templo. */
 
 :root {
     --bg: #e8d9b0;
     --bg2: #efe3c2;
-    --panel: #f4e9cc;
+    --panel: #f6ecd0;
+    --panel-hi: #fbf4de;
     --line: #b79b62;
     --text: #2a1c0d;
     --dim: #5e4a2c;
@@ -36,11 +38,15 @@ html {
 body {
     margin: 0;
     background-color: var(--bg);
-    background-image: radial-gradient(900px 500px at 85% 0%, color-mix(in srgb, var(--gold) 10%, transparent), transparent 70%), radial-gradient(800px 500px at 0% 70%, color-mix(in srgb, var(--accent) 7%, transparent), transparent 70%);
+    background-image:
+        radial-gradient(1000px 560px at 85% -5%, color-mix(in srgb, var(--gold) 20%, transparent), transparent 70%),
+        radial-gradient(800px 520px at -5% 55%, color-mix(in srgb, var(--accent) 9%, transparent), transparent 70%),
+        linear-gradient(180deg, transparent 60%, color-mix(in srgb, var(--gold) 10%, transparent));
+    background-attachment: fixed;
     color: var(--text);
     font-family: var(--f-body);
     font-size: 17px;
-    line-height: 1.5;
+    line-height: 1.55;
     padding-block: 8px 48px;
     padding-left: max(16px, env(safe-area-inset-left, 0px));
     padding-right: max(16px, env(safe-area-inset-right, 0px));
@@ -67,13 +73,28 @@ body {
 }
 
 .wrap {
-    max-width: 1280px;
+    max-width: 1180px;
     margin: 0 auto;
     min-width: 0;
 }
 
+/* Único momento orquestado: el destello dorado al restaurar (como en el mapa) */
+.flash {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    pointer-events: none;
+    background: radial-gradient(circle at 50% 35%, #fffbe8, #f4b93a 55%, #fff6d6);
+    animation: flash 1.6s ease-out both;
+}
 
-/* Cabecera */
+@keyframes flash {
+    0% { opacity: .95; }
+    100% { opacity: 0; visibility: hidden; }
+}
+
+
+/* ---- Cabecera ---- */
 
 .bar {
     display: flex;
@@ -81,7 +102,7 @@ body {
     align-items: center;
     justify-content: space-between;
     gap: 14px 28px;
-    padding-block: 14px;
+    padding-block: 18px 14px;
 }
 
 .brand {
@@ -91,7 +112,7 @@ body {
 .logo {
     display: block;
     margin: 0;
-    font: 900 1.5rem/1.1 var(--f-display);
+    font: 900 1.6rem/1.1 var(--f-display);
     letter-spacing: .06em;
     color: var(--text);
     text-decoration: none;
@@ -103,7 +124,7 @@ body {
 
 .brand small {
     display: block;
-    margin-top: 2px;
+    margin-top: 3px;
     font: 500 11px var(--f-mono);
     letter-spacing: .14em;
     text-transform: uppercase;
@@ -113,8 +134,18 @@ body {
 .stats {
     display: flex;
     flex-wrap: wrap;
-    gap: 12px 28px;
+    gap: 0;
     margin: 0;
+    border: 1px solid var(--line);
+    background: color-mix(in srgb, var(--panel-hi) 70%, transparent);
+}
+
+.stat {
+    padding: 8px 18px;
+}
+
+.stat + .stat {
+    border-left: 1px solid var(--line);
 }
 
 .stat dt {
@@ -131,6 +162,22 @@ body {
     white-space: nowrap;
 }
 
+.ok {
+    color: var(--gold-ink);
+}
+
+.stat dd.ok::before {
+    content: "";
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    margin-right: 7px;
+    border-radius: 50%;
+    background: var(--gold);
+    box-shadow: 0 0 8px var(--glow);
+    vertical-align: 1px;
+}
+
 .meander {
     height: 20px;
     background: var(--gold);
@@ -139,66 +186,84 @@ body {
     mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='20' viewBox='0 0 22 20'%3E%3Cpath d='M0 1H22M1 1V19M21 1V13H8V7H15V10' fill='none' stroke='black' stroke-width='2'/%3E%3C/svg%3E") repeat-x center/auto 100%;
 }
 
+
+/* ---- Menú ---- */
+
 .menu {
+    position: sticky;
+    top: 0;
+    z-index: 20;
     display: flex;
     flex-wrap: wrap;
-    gap: 4px 22px;
-    padding: 12px 0 2px;
+    justify-content: center;
+    gap: 2px 8px;
+    padding: 6px 0;
+    margin-top: 4px;
     font: 500 12px var(--f-mono);
     letter-spacing: .12em;
     text-transform: uppercase;
+    background: color-mix(in srgb, var(--bg) 86%, transparent);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid color-mix(in srgb, var(--line) 60%, transparent);
 }
 
 .menu a {
     color: var(--text);
     text-decoration: none;
-    border-bottom: 1px solid transparent;
-    padding-block: 8px;
+    padding: 10px 16px;
+    border-bottom: 2px solid transparent;
+    transition: color .2s, border-color .2s;
 }
 
 .menu a:hover {
-    color: var(--accent);
-    border-color: var(--accent);
+    color: var(--gold-ink);
+    border-color: var(--gold);
 }
 
 
-/* Portada (centrada) */
+/* ---- Portada ---- */
 
 .intro {
-    padding-block: 26px 10px;
+    padding-block: 44px 14px;
     display: grid;
-    gap: 12px;
+    gap: 14px;
     justify-items: center;
     text-align: center;
 }
 
-.cols {
-    display: flex;
-    justify-content: center;
-    gap: clamp(8px, 3vw, 24px);
-    margin-bottom: 6px;
+.temple {
+    width: min(100%, 380px);
+    height: auto;
+    filter: drop-shadow(0 10px 18px rgba(122, 79, 0, .28));
 }
 
-.cols i {
-    width: clamp(14px, 4vw, 24px);
-    height: clamp(48px, 10vw, 84px);
-    background: linear-gradient(90deg, #d9c48c, #f6ecd0, #d9c48c);
-    border-top: 6px solid var(--gold);
-    border-bottom: 6px solid var(--gold);
-    box-shadow: 0 4px 10px rgba(122, 79, 0, .25);
-}
+.temple .ped { fill: var(--gold); }
+.temple .ped-in { fill: var(--panel-hi); }
+.temple .sun { fill: var(--gold); filter: drop-shadow(0 0 6px var(--glow)); }
+.temple .ent { fill: #d9b45a; }
+.temple .shafts rect { fill: url(#shaft); stroke: #b79b62; stroke-width: .8; }
+.temple .caps rect { fill: var(--gold); }
+.temple .step { fill: #c9a85f; }
+.temple .step:nth-of-type(2) { fill: #bf9c4d; }
 
 .title {
-    margin: 0;
-    font: 900 clamp(2rem, 7vw, 3.4rem)/1.1 var(--f-display);
+    margin: 4px 0 0;
+    font: 900 clamp(2.4rem, 9vw, 4.6rem)/1.02 var(--f-display);
     letter-spacing: .05em;
-    text-shadow: 0 1px 0 rgba(255, 255, 255, .5);
+    text-shadow: 0 1px 0 rgba(255, 255, 255, .6), 0 6px 24px color-mix(in srgb, var(--gold) 35%, transparent);
+}
+
+.title .br {
+    display: none;
 }
 
 .lede {
     margin: 0 auto;
-    max-width: 70ch;
-    font-size: 1.12rem;
+    max-width: 56ch;
+    font-size: 1.2rem;
+    line-height: 1.6;
+    color: var(--dim);
 }
 
 h2.sec {
@@ -208,18 +273,47 @@ h2.sec {
     text-transform: uppercase;
 }
 
+/* Subrayado dorado en los títulos de sección */
+h2.sec::after {
+    content: "";
+    display: block;
+    width: 56px;
+    height: 3px;
+    margin-top: 12px;
+    background: var(--gold);
+}
 
-/* Aviso */
+.notice h2.sec::after,
+.contact-text h2.sec::after {
+    margin-inline: auto;
+}
+
+.contact-text h2.sec::after {
+    margin-inline: 0;
+}
+
+
+/* ---- Aviso ---- */
 
 .notice {
+    position: relative;
     max-width: 760px;
-    margin: 26px auto 0;
-    padding: 24px;
+    margin: 30px auto 0;
+    padding: 30px 28px;
     border: 1px solid var(--gold);
-    background: var(--panel);
+    background: linear-gradient(180deg, var(--panel-hi), var(--panel));
     text-align: center;
-    box-shadow: 0 6px 24px rgba(122, 79, 0, .18);
-    scroll-margin-top: 16px;
+    box-shadow: 0 10px 30px rgba(122, 79, 0, .2);
+    scroll-margin-top: 70px;
+}
+
+/* marco interior, como un sello de pergamino */
+.notice::before {
+    content: "";
+    position: absolute;
+    inset: 7px;
+    border: 1px solid color-mix(in srgb, var(--gold) 45%, transparent);
+    pointer-events: none;
 }
 
 .notice h2 {
@@ -227,8 +321,8 @@ h2.sec {
 }
 
 .notice p {
-    margin: 8px auto 0;
-    max-width: 62ch;
+    margin: 12px auto 0;
+    max-width: 56ch;
 }
 
 .actions {
@@ -236,7 +330,7 @@ h2.sec {
     flex-wrap: wrap;
     gap: 12px;
     align-items: center;
-    margin-top: 18px;
+    margin-top: 20px;
 }
 
 .notice .actions {
@@ -255,14 +349,21 @@ h2.sec {
     color: var(--on-gold);
     border: 0;
     border-radius: 0;
-    padding: 13px 22px;
-    min-height: 46px;
+    padding: 13px 24px;
+    min-height: 48px;
     cursor: pointer;
     box-shadow: 4px 4px 0 var(--line);
+    transition: transform .15s, box-shadow .15s;
 }
 
 .btn:hover {
-    transform: translate(-1px, -1px);
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--line);
+}
+
+.btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 var(--line);
 }
 
 .btn.ghost {
@@ -272,80 +373,101 @@ h2.sec {
     box-shadow: none;
 }
 
+.btn.ghost:hover {
+    background: var(--panel-hi);
+    border-color: var(--gold);
+}
+
 .btn[hidden] {
     display: none;
 }
 
 
-/* Secciones */
+/* ---- Secciones del portal ---- */
 
 .trials {
-    margin-top: 40px;
+    margin-top: 64px;
 }
 
 .tl {
     list-style: none;
-    margin: 18px 0 0;
+    margin: 26px 0 0;
     padding: 0;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
-    gap: 10px;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+    gap: 14px;
 }
 
 .tile {
+    position: relative;
     display: grid;
-    grid-template-columns: 42px minmax(0, 1fr) auto;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 14px;
-    background: var(--panel);
+    grid-template-columns: 48px minmax(0, 1fr) auto;
+    align-items: start;
+    gap: 14px;
+    padding: 16px 16px 16px 16px;
+    background: linear-gradient(180deg, var(--panel-hi), var(--panel));
     border: 1px solid var(--line);
-    transition: border-color .2s;
+    border-left: 3px solid var(--gold);
+    box-shadow: 0 2px 0 rgba(122, 79, 0, .08);
+    transition: border-color .2s, transform .2s, box-shadow .2s;
 }
 
 .tile:hover {
     border-color: var(--accent);
+    border-left-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px rgba(122, 79, 0, .18);
 }
 
 .tgr {
     display: grid;
     place-items: center;
-    width: 42px;
-    height: 42px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
     background: var(--gold);
     color: var(--on-gold);
-    border: 1px solid var(--gold);
-    font: 700 1.15rem var(--f-display);
+    border: 2px solid var(--gold-ink);
+    box-shadow: 0 0 14px var(--glow);
+    font: 700 1.2rem var(--f-display);
 }
 
 .tbody {
     display: flex;
     flex-direction: column;
+    gap: 2px;
     min-width: 0;
 }
 
 .tname {
-    font: 600 1rem/1.25 var(--f-body);
+    font: 700 1.1rem/1.25 var(--f-display);
+    letter-spacing: .03em;
 }
 
 .tdesc {
-    font-size: .95rem;
+    font-size: .98rem;
+    line-height: 1.4;
     color: var(--dim);
 }
 
 .ttag {
-    font: 500 11px var(--f-mono);
+    margin-top: 6px;
+    font: 500 10.5px var(--f-mono);
     letter-spacing: .1em;
     text-transform: uppercase;
-    color: var(--dim);
+    color: var(--gold-ink);
     overflow-wrap: anywhere;
 }
 
 .tst {
+    padding: 3px 7px;
     font: 600 10.5px var(--f-mono);
     letter-spacing: .08em;
     color: var(--gold-ink);
+    border: 1px solid color-mix(in srgb, var(--gold) 60%, transparent);
+    background: color-mix(in srgb, var(--gold) 12%, transparent);
     text-align: right;
+    white-space: nowrap;
 }
 
 .more-wrap {
@@ -353,32 +475,60 @@ h2.sec {
     flex-direction: column;
     align-items: center;
     gap: 10px;
-    margin-top: 18px;
-}
-
-.ok {
-    color: var(--gold-ink);
+    margin-top: 26px;
 }
 
 
-/* Oráculo */
+/* ---- Oráculo (es una secuencia: sí lleva números) ---- */
 
 .section {
-    margin-top: 44px;
+    margin-top: 72px;
 }
 
 .crew {
+    counter-reset: paso;
+    position: relative;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
-    gap: 24px 28px;
-    margin: 18px 0 0;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
+    gap: 28px 28px;
+    margin: 30px 0 0;
     padding: 0;
     list-style: none;
 }
 
+/* hilo dorado que une los pasos */
+.crew::before {
+    content: "";
+    position: absolute;
+    top: 21px;
+    left: 4%;
+    right: 4%;
+    height: 2px;
+    background: repeating-linear-gradient(90deg, var(--gold) 0 10px, transparent 10px 16px);
+    opacity: .7;
+}
+
 .crew li {
-    padding-top: 12px;
-    border-top: 2px solid var(--gold);
+    position: relative;
+    counter-increment: paso;
+    padding-top: 58px;
+}
+
+.crew li::before {
+    content: counter(paso);
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--panel-hi);
+    border: 2px solid var(--gold);
+    color: var(--gold-ink);
+    font: 700 1.15rem var(--f-display);
+    box-shadow: 0 0 0 5px var(--bg), 0 0 16px var(--glow);
 }
 
 .crew b {
@@ -388,15 +538,34 @@ h2.sec {
 }
 
 .crew p {
-    margin: 4px 0 0;
+    margin: 6px 0 0;
+    max-width: 34ch;
     color: var(--dim);
 }
 
 
-/* Formulario */
+/* ---- Contacto ---- */
+
+.contact {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: 32px 56px;
+    align-items: start;
+    padding: 36px;
+    border: 1px solid var(--line);
+    background: linear-gradient(135deg, var(--panel-hi), var(--panel));
+    box-shadow: 0 10px 30px rgba(122, 79, 0, .14);
+}
+
+.contact-text p {
+    margin: 16px 0 0;
+    max-width: 36ch;
+    font-size: 1.1rem;
+    color: var(--dim);
+}
 
 .field {
-    margin: 16px 0 0;
+    margin: 0 0 16px;
 }
 
 .field label {
@@ -411,7 +580,116 @@ h2.sec {
 input,
 textarea {
     width: 100%;
-    max-width: 520px;
-    padding: 12px;
+    padding: 13px 14px;
     font: 1rem var(--f-body);
-    color:
+    color: var(--text);
+    background: #fffaea;
+    border: 1px solid var(--line);
+    border-radius: 0;
+    transition: border-color .2s, box-shadow .2s;
+}
+
+input:hover,
+textarea:hover {
+    border-color: var(--gold);
+}
+
+input:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent);
+}
+
+textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+form .actions {
+    margin-top: 4px;
+}
+
+.msg {
+    min-height: 1.6em;
+    margin: 14px 0 0;
+    font: 500 .92rem var(--f-mono);
+    color: var(--gold-ink);
+}
+
+.msg.bad {
+    color: var(--alert);
+}
+
+.bad {
+    color: var(--alert);
+}
+
+
+/* ---- Pie ---- */
+
+.wrap > .meander {
+    margin-top: 72px;
+}
+
+.foot {
+    margin: 18px 0 12px;
+    font: 500 11.5px/1.7 var(--f-mono);
+    letter-spacing: .06em;
+    color: var(--dim);
+    text-align: center;
+}
+
+.foot small {
+    display: block;
+    font: italic 500 1.05rem var(--f-body);
+    letter-spacing: 0;
+}
+
+
+/* ---- Móvil ---- */
+
+@media (max-width: 760px) {
+    .contact {
+        grid-template-columns: 1fr;
+        padding: 24px 20px;
+    }
+    .crew::before {
+        display: none;
+    }
+    .stat {
+        padding: 8px 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .notice {
+        padding: 24px 18px;
+    }
+    .title .br {
+        display: inline;
+    }
+    .tile {
+        grid-template-columns: 44px minmax(0, 1fr);
+    }
+    .tst {
+        grid-column: 2;
+        justify-self: start;
+    }
+    .tgr {
+        width: 44px;
+        height: 44px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation: none !important;
+        transition: none !important;
+    }
+    .flash {
+        display: none;
+    }
+}
