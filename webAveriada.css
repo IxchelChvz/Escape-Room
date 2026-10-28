@@ -22,6 +22,37 @@
     padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
+
+/* ---- Portada centrada ---- */
+
+.intro {
+    justify-items: center;
+    text-align: center;
+}
+
+.lede {
+    margin-inline: auto;
+}
+
+.errbox {
+    text-align: left;
+    max-width: min(100%, 70ch);
+}
+
+.notice {
+    max-width: 760px;
+    margin-inline: auto;
+    text-align: center;
+}
+
+.notice p {
+    margin-inline: auto;
+}
+
+.notice .actions {
+    justify-content: center;
+}
+
 *,
 *::before,
 *::after {
