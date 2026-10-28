@@ -5,114 +5,164 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>Olimpo Digital · Restaurado</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:wght@400;500;700&family=Cinzel:wght@600;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="webRestaurada.css">
 </head>
 
 <body>
-    <div class="bar" role="status">✔ ΕΠΙΤΥΧΙΑ 0x00 · SISTEMA RESTAURADO · 12/12 SECCIONES DESBLOQUEADAS</div>
-    <nav class="nav" aria-label="Menú principal"><b>Ὄλυμπος.exe</b><a href="#inicio">Inicio</a><a href="#secciones">Dioses</a><a href="#oraculo">Oráculo</a><a href="#contacto">Contacto</a></nav>
-    <main id="inicio">
-        <section class="hero">
-            <h1>Olimpo Digital</h1>
-            <div class="tag">Portal oficial de los dioses · versión 1.0</div>
-            <p>Los doce monstruos de Heracles han sido derrotados. La maldición se ha roto, el templo vuelve a brillar y cada sección funciona.</p>
-        </section>
+    <div class="flash" aria-hidden="true"></div>
+    <a class="skip" href="#contenido">Saltar al contenido</a>
+    <div class="wrap">
+        <header class="bar">
+            <div class="brand">
+                <a class="logo" href="#inicio">Olimpo<span>.digital</span></a>
+                <small>Portal oficial · build 1.0.0</small>
+            </div>
+            <dl class="stats">
+                <div class="stat"><dt>Sistema</dt>
+                    <dd class="ok">RESTAURADO</dd>
+                </div>
+                <div class="stat"><dt>Secciones</dt>
+                    <dd>12/12</dd>
+                </div>
+                <div class="stat"><dt>HTTP</dt>
+                    <dd class="ok">200</dd>
+                </div>
+            </dl>
+        </header>
+        <div class="meander" aria-hidden="true"></div>
 
-        <section class="fix" aria-labelledby="fx">
-            <h2 id="fx">✅ WEB RESTAURADA</h2>
-            <p id="who">Habéis superado las pruebas del mapa y reunido los <b>12 caracteres</b> de la contraseña. El Olimpo Digital vuelve a ser vuestro.</p>
-            <a class="cta" href="index.html">Volver al mapa de pruebas</a>
-        </section>
+        <nav class="menu" aria-label="Menú principal">
+            <a href="#inicio">Inicio</a>
+            <a href="#secciones">Dioses</a>
+            <a href="#oraculo">Oráculo</a>
+            <a href="#contacto">Contacto</a>
+        </nav>
 
-        <div class="tools" id="secciones"><label for="q" style="position:absolute;left:-9999px">Buscar sección</label><input id="q" type="search" placeholder="Buscar sección o monstruo…"></div>
-        <div class="grid" id="grid"></div>
-        <p id="none">No hay ninguna sección que coincida con la búsqueda.</p>
-        <p class="done">✔ Todas las secciones cargadas correctamente.</p>
-
-        <h2 class="sec" id="oraculo">Oráculo · cómo se restauró el templo</h2>
-        <div class="steps">
-            <div><b>1. Inspeccionar</b><br>El código fuente guardaba la nota del León.</div>
-            <div><b>2. Depurar</b><br>La consola reveló el enigma de la Hidra.</div>
-            <div><b>3. Corregir</b><br>Las herramientas de desarrollo sacaron a la luz el elemento que el CSS escondía.</div>
-            <div><b>4. Unir las piezas</b><br>Cada carácter ocupó su posición y la contraseña purificó la web.</div>
+        <div class="ticker" aria-hidden="true">
+            <div class="track">
+                <span><b>OK</b> /css/estilos.css 200 · <b>OK</b> /api/secciones 200 · <b>OK</b> 12 módulos cargados · <b>OK</b> maldición resuelta · <b>OK</b> olimpo.js sin errores</span>
+                <span><b>OK</b> /css/estilos.css 200 · <b>OK</b> /api/secciones 200 · <b>OK</b> 12 módulos cargados · <b>OK</b> maldición resuelta · <b>OK</b> olimpo.js sin errores</span>
+            </div>
         </div>
 
-        <h2 class="sec" id="contacto">Contacto</h2>
-        <p>¿Quieres un escape room como este para tu centro? Escríbenos.</p>
-        <form id="f" novalidate>
-            <p><label for="n">Nombre</label><br><input id="n"></p>
-            <p><label for="m">Mensaje</label><br><textarea id="m" rows="3"></textarea></p>
-            <button class="btn" type="submit">Enviar a los dioses</button>
-            <div id="thanks" role="status"></div>
-        </form>
-    </main>
-    <footer>© Dódeka · Los 12 Trabajos del Código<br>Aprende programando, juega depurando.</footer>
+        <main id="contenido">
+            <section class="intro" id="inicio">
+                <div class="cols" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+                <h1 class="title">Olimpo Digital</h1>
+                <p class="lede">
+                    La maldición se ha roto. Los doce monstruos de Heracles han sido derrotados y el templo vuelve a brillar con todas sus secciones operativas.
+                </p>
+            </section>
+
+            <section class="notice" aria-labelledby="nt">
+                <h2 class="sec" id="nt">Web restaurada</h2>
+                <p>
+                    Habéis superado las pruebas del mapa y reunido los <b>12 caracteres</b> de la contraseña. El Olimpo Digital vuelve a estar en línea.
+                </p>
+                <div class="actions"><a class="btn" href="#secciones">Explorar el templo</a></div>
+            </section>
+
+            <section class="trials" id="secciones" aria-labelledby="sec">
+                <h2 class="sec" id="sec">Secciones del portal</h2>
+                <ul class="tl" id="grid"></ul>
+                <div class="more-wrap">
+                    <button class="btn ghost" id="more" type="button">Cargar más secciones</button>
+                </div>
+            </section>
+
+            <section class="section" id="oraculo" aria-labelledby="or">
+                <h2 class="sec" id="or">Oráculo · cómo se restauró</h2>
+                <ol class="crew">
+                    <li><b>1. Inspeccionar</b>
+                        <p>El código fuente guardaba la nota del León.</p>
+                    </li>
+                    <li><b>2. Depurar</b>
+                        <p>La consola reveló el enigma de la Hidra.</p>
+                    </li>
+                    <li><b>3. Corregir</b>
+                        <p>Las herramientas de desarrollo sacaron a la luz el elemento que el CSS escondía.</p>
+                    </li>
+                    <li><b>4. Unir las piezas</b>
+                        <p>Cada carácter ocupó su posición y la contraseña purificó la web.</p>
+                    </li>
+                </ol>
+            </section>
+
+            <section class="section" id="contacto" aria-labelledby="ct">
+                <h2 class="sec" id="ct">Contacto</h2>
+                <p>¿Quieres un escape room como este para tu centro? Escríbenos.</p>
+                <form id="f" novalidate>
+                    <div class="field"><label for="n">Nombre</label><input id="n" autocomplete="name"></div>
+                    <div class="field"><label for="m">Mensaje</label><textarea id="m" rows="4"></textarea></div>
+                    <div class="actions"><button class="btn" type="submit">Enviar mensaje</button></div>
+                    <p class="msg" id="msg" role="status"></p>
+                </form>
+            </section>
+        </main>
+
+        <p class="foot">
+            © Dódeka · Los 12 Trabajos del Código
+            <small>Aprende programando, juega depurando.</small>
+        </p>
+    </div>
+
     <script>
         var S = [
-            ["León de Nemea", "Noticias", "🦁", "Su piel invulnerable cedió: ya se pueden leer las novedades del templo."],
-            ["Hidra de Lerna", "Galería", "🐍", "Cada cabeza cortada devolvió una imagen. La galería carga de nuevo."],
-            ["Cierva de Cerinia", "Mapa del sitio", "🦌", "Atrapada con paciencia: el mapa vuelve a guiar por todo el templo."],
-            ["Jabalí de Erimanto", "Buscador", "🐗", "Capturado en la nieve: el buscador encuentra cualquier contenido."],
-            ["Establos de Augías", "Archivo", "🐴", "Limpiados en un día: el archivo está ordenado y sin código basura."],
-            ["Aves del Estínfalo", "Chat", "🐦", "Ahuyentadas con ruido: el chat de los dioses está en línea."],
-            ["Toro de Creta", "Tienda", "🐂", "Domado: la tienda de reliquias funciona otra vez."],
-            ["Yeguas de Diomedes", "Eventos", "🐎", "Calmadas: el calendario de eventos ya no se bloquea."],
-            ["Cinturón de Hipólita", "Perfil", "👑", "Recuperado: los perfiles de usuario vuelven a abrirse."],
-            ["Ganado de Gerión", "Foro", "🐄", "Reunido: el foro de debate está abierto a todos."],
-            ["Manzanas de las Hespérides", "Premios", "🍎", "Conseguidas: los diplomas y premios están disponibles."],
-            ["Cerbero", "Acceso final", "🐕", "Vencido: la última puerta del templo está abierta."]
+            ["León de Nemea", "Noticias", "Las novedades del templo vuelven a poder leerse."],
+            ["Hidra de Lerna", "Galería", "Todas las imágenes cargan de nuevo."],
+            ["Cierva de Cerinia", "Mapa del sitio", "El mapa guía otra vez por todo el portal."],
+            ["Jabalí de Erimanto", "Buscador", "El buscador encuentra cualquier contenido."],
+            ["Establos de Augías", "Archivo", "Archivo ordenado y sin código basura."],
+            ["Aves del Estínfalo", "Chat", "El chat de los dioses está en línea."],
+            ["Toro de Creta", "Tienda", "La tienda de reliquias funciona otra vez."],
+            ["Yeguas de Diomedes", "Eventos", "El calendario de eventos ya no se bloquea."],
+            ["Cinturón de Hipólita", "Perfil", "Los perfiles de usuario vuelven a abrirse."],
+            ["Ganado de Gerión", "Foro", "El foro de debate está abierto a todos."],
+            ["Manzanas de las Hespérides", "Premios", "Diplomas y premios disponibles."],
+            ["Cerbero", "Acceso final", "La última puerta del templo está abierta."]
         ];
-        var g = document.getElementById("grid");
-        S.forEach(function(s, i) {
-            var d = document.createElement("article");
-            d.className = "card";
-            var h = document.createElement("h3");
-            h.textContent = s[1];
-            var im = document.createElement("div");
-            im.className = "img";
-            im.innerHTML = "<span aria-hidden='true'></span>imagen_" + (i + 1) + ".png ✔";
-            im.firstChild.textContent = s[2];
-            var p = document.createElement("p");
-            p.textContent = s[3];
-            var st = document.createElement("div");
-            st.className = "st";
-            st.textContent = "✔ Desbloqueada · vencido: " + s[0];
-            d.appendChild(h);
-            d.appendChild(im);
-            d.appendChild(p);
-            d.appendChild(st);
-            d.dataset.t = (s[0] + " " + s[1] + " " + s[3]).toLowerCase();
-            g.appendChild(d);
-        });
-        document.getElementById("q").oninput = function() {
-            var v = this.value.trim().toLowerCase(),
-                c = 0;
-            Array.prototype.forEach.call(g.children, function(d) {
-                var m = d.dataset.t.indexOf(v) > -1;
-                d.style.display = m ? "" : "none";
-                if (m) c++;
+        var G = ["Α", "Β", "Γ", "Δ", "Ε", "Ζ", "Η", "Θ", "Ι", "Κ", "Λ", "Μ"];
+        var g = document.getElementById("grid"),
+            btn = document.getElementById("more"),
+            shown = 0,
+            PAGE = 6;
+
+        function render() {
+            S.slice(shown, shown + PAGE).forEach(function(s, k) {
+                var li = document.createElement("li");
+                li.className = "tile";
+                li.innerHTML = "<span class='tgr' aria-hidden='true'></span>" +
+                    "<span class='tbody'><span class='tname'></span><span class='tdesc'></span><span class='ttag'></span></span>" +
+                    "<span class='tst'>HTTP 200</span>";
+                li.querySelector(".tgr").textContent = G[shown + k];
+                li.querySelector(".tname").textContent = s[1];
+                li.querySelector(".tdesc").textContent = s[2];
+                li.querySelector(".ttag").textContent = "Liberada de " + s[0];
+                g.appendChild(li);
             });
-            document.getElementById("none").style.display = c ? "none" : "block";
-        };
+            shown += PAGE;
+            if (shown >= S.length) btn.hidden = true;
+        }
+        btn.onclick = render;
+        render();
+
         document.getElementById("f").onsubmit = function(e) {
             e.preventDefault();
             var n = document.getElementById("n").value.trim(),
                 m = document.getElementById("m").value.trim(),
-                t = document.getElementById("thanks");
+                t = document.getElementById("msg");
             if (!n || !m) {
-                t.style.color = "#b3261e";
+                t.className = "msg bad";
                 t.textContent = "Rellena tu nombre y el mensaje.";
                 return;
             }
-            t.style.color = "";
-            t.textContent = "¡Gracias, " + n + "! Hemos recibido tu mensaje.";
+            t.className = "msg";
+            t.textContent = "Gracias, " + n + ". Hemos recibido tu mensaje.";
             this.reset();
         };
-        try {
-            var s = JSON.parse(localStorage.getItem("dk") || "{}");
-            if (s.team) document.getElementById("who").innerHTML = "El equipo <b></b> ha superado las pruebas del mapa y reunido los <b>12 caracteres</b>. El Olimpo Digital vuelve a ser vuestro.";
-            if (s.team) document.getElementById("who").querySelector("b").textContent = s.team;
-        } catch (e) {}
     </script>
 </body>
 

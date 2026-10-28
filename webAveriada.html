@@ -4,116 +4,144 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <title>Olimpo Digital · ΣΦΑΛΜΑ</title>
-
+    <title>Olimpo Digital · Error 500</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:wght@400;500;700&family=Cinzel:wght@600;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="webAveriada.css">
 </head>
 
 <body>
-
-    <div class="bar" role="alert">
-        ⚠ ΣΦΑΛΜΑ 0xΩ12 · SISTEMA CORRUPTO · 12/12 SECCIONES BLOQUEADAS
-    </div>
-
-    <nav class="nav" aria-label="Menú (averiado)">
-        <b>Ὄλυμπος.exe</b>
-        <span>Inicio</span>
-        <span>Dioses</span>
-        <span>Oráculo</span>
-        <span>Contacto</span>
-    </nav>
-
-    <main>
-
-        <section class="hero">
-            <h1>Olimp<i>o</i> Digi&#8203;tal</h1>
-
-            <div class="tag">
-                Portal oficial de los dioses · versión ∅.404
+    <a class="skip" href="#aviso">Ir al aviso para reparar la web</a>
+    <div class="wrap">
+        <header class="bar">
+            <div class="brand">
+                <a class="logo" href="webAveriada.html">Olimpo<span>.digital</span></a>
+                <small>Portal oficial · build 0.404-corrupt</small>
             </div>
+            <dl class="stats">
+                <div class="stat"><dt>Sistema</dt>
+                    <dd class="bad">MALDECIDO / CORRUPTO</dd>
+                </div>
+                <div class="stat"><dt>Secciones</dt>
+                    <dd>0/12</dd>
+                </div>
+                <div class="stat"><dt>HTTP</dt>
+                    <dd class="bad">500</dd>
+                </div>
+            </dl>
+        </header>
+        <div class="meander" aria-hidden="true"></div>
 
-            <p>
-                Un hacker de la antigüedad ha lanzado una maldición algorítmica sobre este templo. Los doce monstruos de Heracles se han apoderado del código.
-            </p>
-        </section>
+        <nav class="menu" aria-label="Menú principal (no disponible)">
+            <a aria-disabled="true" tabindex="-1">Inicio</a>
+            <a aria-disabled="true" tabindex="-1">Dioses</a>
+            <a aria-disabled="true" tabindex="-1">Oráculo</a>
+            <a aria-disabled="true" tabindex="-1">Contacto</a>
+        </nav>
 
-        <section class="fix" aria-labelledby="fx">
+        <div class="ticker" aria-hidden="true">
+            <div class="track">
+                <span><b>ERROR</b> Uncaught TypeError: Cannot read properties of undefined (reading 'render') · <b>404</b> /css/estilos.css · <b>500</b> /api/secciones · <b>WARN</b> Mixed Content bloqueado · <b>ERROR</b> olimpo.js:12:34</span>
+                <span><b>ERROR</b> Uncaught TypeError: Cannot read properties of undefined (reading 'render') · <b>404</b> /css/estilos.css · <b>500</b> /api/secciones · <b>WARN</b> Mixed Content bloqueado · <b>ERROR</b> olimpo.js:12:34</span>
+            </div>
+        </div>
 
-            <h2 id="fx">🔧 CÓMO ARREGLAR ESTA WEB</h2>
+        <main>
+            <section class="intro">
+                <h1 class="title">Olimp<span class="mis">o</span> Digi&#8203;tal</h1>
+                <p class="lede">
+                    Un hacker de la antigüedad ha lanzado una maldición algorítmica sobre este templo. Los doce monstruos de Heracles se han apoderado del código.
+                </p>
+                <pre class="errbox" aria-hidden="true">Uncaught TypeError: Cannot read properties of undefined (reading 'render')
+    at Heracles.cargarSecciones (olimpo.js:12:34)</pre>
+            </section>
 
-            <p>
-                Para restaurar el Olimpo, <b>pasaos por el mapa</b>, superad las pruebas de los templos y reunid los
-                <b>12 caracteres</b> de la contraseña. Cada prueba os dice qué letra es y en qué posición va.
-            </p>
+            <section class="notice" id="aviso" tabindex="-1" aria-labelledby="nt">
+                <h2 class="sec" id="nt">Cómo reparar esta web</h2>
+                <p>
+                    Para restaurar el Olimpo, <b>pasaos por el mapa</b>, superad las pruebas de los templos y reunid los <b>12 caracteres</b> de la contraseña. Cada prueba os dice qué letra es y en qué posición va.
+                </p>
+                <div class="actions"><a class="btn" href="mapa.html">Ir al mapa de pruebas</a></div>
+            </section>
 
-            <a class="cta" href="https://claude.ai/artifact/UqwpSXLXrUfn1NBXr4EAX3" target="_blank" rel="noopener">
-                Abrir el mapa de pruebas →
-            </a>
+            <section class="trials" aria-labelledby="sec">
+                <h2 class="sec" id="sec">Secciones del portal</h2>
+                <ul class="tl" id="grid"></ul>
+                <div class="more-wrap">
+                    <button class="btn ghost" id="more" type="button">Cargar más secciones</button>
+                    <p class="msg" id="msg" role="status"></p>
+                </div>
+            </section>
+        </main>
 
-        </section>
-
-        <div class="grid" id="grid"></div>
-
-        <p class="stuck">
-            <span class="spin" aria-hidden="true">⌛</span> Cargando secciones… (atascado desde 1184 a. C.)
+        <p class="foot">
+            © Dódeka · Los 12 Trabajos del Código
+            <small>pista: lo que está oculto en el código también cuenta</small>
+            <a href="webRestaurada.html">Modo presentación: ver directamente la web restaurada</a>
         </p>
-
-    </main>
+    </div>
 
     <div class="ckb" role="note">
-        🍪 Este sitio usa cookies de ámbar.
-        <u>Aceptar</u>
-        <u>Rechazar</u> (botón roto)
+        Este sitio usa cookies. <u>Aceptar</u> · <u>Rechazar</u>
+        <small>(error: handler undefined)</small>
     </div>
-
-    <footer>
-        © Dódeka · Los 12 Trabajos del Código
-        <br>
-        <small>pista: lo que está oculto en el código también cuenta</small>
-    </footer>
 
     <script>
         var S = [
-            ["León de Nemea", "Noticias", "🦁"],
-            ["Hidra de Lerna", "Galería", "🐍"],
-            ["Cierva de Cerinia", "Mapa del sitio", "🦌"],
-            ["Jabalí de Erimanto", "Buscador", "🐗"],
-            ["Establos de Augías", "Archivo", "🐴"],
-            ["Aves del Estínfalo", "Chat", "🐦"],
-            ["Toro de Creta", "Tienda", "🐂"],
-            ["Yeguas de Diomedes", "Eventos", "🐎"],
-            ["Cinturón de Hipólita", "Perfil", "👑"],
-            ["Ganado de Gerión", "Foro", "🐄"],
-            ["Manzanas de las Hespérides", "Premios", "🍎"],
-            ["Cerbero", "Acceso final", "🐕"]
+            ["León de Nemea", "Noticias"],
+            ["Hidra de Lerna", "Galería"],
+            ["Cierva de Cerinia", "Mapa del sitio"],
+            ["Jabalí de Erimanto", "Buscador"],
+            ["Establos de Augías", "Archivo"],
+            ["Aves del Estínfalo", "Chat"],
+            ["Toro de Creta", "Tienda"],
+            ["Yeguas de Diomedes", "Eventos"],
+            ["Cinturón de Hipólita", "Perfil"],
+            ["Ganado de Gerión", "Foro"],
+            ["Manzanas de las Hespérides", "Premios"],
+            ["Cerbero", "Acceso final"]
         ];
+        var G = ["Α", "Β", "Γ", "Δ", "Ε", "Ζ", "Η", "Θ", "Ι", "Κ", "Λ", "Μ"];
+        var g = document.getElementById("grid"),
+            btn = document.getElementById("more"),
+            msg = document.getElementById("msg"),
+            shown = 0,
+            fails = 0,
+            PAGE = 6;
 
-        var g = document.getElementById("grid");
+        function code(n) {
+            return "ERR_" + n.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+                .toUpperCase().replace(/[^A-Z]+/g, "_");
+        }
 
-        S.forEach(function(s, i) {
+        function render() {
+            S.slice(shown, shown + PAGE).forEach(function(s, k) {
+                var li = document.createElement("li");
+                li.className = "tile";
+                li.innerHTML = "<span class='tgr' aria-hidden='true'></span>" +
+                    "<span class='tbody'><span class='tname'></span><span class='ttag'></span></span>" +
+                    "<span class='tst'>HTTP 403</span>";
+                li.querySelector(".tgr").textContent = G[shown + k];
+                li.querySelector(".tname").textContent = s[1];
+                li.querySelector(".ttag").textContent = "Bloqueada · " + code(s[0]);
+                g.appendChild(li);
+            });
+            shown += PAGE;
+            if (shown >= S.length) btn.hidden = true;
+        }
 
-            var d = document.createElement("div");
-
-            d.className = "card";
-
-            d.innerHTML =
-                "<h3></h3>" +
-                "<div class='img'>🖼 imagen_" + (i + 1) + ".png ✖</div>" +
-                "<p>Lorem ipsum δεδομένα corrupted…</p>" +
-                "<div class='lock'>" +
-                "<span>" + s[2] + "</span>" +
-                "</div>";
-
-            d.querySelector("h3").textContent = s[1];
-
-            d.querySelector(".lock").appendChild(
-                document.createTextNode("Bloqueada por " + s[0])
-            );
-
-            g.appendChild(d);
-        });
+        btn.onclick = function() {
+            if (fails < 1) { /* el primer intento falla a propósito */
+                fails++;
+                msg.textContent = "Error de red: GET /api/secciones?page=2 · timeout (504). Inténtalo de nuevo.";
+                return;
+            }
+            msg.textContent = "";
+            render();
+        };
+        render();
     </script>
-
 </body>
 
 </html>
