@@ -72,47 +72,7 @@
         <small>pista: lo que está oculto en el código también cuenta</small>
     </footer>
 
-    <script>
-        var S = [
-            ["León de Nemea", "Noticias", "🦁"],
-            ["Hidra de Lerna", "Galería", "🐍"],
-            ["Cierva de Cerinia", "Mapa del sitio", "🦌"],
-            ["Jabalí de Erimanto", "Buscador", "🐗"],
-            ["Establos de Augías", "Archivo", "🐴"],
-            ["Aves del Estínfalo", "Chat", "🐦"],
-            ["Toro de Creta", "Tienda", "🐂"],
-            ["Yeguas de Diomedes", "Eventos", "🐎"],
-            ["Cinturón de Hipólita", "Perfil", "👑"],
-            ["Ganado de Gerión", "Foro", "🐄"],
-            ["Manzanas de las Hespérides", "Premios", "🍎"],
-            ["Cerbero", "Acceso final", "🐕"]
-        ];
-
-        var g = document.getElementById("grid");
-
-        S.forEach(function(s, i) {
-
-            var d = document.createElement("div");
-
-            d.className = "card";
-
-            d.innerHTML =
-                "<h3></h3>" +
-                "<div class='img'>🖼 imagen_" + (i + 1) + ".png ✖</div>" +
-                "<p>Lorem ipsum δεδομένα corrupted…</p>" +
-                "<div class='lock'>" +
-                "<span>" + s[2] + "</span>" +
-                "</div>";
-
-            d.querySelector("h3").textContent = s[1];
-
-            d.querySelector(".lock").appendChild(
-                document.createTextNode("Bloqueada por " + s[0])
-            );
-
-            g.appendChild(d);
-        });
-    </script>
+    
 
 </body>
 

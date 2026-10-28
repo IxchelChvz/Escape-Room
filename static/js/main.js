@@ -46,7 +46,8 @@ function quiz(items){
             b.classList.add('ok');
             opts.querySelectorAll('button').forEach(x=>{x.disabled=true});
             ctx.fb('Correcto.','ok');
-            ctx.later(()=>{k++;if(k<items.length){ctx.fb('','');show()}else ctx.win()},700);
+            if(k+1>=items.length)ctx.later(ctx.win,700);
+            else ctx.later(()=>{k++;ctx.fb('','');show()},700);
           }else{
             b.classList.add('bad');b.disabled=true;
             ctx.fb(it.hint||'No es esa. Prueba otra.','err');
@@ -430,7 +431,8 @@ const OKS=[['OK','12/12 hazañas completadas'],['OK','niebla disipada'],['OK','m
 function ticker(){
   const L=root.classList.contains('restored')?OKS:ERR;
   const mk=()=>L.map(([k,t])=>h('span',{},h('b',{},k+' '),t));
-  $('#track').replaceChildren(...mk(),...mk());
+  const tr=$('#track');
+  if(tr)tr.replaceChildren(...mk(),...mk());
 }
 function applyState(){
   stEl.textContent=root.classList.contains('restored')?'PURIFICADO':cursed;
@@ -469,8 +471,12 @@ function reward(i,again){
       h('p',{class:'dim'},done.size===12?'Tienes los doce caracteres. Baja a la zona de desbloqueo y restaura el Olimpo.':`Llevas ${done.size} de 12 trabajos.`)),
     h('button',{class:'btn',type:'button',onclick:()=>dlg.close()},'Volver al mapa')));
 }
-function win(i){
+function markDone(i){
+  if(done.has(i))return;
   done.add(i);save();update();animFog(i);
+}
+function win(i){
+  markDone(i);
   runCleanups();fb('','');
   reward(i,false);
 }
@@ -483,12 +489,16 @@ function openTrial(i){
   runCleanups();fb('','');
   if(!dlg.open)dlg.showModal();
   if(done.has(i)){reward(i,true);return}
-  t.run({
+  const ctx={
     body:dBody,fb,
     win:()=>win(i),
     reg:f=>cleanups.push(f),
-    later:(f,ms)=>{const x=setTimeout(f,ms);cleanups.push(()=>clearTimeout(x))}
-  });
+    later:(f,ms)=>{
+      if(f===ctx.win)markDone(i); // se cuenta ya, aunque cierren la ventana antes del aviso
+      const x=setTimeout(f,ms);cleanups.push(()=>clearTimeout(x));
+    }
+  };
+  t.run(ctx);
 }
 dlg.addEventListener('close',()=>{runCleanups();dBody.replaceChildren();fb('','')});
 $('#dClose').addEventListener('click',()=>dlg.close());
@@ -502,20 +512,55 @@ function restore(){
   const filled=v.filter(Boolean).length;
   if(filled<12){msg(`Faltan ${12-filled} caracteres. Supera más trabajos para revelarlos.`,'err');shakeEl(slotsEl);return}
   if(v.join('')!==PASS){msg('Esa contraseña no abre el templo. Revisa los caracteres escritos a mano.','err');shakeEl(slotsEl);return}
+  if(done.size<12){msg('Aún te faltan trabajos por superar en el mapa.','err');shakeEl(slotsEl);return}
+  
   msg('Contraseña correcta. Las doce hazañas se cumplen…','ok');
   flash.classList.add('go');
-  setTimeout(()=>{root.classList.add('restored');applyState();$('#map').scrollIntoView({block:'nearest',behavior:rm?'auto':'smooth'})},420);
-  setTimeout(()=>{flash.classList.remove('go');msg('El Olimpo ha sido restaurado.','ok')},1500);
+  
+  // Guardamos la bandera de victoria para la siguiente pantalla
+  try {
+    localStorage.setItem("dk", JSON.stringify({ team: "Héroes del Código" }));
+  } catch(e){}
+
+  setTimeout(()=>{
+    root.classList.add('restored');
+    applyState();
+  }, 420);
+
+  // REDIRECCIÓN AUTOMÁTICA A LA PÁGINA RESTAURADA
+  setTimeout(()=>{
+    // Si estás en Flask, usa la ruta correspondiente de tu servidor
+    window.location.href = "/restaurada"; 
+  }, 1500);
 }
 $('#restore').addEventListener('click',restore);
-$('#reset').addEventListener('click',()=>{
-  done.clear();prog.clear();save();
-  slots.forEach(sl=>{sl.value='';sl.readOnly=false;sl.classList.remove('locked')});
-  root.classList.remove('restored');
-  msg('Demo reiniciada. La maldición ha vuelto.','');
-  applyState();update();drawFog();
-});
+$('#reset').addEventListener('click', () => {
+  // 1. Limpiar los conjuntos de datos en memoria
+  done.clear();
+  prog.clear();
 
+  // 2. Borrar del almacenamiento local del navegador
+  try {
+    localStorage.removeItem(KEY); // Elimina 'heracles-mapa-done'
+    localStorage.removeItem("dk"); // Elimina datos del equipo
+  } catch (e) {}
+
+  // 3. Resetear las casillas de entrada de la contraseña
+  slots.forEach(sl => {
+    sl.value = '';
+    sl.readOnly = false;
+    sl.classList.remove('locked');
+  });
+
+  // 4. Quitar la clase de estado restaurado global
+  root.classList.remove('restored');
+  msg('Demo reiniciada. La maldición ha vuelto.', '');
+
+  // 5. Forzar la actualización visual de pines, lista y niebla
+  applyState();
+  update();   // Al estar 'done' vacío, quita la clase .done de los pines y tiles
+  drawFog();  // Vuelve a dibujar la niebla completa
+});
 /* ---------- Texto corrupto ---------- */
 function scramble(){
   if(rm||root.classList.contains('restored'))return;
