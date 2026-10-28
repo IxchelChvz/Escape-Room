@@ -50,6 +50,7 @@ body {
     padding-left: max(16px, env(safe-area-inset-left, 0px));
     padding-right: max(16px, env(safe-area-inset-right, 0px));
     overflow-x: hidden;
+    position: relative;
 }
 
 /* líneas de escaneo, igual que la niebla del mapa */
@@ -301,6 +302,7 @@ body::after {
 
 .errbox {
     margin: 6px 0 0;
+    line-height: 1.7;
     padding: 12px 16px;
     width: min(100%, 70ch);
     white-space: pre-wrap;
@@ -566,9 +568,164 @@ h2.sec::after {
 .tile:nth-child(6) .tname { transform: translateX(5px); }
 
 
+/* ---- Hades, la avaricia y cosas antiguas ---- */
+
+.hero-art {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: clamp(8px, 3vw, 36px);
+    width: min(100%, 640px);
+}
+
+.sym {
+    flex: none;
+    width: clamp(44px, 9vw, 84px);
+    height: clamp(44px, 9vw, 84px);
+    fill: none;
+    stroke: var(--gold);
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: .5;
+    margin-bottom: 8px;
+    filter: drop-shadow(0 0 8px rgba(224, 168, 46, .35));
+}
+
+.sym-l { transform: rotate(-8deg); }
+.sym-r { transform: rotate(6deg); }
+
+/* polvo antiguo flotando sobre la portada */
+.intro {
+    position: relative;
+}
+
+.intro::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+        radial-gradient(circle at 12% 30%, rgba(235, 189, 85, .55) 0 1.2px, transparent 2px),
+        radial-gradient(circle at 28% 70%, rgba(235, 189, 85, .4) 0 1px, transparent 2px),
+        radial-gradient(circle at 47% 18%, rgba(235, 189, 85, .5) 0 1.4px, transparent 2px),
+        radial-gradient(circle at 66% 62%, rgba(235, 189, 85, .4) 0 1px, transparent 2px),
+        radial-gradient(circle at 84% 26%, rgba(235, 189, 85, .55) 0 1.3px, transparent 2px),
+        radial-gradient(circle at 92% 74%, rgba(235, 189, 85, .35) 0 1px, transparent 2px);
+    animation: polvo 14s ease-in-out infinite alternate;
+}
+
+@keyframes polvo {
+    from { transform: translateY(0); }
+    to { transform: translateY(-14px); }
+}
+
+/* friso de símbolos antiguos */
+.friso {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(10px, 3vw, 34px);
+    margin-top: 56px;
+    padding-block: 14px;
+    border-block: 1px solid var(--line);
+    background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--gold) 6%, transparent), transparent);
+}
+
+.friso svg {
+    width: clamp(26px, 5vw, 40px);
+    height: clamp(26px, 5vw, 40px);
+    fill: none;
+    stroke: var(--gold);
+    stroke-width: 2.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: .6;
+}
+
+.friso svg:nth-child(odd) { opacity: .4; }
+
+.oracle {
+    max-width: 52ch;
+    margin: 18px auto 0;
+    text-align: center;
+    font: italic 500 1.1rem/1.5 var(--f-body);
+    color: var(--dim);
+}
+
+.friso + .oracle + .trials {
+    margin-top: 40px;
+}
+
+/* monedas y bidente grabados en las tarjetas bloqueadas */
+.tile::after {
+    content: "";
+    position: absolute;
+    right: 10px;
+    bottom: 8px;
+    width: 34px;
+    height: 34px;
+    opacity: .16;
+    pointer-events: none;
+    background: var(--gold);
+    -webkit-mask: var(--glyph) center/contain no-repeat;
+    mask: var(--glyph) center/contain no-repeat;
+}
+
+.tile:nth-child(3n+1) { --glyph: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64' fill='none' stroke='black' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='32' cy='32' r='22'/%3E%3Cpath d='M32 22l8 10-8 10-8-10z'/%3E%3C/svg%3E"); }
+.tile:nth-child(3n+2) { --glyph: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64' fill='none' stroke='black' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M17 5v20q0 10 15 10t15-10V5M32 35v26'/%3E%3C/svg%3E"); }
+.tile:nth-child(3n) { --glyph: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64' fill='none' stroke='black' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cellipse cx='32' cy='46' rx='20' ry='7'/%3E%3Cellipse cx='32' cy='36' rx='20' ry='7'/%3E%3Cellipse cx='32' cy='26' rx='20' ry='7'/%3E%3C/svg%3E"); }
+
+/* en las tarjetas con etiqueta larga, la moneda no tapa el texto */
+.tile .tst { position: relative; z-index: 1; }
+
+
+/* ---- Sellos del fondo ---- */
+
+.sigils {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.sg {
+    position: absolute;
+    fill: none;
+    stroke: var(--gold);
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.sg text {
+    fill: var(--gold);
+    stroke: none;
+    font: 600 17px var(--f-mono);
+    letter-spacing: .1em;
+}
+
+.sg1 { width: 640px; height: 640px; left: -200px; top: 90px; opacity: .10; animation: giro 240s linear infinite; }
+.sg2 { width: 560px; height: 560px; right: -180px; top: 640px; opacity: .09; stroke: var(--alert); animation: giro 300s linear infinite reverse; }
+.sg2 text { fill: var(--alert); }
+.sg3 { width: 480px; height: 480px; left: 52%; top: 260px; opacity: .06; transform: translateX(-50%); }
+.sg4 { width: 600px; height: 600px; left: -240px; top: 1250px; opacity: .08; animation: giro 280s linear infinite; }
+.sg5 { width: 520px; height: 520px; right: -150px; top: 1500px; opacity: .08; stroke: var(--alert); animation: giro 260s linear infinite; }
+.sg5 text { fill: var(--alert); }
+
+@keyframes giro {
+    to { transform: rotate(360deg); }
+}
+
+
 /* ---- Móvil ---- */
 
 @media (max-width: 480px) {
+    .sg1, .sg4 { width: 380px; height: 380px; left: -160px; }
+    .sg2, .sg5 { width: 340px; height: 340px; right: -150px; }
+    .sg3 { width: 300px; height: 300px; }
     .ckb {
         left: 0;
         right: 0;
@@ -604,5 +761,11 @@ h2.sec::after {
     }
     .track span + span {
         display: none;
+    }
+    .intro::before {
+        display: none;
+    }
+    .sg {
+        animation: none !important;
     }
 }
