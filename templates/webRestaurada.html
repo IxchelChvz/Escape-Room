@@ -14,7 +14,9 @@
 <body>
     <script>
         // Verificar si se completaron los 12 trabajos antes de permitir el acceso
-        try {
+        // Modo presentación (?presentacion=1): se salta la comprobación
+        const presentacion = new URLSearchParams(location.search).has('presentacion');
+        if (!presentacion) try {
             const done = JSON.parse(localStorage.getItem('heracles-mapa-done') || '[]');
             if (!Array.isArray(done) || done.length < 12) {
                 alert("Acceso denegado: Primero debes descifrar los 12 caracteres en el mapa.");
