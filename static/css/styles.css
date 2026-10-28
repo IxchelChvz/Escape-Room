@@ -1273,3 +1273,99 @@ dialog .cin:focus-visible {
     padding: 10px 12px;
   }
 }
+
+/* ==========================================================================
+   GRID DE TRABAJOS (estilo Olimpo Digital, igual que el portal)
+   ========================================================================== */
+h2.sec::after {
+  content: "";
+  display: block;
+  width: 56px;
+  height: 3px;
+  margin-top: 12px;
+  background: var(--gold);
+}
+
+.trials {
+  margin-top: 64px;
+}
+
+.tl {
+  margin-top: 26px;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+  gap: 14px;
+}
+
+.tile {
+  position: relative;
+  height: 100%;
+  grid-template-columns: 48px minmax(0, 1fr) auto;
+  gap: 14px;
+  padding: 16px;
+  background:
+    repeating-linear-gradient(135deg, transparent 0 9px, rgba(229, 96, 63, .045) 9px 10px),
+    var(--panel);
+  border-left: 3px solid var(--alert);
+  transition: border-color .2s;
+}
+
+.tgr {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border-width: 2px;
+  background: var(--bg);
+  font-size: 1.2rem;
+}
+
+.tbody {
+  gap: 2px;
+}
+
+.tname {
+  font: 700 1.1rem/1.25 var(--f-display);
+  letter-spacing: .03em;
+}
+
+.ttag {
+  font-size: 10.5px;
+  overflow-wrap: anywhere;
+}
+
+.tst {
+  position: relative;
+  z-index: 1;
+  padding: 3px 7px;
+  border: 1px solid color-mix(in srgb, var(--alert) 65%, transparent);
+  background: color-mix(in srgb, var(--alert) 10%, transparent);
+  white-space: nowrap;
+}
+
+/* monedas y bidente grabados en las tarjetas */
+.tile::after {
+  content: "";
+  position: absolute;
+  right: 10px;
+  bottom: 8px;
+  width: 34px;
+  height: 34px;
+  opacity: .16;
+  pointer-events: none;
+  background: var(--gold);
+  -webkit-mask: var(--glyph) center/contain no-repeat;
+  mask: var(--glyph) center/contain no-repeat;
+}
+
+.tl li:nth-child(3n+1) .tile { --glyph: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64' fill='none' stroke='black' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='32' cy='32' r='22'/%3E%3Cpath d='M32 22l8 10-8 10-8-10z'/%3E%3C/svg%3E"); }
+.tl li:nth-child(3n+2) .tile { --glyph: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64' fill='none' stroke='black' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M17 5v20q0 10 15 10t15-10V5M32 35v26'/%3E%3C/svg%3E"); }
+.tl li:nth-child(3n) .tile { --glyph: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64' fill='none' stroke='black' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cellipse cx='32' cy='46' rx='20' ry='7'/%3E%3Cellipse cx='32' cy='36' rx='20' ry='7'/%3E%3Cellipse cx='32' cy='26' rx='20' ry='7'/%3E%3C/svg%3E"); }
+
+.tile.done {
+  background: var(--panel);
+  border-left-color: var(--gold);
+}
+
+.tile.done .tst {
+  border-color: color-mix(in srgb, var(--gold) 65%, transparent);
+  background: color-mix(in srgb, var(--gold) 10%, transparent);
+}
