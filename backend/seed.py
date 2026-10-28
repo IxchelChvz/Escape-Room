@@ -4,8 +4,7 @@ Script de Sembrado (Seed) para inicializar SQLite con SQLAlchemy
 Olympus Tech Solutions - Grupo 4 (Paul: Backend DWES)
 Sin emojis.
 """
-
-from backend.models import db, Labor, Team, GameSession
+from models import db, Labor, Team, GameSession
 
 LABORS_SEED = [
     {

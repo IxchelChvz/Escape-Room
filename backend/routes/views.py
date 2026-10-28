@@ -7,7 +7,7 @@ Sin emojis.
 
 import json
 from flask import Blueprint, render_template, redirect, url_for, flash
-from backend.models import db, Labor, GameSession, Team, LaborAttempt
+from models import db, Labor, GameSession, Team, LaborAttempt
 
 views_bp = Blueprint('views', __name__)
 

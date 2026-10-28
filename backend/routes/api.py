@@ -6,7 +6,7 @@ Sin emojis.
 """
 
 from flask import Blueprint, request, jsonify
-from backend.models import db, Labor, GameSession, Team, LaborAttempt
+from models import db, Labor, GameSession, Team, LaborAttempt
 
 api_bp = Blueprint('api', __name__, url_prefix='/api')
 

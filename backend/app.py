@@ -8,10 +8,10 @@ Sin emojis.
 import os
 from flask import Flask
 from flask_cors import CORS
-from backend.models import db
-from backend.routes.views import views_bp
-from backend.routes.api import api_bp
-from backend.seed import seed_database
+from models import db
+from routes.views import views_bp
+from routes.api import api_bp
+from seed import seed_database
 
 def create_app():
     """Fabrica de la aplicacion Flask con soporte ORM y plantillas Jinja2."""
