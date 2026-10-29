@@ -1,0 +1,44 @@
+[
+  {
+    "id": 5,
+    "name": "asasdasdasdasd",
+    "trials_completed": 0,
+    "elapsed_seconds": 0,
+    "score": 1000,
+    "is_restored": false,
+    "created_at": "2026-10-29T07:54:21.804Z"
+  },
+  {
+    "id": 4,
+    "name": "deportago",
+    "trials_completed": 0,
+    "elapsed_seconds": 0,
+    "score": 1000,
+    "is_restored": false,
+    "created_at": "2026-10-28T12:00:03.121Z"
+  },
+  {
+    "id": 1,
+    "name": "Teseo & Jasón (Argonautas)",
+    "trials_completed": 12,
+    "elapsed_seconds": 1420,
+    "score": 1200,
+    "is_restored": true
+  },
+  {
+    "id": 2,
+    "name": "Espartanos de Leónidas",
+    "trials_completed": 12,
+    "elapsed_seconds": 1650,
+    "score": 1100,
+    "is_restored": true
+  },
+  {
+    "id": 3,
+    "name": "Héroes del Código",
+    "trials_completed": 1,
+    "elapsed_seconds": 0,
+    "score": 1000,
+    "is_restored": false
+  }
+]

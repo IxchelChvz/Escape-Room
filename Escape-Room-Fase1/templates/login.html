@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <title>Olimpo Digital · Elección de Equipo (Heracles.exe)</title>
+    <title>Olimpo Digital · Elección de Grupo (Heracles.exe)</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:wght@400;500;700&family=Cinzel:wght@600;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -21,7 +21,7 @@
             position: relative;
         }
         .login-wrap::before {
-            content: "[ ALTAR DE REGISTRO // JURAMENTO DE LAS ESCUADRAS ]";
+            content: "[ ALTAR DE REGISTRO // JURAMENTO DE LOS GRUPOS ]";
             display: block;
             font-family: var(--f-mono);
             font-size: 0.75rem;
@@ -166,6 +166,12 @@
             color: #6fc2ad;
             display: block;
         }
+        .alert-msg.warn {
+            background: rgba(224, 168, 46, 0.15);
+            border: 1px solid #e0a82e;
+            color: #f7ca68;
+            display: block;
+        }
         .alert-msg.err {
             background: rgba(229, 96, 63, 0.15);
             border: 1px solid #e5603f;
@@ -180,7 +186,7 @@
         <header class="bar">
             <div class="brand">
                 <a class="logo" href="/">Olimpo<span>.digital</span></a>
-                <small>Portal oficial · Registro de Escuadras</small>
+                <small>Portal oficial · Registro de Grupos</small>
             </div>
             <dl class="stats">
                 <div class="stat"><dt>Modo</dt><dd class="ok">IDENTIFICACION</dd></div>
@@ -199,20 +205,20 @@
 
         <main>
             <div class="login-wrap">
-                <h1 class="login-title">Elección de Escuadra</h1>
+                <h1 class="login-title">Elección de Grupo</h1>
                 <p class="login-subtitle">
-                    Identifica a tu equipo de desarrollo para registrar vuestro progreso, tiempos y puntuación en la base de datos sagrada del Olimpo.
+                    Identifica a tu grupo de desarrollo para registrar vuestro progreso, tiempos y puntuación en la base de datos sagrada del Olimpo.
                 </p>
 
                 <div class="radio-tabs">
-                    <button class="tab-btn active" id="tabNew" type="button">Crear Nueva Escuadra</button>
-                    <button class="tab-btn" id="tabExisting" type="button">Seleccionar Equipo Existente</button>
+                    <button class="tab-btn active" id="tabNew" type="button">Crear Nuevo Grupo</button>
+                    <button class="tab-btn" id="tabExisting" type="button">Seleccionar Grupo Existente</button>
                 </div>
 
-                <!-- Formulario Nuevo Equipo -->
+                <!-- Formulario Nuevo Grupo -->
                 <form id="formNewTeam">
                     <div class="form-group">
-                        <label class="form-label" for="teamNameInput">Nombre de la Escuadra</label>
+                        <label class="form-label" for="teamNameInput">Nombre del Grupo</label>
                         <input class="form-input" id="teamNameInput" type="text" placeholder="Ej: Argonautas del Código, Espartanos DAW..." required autocomplete="off">
                     </div>
 
@@ -224,13 +230,13 @@
                     <button class="btn-submit" type="submit">Jurar y Entrar al Mapa de la Hélade</button>
                 </form>
 
-                <!-- Vista Equipos Existentes -->
+                <!-- Vista Grupos Existentes -->
                 <div id="viewExisting" style="display: none;">
                     <p style="font-size: 0.9rem; color: var(--dim); margin-bottom: 0.75rem;">
-                        Haz clic en un equipo para cargarlo en esta sesión:
+                        Haz clic en un grupo para cargarlo en esta sesión:
                     </p>
                     <div class="existing-list" id="existingList">
-                        <div style="color: var(--dim); padding: 0.5rem; text-align: center;">Cargando equipos de la base de datos...</div>
+                        <div style="color: var(--dim); padding: 0.5rem; text-align: center;">Cargando grupos de la base de datos...</div>
                     </div>
                 </div>
 
@@ -256,6 +262,14 @@
             const alertBox = document.getElementById('alertBox');
             const teamNameInput = document.getElementById('teamNameInput');
             const pinInput = document.getElementById('pinInput');
+
+            // Comprobar si fue redirigido por intentar entrar sin grupo
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('msg') === 'requerido' || urlParams.get('requerido') === '1') {
+                alertBox.textContent = 'Acceso restringido: debes registrar o seleccionar un grupo antes de entrar al mapa de pruebas.';
+                alertBox.className = 'alert-msg warn';
+            }
+
 
             function showAlert(msg, isOk) {
                 alertBox.textContent = msg;
@@ -284,7 +298,7 @@
                     .then(teams => {
                         existingList.innerHTML = '';
                         if (!Array.isArray(teams) || teams.length === 0) {
-                            existingList.innerHTML = '<div style="color:var(--dim);padding:0.75rem;text-align:center;">No hay equipos registrados todavía. Crea el primero.</div>';
+                            existingList.innerHTML = '<div style="color:var(--dim);padding:0.75rem;text-align:center;">No hay grupos registrados todavía. Crea el primero.</div>';
                             return;
                         }
                         teams.forEach(t => {
@@ -308,7 +322,7 @@
             }
 
             function selectTeam(teamName) {
-                showAlert(`Autenticando escuadra «${teamName}»...`, true);
+                showAlert(`Autenticando grupo «${teamName}»...`, true);
                 fetch('/api/login', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -323,7 +337,7 @@
                                 loggedAt: new Date().toISOString()
                             }));
                         } catch (e) {}
-                        showAlert(`Escuadra «${teamName}» vinculada en base de datos. Redirigiendo a la Hélade...`, true);
+                        showAlert(`Grupo «${teamName}» vinculado en base de datos. Redirigiendo a la Hélade...`, true);
                         setTimeout(() => {
                             window.location.href = '/mapa';
                         }, 900);
@@ -336,7 +350,7 @@
                     try {
                         localStorage.setItem('dk', JSON.stringify({ team: teamName }));
                     } catch (e) {}
-                    showAlert(`Escuadra «${teamName}» seleccionada localmente. Entrando al mapa...`, true);
+                    showAlert(`Grupo «${teamName}» seleccionado localmente. Entrando al mapa...`, true);
                     setTimeout(() => { window.location.href = '/mapa'; }, 800);
                 });
             }
@@ -348,7 +362,7 @@
                 const pin = pinInput.value.trim();
 
                 if (!name) {
-                    showAlert('Por favor, indica un nombre para tu escuadra.', false);
+                    showAlert('Por favor, indica un nombre para tu grupo.', false);
                     return;
                 }
 
@@ -368,12 +382,12 @@
                                 loggedAt: new Date().toISOString()
                             }));
                         } catch (e) {}
-                        showAlert(`¡Escuadra «${name}» registrada! Partiendo a la Hélade...`, true);
+                        showAlert(`Grupo «${name}» registrado. Partiendo a la Hélade...`, true);
                         setTimeout(() => {
                             window.location.href = '/mapa';
                         }, 900);
                     } else {
-                        showAlert(data.message || 'Error al registrar el equipo.', false);
+                        showAlert(data.message || 'Error al registrar el grupo.', false);
                     }
                 })
                 .catch(() => {
@@ -381,7 +395,7 @@
                     try {
                         localStorage.setItem('dk', JSON.stringify({ team: name }));
                     } catch (e) {}
-                    showAlert(`Escuadra «${name}» guardada localmente. Redirigiendo...`, true);
+                    showAlert(`Grupo «${name}» guardado localmente. Redirigiendo...`, true);
                     setTimeout(() => { window.location.href = '/mapa'; }, 800);
                 });
             });

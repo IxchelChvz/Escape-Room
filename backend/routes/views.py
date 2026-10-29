@@ -54,7 +54,7 @@ def reset_db_action():
 
 @views_bp.route('/login')
 def login_view():
-    """Vista de registro y seleccion de escuadras."""
+    """Vista de registro y seleccion de grupos."""
     teams = Team.query.all()
     return render_template('login.html', teams=teams)
 

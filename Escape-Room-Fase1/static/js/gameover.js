@@ -11,7 +11,7 @@
     var isGameOverActive = false;
 
     function getTeamInfo() {
-        var name = 'Escuadra sin registrar';
+        var name = 'Grupo sin registrar';
         try {
             var dk = JSON.parse(localStorage.getItem('dk') || '{}');
             if (dk && dk.team) name = dk.team;
@@ -104,7 +104,7 @@
                         '<span class="crt-telemetry-val bad">00:00:00 [TIEMPO AGOTADO]</span>' +
                     '</div>' +
                     '<div class="crt-telemetry-row">' +
-                        '<span class="crt-telemetry-label">ESCUADRA AFECTADA   :</span>' +
+                        '<span class="crt-telemetry-label">GRUPO AFECTADO   :</span>' +
                         '<span class="crt-telemetry-val">' + teamName + '</span>' +
                     '</div>' +
                     '<div class="crt-telemetry-row">' +

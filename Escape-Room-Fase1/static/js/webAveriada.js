@@ -34,7 +34,7 @@ S.forEach(function (s, i) {
     g.appendChild(li);
 });
 
-// Mostrar escuadra activa si esta guardada en localStorage
+// Mostrar grupo activo si esta guardada en localStorage
 try {
     var teamData = JSON.parse(localStorage.getItem("dk") || "{}");
     if (teamData.team) {
@@ -74,4 +74,23 @@ try {
     }
     tick();
     setInterval(tick, 1000);
+})();
+
+// Interceptar acceso al mapa: verificar si hay grupo registrado
+(function() {
+    var btn = document.getElementById("btnIrMapa");
+    if (btn) {
+        btn.addEventListener("click", function(e) {
+            try {
+                var dk = JSON.parse(localStorage.getItem("dk") || "{}");
+                if (!dk || !dk.team || !dk.team.trim()) {
+                    e.preventDefault();
+                    window.location.href = "/login?msg=requerido";
+                }
+            } catch (err) {
+                e.preventDefault();
+                window.location.href = "/login?msg=requerido";
+            }
+        });
+    }
 })();

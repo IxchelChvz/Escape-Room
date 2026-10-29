@@ -1,5 +1,18 @@
 (()=>{
 'use strict';
+
+// Obligatorio tener grupo registrado para acceder al mapa
+try {
+  const dk = JSON.parse(localStorage.getItem('dk') || '{}');
+  if (!dk || !dk.team || typeof dk.team !== 'string' || !dk.team.trim()) {
+    window.location.replace('/login?msg=requerido');
+    return;
+  }
+} catch (e) {
+  window.location.replace('/login?msg=requerido');
+  return;
+}
+
 const PASS='HERACLES.EXE';
 const root=document.documentElement;
 const $=s=>document.querySelector(s);

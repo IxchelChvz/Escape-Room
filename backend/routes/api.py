@@ -134,7 +134,7 @@ def get_leaderboard_json():
 
 @api_bp.route('/login', methods=['POST'])
 def login_team():
-    """Autentica o registra una escuadra sin seleccion de deidades."""
+    """Autentica o registra una grupo sin seleccion de deidades."""
     data = request.get_json() or {}
     team_name = (data.get('name') or data.get('teamName') or '').strip()
     if not team_name:
@@ -148,19 +148,19 @@ def login_team():
 
     return jsonify({
         "success": True,
-        "message": f"Escuadra '{team.name}' registrada correctamente en la base de datos.",
+        "message": f"Grupo '{team.name}' registrada correctamente en la base de datos.",
         "team": team.to_dict()
     }), 200
 
 @api_bp.route('/teams', methods=['GET'])
 def get_teams():
-    """Lista todas las escuadras registradas."""
+    """Lista todas las grupos registradas."""
     teams = Team.query.all()
     return jsonify([t.to_dict() for t in teams]), 200
 
 @api_bp.route('/team/current', methods=['GET'])
 def get_current_team():
-    """Devuelve la escuadra activa."""
+    """Devuelve la grupo activa."""
     team = Team.query.first()
     return jsonify({"authenticated": bool(team), "team": team.to_dict() if team else None}), 200
 

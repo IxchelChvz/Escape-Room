@@ -134,7 +134,7 @@ const server = http.createServer(async (req, res) => {
 
     return sendJSON(res, 200, {
       success: true,
-      message: `Escuadra «${team.name}» autenticada correctamente.`,
+      message: `Grupo «${team.name}» autenticada correctamente.`,
       team: team
     });
   }

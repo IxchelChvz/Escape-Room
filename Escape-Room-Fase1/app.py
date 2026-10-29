@@ -71,7 +71,7 @@ class Trial(db.Model):
         }
 
 class Team(db.Model):
-    """Modelo ORM para registrar escuadras, progreso y clasificacion."""
+    """Modelo ORM para registrar grupos, progreso y clasificacion."""
     __tablename__ = 'teams'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -127,7 +127,7 @@ class Submission(db.Model):
         }
 
 class GameSession(db.Model):
-    """Registro relacional ORM del historial de partidas completadas por escuadra (1:N)."""
+    """Registro relacional ORM del historial de partidas completadas por grupo (1:N)."""
     __tablename__ = 'game_sessions'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -277,7 +277,7 @@ def api_login():
 
     return jsonify({
         "success": True,
-        "message": f"Escuadra '{team.name}' autenticada correctamente en la base de datos.",
+        "message": f"Grupo '{team.name}' autenticada correctamente en la base de datos.",
         "team": team.to_dict()
     })
 
