@@ -1,13 +1,8 @@
-<!DOCTYPE html>
-<html lang="es">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <title>Olimpo Digital · Identificación de Grupo (Heracles.exe)</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:wght@400;500;700&family=Cinzel:wght@600;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+{% block title %}Olimpo Digital · Identificación de Grupo (Heracles.exe){% endblock %}
+
+{% block extra_css %}
     <link rel="stylesheet" href="/static/css/webAveriada.css">
     <style>
         .login-wrap {
@@ -169,67 +164,52 @@
             display: block;
         }
     </style>
-</head>
+{% endblock %}
 
-<body>
-    <div class="wrap">
-        <header class="bar">
-            <div class="brand">
-                <a class="logo" href="/">Olimpo<span>.digital</span></a>
-                <small>Portal oficial · Identificación de Grupos</small>
-            </div>
-            <dl class="stats">
-                <div class="stat"><dt>Modo</dt><dd class="ok">IDENTIFICACION OBLIGATORIA</dd></div>
-                <div class="stat"><dt>Base de Datos</dt><dd>SQLite / ORM</dd></div>
-            </dl>
-        </header>
-
-        <div class="meander" aria-hidden="true"></div>
-
-        <nav class="menu" aria-label="Menú principal">
-            <a href="/">Inicio (Templo Averiado)</a>
-            <a href="/login" class="active">Identificar Grupo</a>
-            <a href="/restaurada">Web Restaurada</a>
-        </nav>
-
-        <main>
-            <div class="login-wrap">
-                <h1 class="login-title">Identificación de Grupo</h1>
-                <p class="login-subtitle">
-                    Introduce el nombre de tu grupo. Si ya existe en la base de datos se iniciará tu sesión; si es nuevo, se creará automáticamente y accederás de inmediato al mapa.
-                </p>
-
-                <div class="alert-msg" id="alertBox"></div>
-
-                <form id="formLogin" autocomplete="off">
-                    <div class="form-group">
-                        <label class="form-label" for="teamNameInput">Nombre del Grupo</label>
-                        <input class="form-input" id="teamNameInput" list="existingTeamsDatalist" type="text" placeholder="Ej: Argonautas del Código, Espartanos DAW..." required autofocus>
-                        <datalist id="existingTeamsDatalist"></datalist>
-                        <span class="form-hint">Escribe tu nombre de grupo (creación o inicio de sesión transparente).</span>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label" for="pinInput">PIN de Acceso (Opcional, 4 dígitos)</label>
-                        <input class="form-input" id="pinInput" type="password" maxlength="4" placeholder="Ej: 1234">
-                    </div>
-
-                    <button class="btn-submit" type="submit">Entrar al Mapa de la Hélade</button>
-                </form>
-
-                <div class="existing-box" id="existingBox" style="display: none;">
-                    <div class="existing-box-title">O pulsa en un grupo ya registrado para entrar:</div>
-                    <div class="existing-list" id="existingList"></div>
-                </div>
-            </div>
-        </main>
-
-        <p class="foot">
-            © Dódeka · Los 12 Trabajos del Código · Olympus Tech Solutions
-            <small>Los datos se guardan en la tabla relacional teams de heracles.db.</small>
+{% block content %}
+    <div class="login-wrap">
+        <h1 class="login-title">Identificación de Grupo</h1>
+        <p class="login-subtitle">
+            Introduce el nombre de tu grupo. Si ya existe en la base de datos se iniciará tu sesión; si es nuevo, se creará automáticamente y accederás de inmediato al mapa.
         </p>
-    </div>
 
+        <div class="alert-msg" id="alertBox"></div>
+
+        <form id="formLogin" autocomplete="off">
+            <div class="form-group">
+                <label class="form-label" for="teamNameInput">Nombre del Grupo</label>
+                <input class="form-input" id="teamNameInput" list="existingTeamsDatalist" type="text" placeholder="Ej: Argonautas del Código, Espartanos DAW..." required autofocus>
+                <datalist id="existingTeamsDatalist">
+                {% for t in teams %}
+                    <option value="{{ t.name }}"></option>
+                {% endfor %}
+                </datalist>
+                <span class="form-hint">Escribe tu nombre de grupo (creación o inicio de sesión transparente).</span>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="pinInput">PIN de Acceso (Opcional, 4 dígitos)</label>
+                <input class="form-input" id="pinInput" type="password" maxlength="4" placeholder="Ej: 1234">
+            </div>
+
+            <button class="btn-submit" type="submit">Entrar al Mapa de la Hélade</button>
+        </form>
+
+        <div class="existing-box" id="existingBox" {% if not teams %}style="display: none;"{% endif %}>
+            <div class="existing-box-title">O pulsa en un grupo ya registrado para entrar:</div>
+            <div class="existing-list" id="existingList">
+            {% for t in teams %}
+                <div class="team-item" onclick="selectExistingTeam('{{ t.name|escape }}')">
+                    <div><span class="team-name">{{ t.name }}</span></div>
+                    <span class="team-score">{{ t.trials_completed }}/12 trabajos</span>
+                </div>
+            {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
     <script>
         (function() {
             'use strict';
@@ -238,45 +218,21 @@
             const teamNameInput = document.getElementById('teamNameInput');
             const pinInput = document.getElementById('pinInput');
             const alertBox = document.getElementById('alertBox');
-            const existingBox = document.getElementById('existingBox');
-            const existingList = document.getElementById('existingList');
-            const datalist = document.getElementById('existingTeamsDatalist');
 
             function showAlert(msg, type) {
                 alertBox.textContent = msg;
                 alertBox.className = 'alert-msg ' + (type === 'ok' ? 'ok' : type === 'warn' ? 'warn' : 'err');
             }
 
-            // Aviso si fue redirigido por intentar entrar al mapa sin identificarse
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('msg') === 'requerido' || urlParams.get('requerido') === '1') {
                 showAlert('Acceso restringido: debes identificarte con tu grupo antes de entrar al mapa de pruebas.', 'warn');
             }
 
-            // Cargar grupos existentes para autocompletado y selección rápida con un clic
-            fetch('/api/teams')
-                .then(res => res.json())
-                .then(teams => {
-                    if (!Array.isArray(teams) || teams.length === 0) return;
-                    if (datalist) {
-                        datalist.innerHTML = teams.map(t => '<option value="' + t.name.replace(/"/g, '&quot;') + '">').join('');
-                    }
-                    if (existingList && existingBox) {
-                        existingBox.style.display = 'block';
-                        existingList.innerHTML = '';
-                        teams.forEach(t => {
-                            const item = document.createElement('div');
-                            item.className = 'team-item';
-                            item.innerHTML = '<div><span class="team-name">' + t.name + '</span></div><span class="team-score">' + (t.trials_completed || 0) + '/12 trabajos</span>';
-                            item.addEventListener('click', () => {
-                                teamNameInput.value = t.name;
-                                submitLogin(t.name);
-                            });
-                            existingList.appendChild(item);
-                        });
-                    }
-                })
-                .catch(() => {});
+            window.selectExistingTeam = function(teamName) {
+                teamNameInput.value = teamName;
+                submitLogin(teamName);
+            };
 
             function submitLogin(name) {
                 const teamName = (name || teamNameInput.value).trim();
@@ -314,18 +270,17 @@
                             window.location.href = '/mapa';
                         }, 700);
                     } else {
-                        showAlert(data.message || 'Error al procesar el grupo.', 'err');
+                        showAlert(data.message || 'PIN o datos incorrectos para este grupo.', 'err');
                     }
                 })
                 .catch(() => {
-                    // Fallback local en caso de desconexión
                     try {
                         localStorage.setItem('dk', JSON.stringify({
                             team: teamName,
                             loggedAt: new Date().toISOString()
                         }));
                     } catch (e) {}
-                    showAlert('Grupo «' + teamName + '» guardado. Accediendo al mapa...', 'ok');
+                    showAlert('Grupo «' + teamName + '» guardado localmente. Accediendo al mapa...', 'ok');
                     setTimeout(() => {
                         window.location.href = '/mapa';
                     }, 600);
@@ -338,6 +293,4 @@
             });
         })();
     </script>
-</body>
-
-</html>
+{% endblock %}

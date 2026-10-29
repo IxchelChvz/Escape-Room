@@ -1,0 +1,276 @@
+{% extends "base.html" %}
+
+{% block title %}Panel de Control Interno · Olimpo Digital (Admin){% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <style>
+        .admin-wrap {
+            max-width: 1100px;
+            margin: 1.5rem auto;
+            padding: 0 1rem;
+        }
+        .admin-kpis {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .kpi-card {
+            background: #1c140d;
+            border: 1px solid var(--line);
+            border-radius: 4px;
+            padding: 1.25rem;
+            text-align: center;
+        }
+        .kpi-num {
+            font-size: 2.2rem;
+            font-family: var(--f-display);
+            color: var(--gold-ink);
+            margin: 0.25rem 0;
+            font-weight: 900;
+        }
+        .kpi-label {
+            font-size: 0.8rem;
+            font-family: var(--f-mono);
+            color: var(--dim);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        .admin-section {
+            background: #17100a;
+            border: 1px solid var(--line);
+            border-radius: 4px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: var(--f-mono);
+            font-size: 0.85rem;
+            margin-top: 1rem;
+        }
+        .admin-table th {
+            border-bottom: 2px solid var(--gold);
+            color: var(--gold-ink);
+            text-align: left;
+            padding: 0.75rem 0.5rem;
+        }
+        .admin-table td {
+            padding: 0.65rem 0.5rem;
+            border-bottom: 1px solid rgba(77, 59, 36, 0.35);
+        }
+        .badge-ok {
+            background: rgba(111, 194, 173, 0.2);
+            color: #6fc2ad;
+            border: 1px solid #6fc2ad;
+            padding: 2px 6px;
+            border-radius: 2px;
+            font-size: 0.75rem;
+        }
+        .badge-err {
+            background: rgba(229, 96, 63, 0.2);
+            color: #e5603f;
+            border: 1px solid #e5603f;
+            padding: 2px 6px;
+            border-radius: 2px;
+            font-size: 0.75rem;
+        }
+        .badge-gold {
+            background: rgba(224, 168, 46, 0.2);
+            color: var(--gold-ink);
+            border: 1px solid #e0a82e;
+            padding: 2px 6px;
+            border-radius: 2px;
+            font-size: 0.75rem;
+        }
+        .admin-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            align-items: center;
+        }
+        .btn-danger {
+            background: #e5603f;
+            color: #fff;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            font-family: var(--f-mono);
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            border-radius: 2px;
+        }
+        .btn-danger:hover {
+            background: #ff704d;
+        }
+    </style>
+{% endblock %}
+
+{% block header_subtitle %}Panel de Supervisión Interna para Evaluadores y Profesores{% endblock %}
+
+{% block stats %}
+    <div class="stat"><dt>Modo</dt><dd class="ok">ADMINISTRADOR</dd></div>
+    <div class="stat"><dt>Total Grupos</dt><dd>{{ stats.total_teams }}</dd></div>
+    <div class="stat"><dt>Intentos Totales</dt><dd>{{ stats.total_submissions }}</dd></div>
+{% endblock %}
+
+{% block content %}
+    <div class="admin-wrap">
+        <h1 style="font-family:var(--f-display);color:var(--gold-ink);margin-bottom:0.5rem;">Panel Interno del Olimpo</h1>
+        <p style="color:var(--dim);font-family:var(--f-mono);font-size:0.9rem;margin-bottom:1.5rem;">
+            Monitorización en tiempo real de los grupos, trabajos superados, tiempos invertidos y telemetría de intentos en base de datos SQLite / SQLAlchemy.
+        </p>
+
+        <!-- KPIs Resumen -->
+        <div class="admin-kpis">
+            <div class="kpi-card">
+                <div class="kpi-label">Grupos Inscritos</div>
+                <div class="kpi-num">{{ stats.total_teams }}</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Templos Purificados</div>
+                <div class="kpi-num">{{ stats.restored_teams }}</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Intentos Registrados</div>
+                <div class="kpi-num">{{ stats.total_submissions }}</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Aciertos Backend</div>
+                <div class="kpi-num">{{ stats.correct_submissions }}</div>
+            </div>
+        </div>
+
+        <!-- Tabla de Grupos y Avance -->
+        <div class="admin-section">
+            <h2 style="font-family:var(--f-display);color:var(--gold-ink);font-size:1.2rem;margin:0 0 0.5rem 0;">Estado de los Grupos</h2>
+            <div style="overflow-x:auto;">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Grupo</th>
+                            <th>PIN</th>
+                            <th>Progreso</th>
+                            <th>Tiempo</th>
+                            <th>Puntuación</th>
+                            <th>Estado</th>
+                            <th>Trabajos Superados</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for tm in teams %}
+                        <tr>
+                            <td>#{{ tm.id }}</td>
+                            <td style="font-weight:bold;color:var(--gold-ink);">{{ tm.name }}</td>
+                            <td>{% if tm.access_pin %}Protegido{% else %}<span style="color:var(--dim);">Abierto</span>{% endif %}</td>
+                            <td>{{ tm.trials_completed }}/12</td>
+                            <td>
+                                {% set s = tm.elapsed_seconds %}
+                                {{ '%02d:%02d:%02d' | format(s // 3600, (s % 3600) // 60, s % 60) }}
+                            </td>
+                            <td>{{ tm.score }} pts</td>
+                            <td>
+                                {% if tm.is_restored %}
+                                    <span class="badge-ok">PURIFICADO</span>
+                                {% else %}
+                                    <span class="badge-gold">EN PROGRESO</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% for tr in tm.solved_trials %}
+                                    <span class="badge-ok">{{ tr.greek_letter }}#{{ tr.num }}</span>
+                                {% else %}
+                                    <span style="color:var(--dim);">Ninguno aún</span>
+                                {% endfor %}
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr><td colspan="8" style="text-align:center;color:var(--dim);">No hay grupos registrados en la base de datos.</td></tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Historial de Envíos e Intentos Recientes -->
+        <div class="admin-section">
+            <h2 style="font-family:var(--f-display);color:var(--gold-ink);font-size:1.2rem;margin:0 0 0.5rem 0;">Registro de Envíos e Intentos (Submissions)</h2>
+            <div style="overflow-x:auto;">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Fecha / Hora</th>
+                            <th>Grupo</th>
+                            <th>Trabajo</th>
+                            <th>Solución Enviada</th>
+                            <th>Resultado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for sub in submissions %}
+                        <tr>
+                            <td style="color:var(--dim);">{{ sub.submitted_at.strftime('%H:%M:%S') }}</td>
+                            <td style="color:var(--gold-ink);font-weight:bold;">{{ sub.team_name }}</td>
+                            <td>Trabajo #{{ sub.trial_id }}</td>
+                            <td><code style="background:#100b07;padding:2px 6px;border-radius:2px;">{{ sub.solution_sent }}</code></td>
+                            <td>
+                                {% if sub.is_correct %}
+                                    <span class="badge-ok">CORRECTO</span>
+                                {% else %}
+                                    <span class="badge-err">FALLIDO</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr><td colspan="5" style="text-align:center;color:var(--dim);">No hay intentos registrados aún.</td></tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Zona de Mantenimiento de Evaluadores -->
+        <div class="admin-section">
+            <h2 style="font-family:var(--f-display);color:var(--gold-ink);font-size:1.2rem;margin:0 0 0.5rem 0;">Acciones de Administración</h2>
+            <p style="color:var(--dim);font-family:var(--f-mono);font-size:0.85rem;">
+                Reinicia los envíos y sesiones para iniciar un nuevo turno de alumnos sin borrar los 12 trabajos configurados.
+            </p>
+            <div class="admin-actions">
+                <button type="button" class="btn-danger" onclick="resetCompetition()">[ RESETEAR COMPETICIÓN PARA NUEVO TURNO ]</button>
+                <span id="adminMsg" style="font-family:var(--f-mono);font-size:0.85rem;color:var(--gold-ink);"></span>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        function resetCompetition() {
+            if (!confirm('¿Seguro que deseas reiniciar los grupos y envíos para un nuevo turno? Esta acción no se puede deshacer.')) return;
+            const token = prompt('Introduce el token de administrador (ej: OLIMPO_ADMIN_2024):');
+            if (!token) return;
+
+            fetch('/api/reset', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Admin-Token': token
+                },
+                body: JSON.stringify({ token: token })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Base de datos restablecida con éxito para el nuevo turno.');
+                    window.location.reload();
+                } else {
+                    alert('Acceso denegado: ' + (data.message || 'Token no válido'));
+                }
+            })
+            .catch(() => alert('Error al contactar con el servidor.'));
+        }
+    </script>
+{% endblock %}

@@ -1,0 +1,20 @@
+[Unit]
+Description=Servicio WSGI Gunicorn para HERACLES.EXE
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/heracles
+Environment="PATH=/var/www/heracles/venv/bin"
+EnvironmentFile=/var/www/heracles/.env
+ExecStart=/var/www/heracles/venv/bin/gunicorn --config gunicorn.conf.py wsgi:application
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=heracles
+
+[Install]
+WantedBy=multi-user.target

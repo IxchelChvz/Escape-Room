@@ -5,57 +5,63 @@
 
 ---
 
-## 1. Descripcion del Proyecto
+## 1. Descripcion General del Proyecto
 
-Este proyecto es una aplicacion web interactiva de Escape Room digital basada en los 12 Trabajos de Heracles adaptados a los retos tecnicos del ciclo formativo de DAW.
+HERACLES.EXE es una aplicacion web interactiva de Escape Room tecnico-educativo basada en los 12 Trabajos de Heracles, adaptados rigurosamente a las competencias curriculares clave de los modulos de Desarrollo de Aplicaciones Web (DAW) y Multiplataforma (DAM).
 
-La aplicacion consta de cuatro vistas conectadas entre si y sincronizadas con el Backend:
-
-1. **Pantalla 1 - Web Averiada (Landing Page) (`/`):**
-   * Archivo: `templates/index.html` y estilos `static/css/webAveriada.css`.
-   * El templo sagrado del Olimpo esta corrompido por la maldicion de Hera arrojando un error HTTP 500.
-   * La lista de secciones (`<ul id="grid">`) es hidratada por `static/js/webAveriada.js`.
-   * Botones de navegacion hacia el Mapa de la Helade y la Eleccion de Escuadra.
-
-2. **Pantalla de Identificacion - Eleccion de Escuadra (`/login`):**
-   * Archivo: `templates/login.html`.
-   * Permite registrar una nueva escuadra o seleccionar una existente de la base de datos relacional.
-   * Registro del nombre de la escuadra y PIN de acceso opcional.
-   * Persistencia en la tabla `teams` de SQLite (`heracles.db`) y sesion activa.
-
-3. **Pantalla 2 - Mapa de la Helade (`/mapa`):**
-   * Archivo: `templates/mapa.html` y estilos `static/css/styles.css`.
-   * Cartografia de Grecia (`static/images/mapaGriego.jpeg`) con niebla de guerra dinamica renderizada sobre un lienzo `<canvas id="fog">`.
-   * 12 pines interactivos (`<button class="pin">`) que abren modales de dialogo (`<dialog id="dlg">`) con los 12 desafios gestionados por `static/js/main.js`.
-   * Muestra el nombre de la escuadra activa en las estadisticas superiores.
-   * Zona de pedestales (`#slots`) para introducir la contraseña final:
-     ```text
-     HERACLES.EXE (12 caracteres)
-     ```
-   * Al validar la clave, se realiza una peticion `POST /api/verify` al servidor, vinculando la victoria al equipo en la base de datos.
-
-4. **Pantalla 3 - Web Restaurada (`/restaurada`):**
-   * Archivo: `templates/webRestaurada.html` y estilos `static/css/webRestaurada.css`.
-   * El templo dorado refulge con estado HTTP 200 y sistema RESTAURADO.
-   * Muestra el nombre de la escuadra victoriosa en el mensaje de gloria.
-   * Tabla de honor de las escuadras (Leaderboard) cargada dinamicamente desde la base de datos.
-   * Buscador de secciones (`#q`) gestionado por `static/js/webRestaurada_2.js`.
-   * Formulario de contacto y memoria tecnica del oraculo.
+La plataforma esta construida con una arquitectura de servidor unico en **Python / Flask** con persistencia relacional en **SQLite / SQLAlchemy ORM**, renderizado dinamico con motor de plantillas **Jinja2** (con herencia mediante `base.html`), gestion segura de sesiones, validacion estricta de retos del lado del servidor y un panel interno de evaluacion y telemetria para organizadores docentes (`/admin`).
 
 ---
 
-## 2. Matriz Curricular: Los 12 Trabajos de Heracles
+## 2. Arquitectura de Vistas (Jinja2 Template Inheritance)
 
-| Num | Trabajo Mitologico | Modulo DAW | Concepto Tecnico | Solucion / Letra |
+La interfaz se estructura mediante herencia de plantillas Jinja2 a partir de `templates/base.html`, garantizando consistencia semantica, accesibilidad y dinamismo:
+
+1. **Pantalla 1 - Web Averiada (Landing Page) (`/`):**
+   * Archivo: `templates/index.html` (extiende `base.html`).
+   * Representa el templo sagrado del Olimpo corrompido por errores intencionados (HTTP 500, excepciones en consola, terminal interactiva de descompilacion y arte ASCII de la Quimera).
+   * Renderiza dinamicamente los 12 bloqueos mediante un bucle `{% for trial in trials %}`.
+   * Muestra el equipo activo mediante `{{ active_team }}` y enlace directo al flujo de entrada.
+
+2. **Pantalla de Identificacion - Eleccion de Grupo (`/login`):**
+   * Archivo: `templates/login.html` (extiende `base.html`).
+   * Permite a los participantes registrar un nuevo grupo o identificarse con uno existente.
+   * Sistema de seguridad con PIN de 4 digitos hasheado criptograficamente en servidor (PBKDF2/Werkzeug). Si el PIN no coincide, deniega el acceso con codigo HTTP 401.
+
+3. **Pantalla 2 - Mapa de la Helade y Retos (`/mapa`):**
+   * Archivo: `templates/mapa.html` (extiende `base.html`).
+   * Cartografia de Grecia con niebla de guerra dinamica renderizada sobre `<canvas id="fog">`.
+   * 12 pines interactivos en coordenadas exactas. Por diseño pedagogico, las pruebas 3, 11 y 12 permanecen abiertas mientras que el resto muestran candado SVG.
+   * Modales interactivos para cada desafio. La superacion se valida tanto en cliente como en el endpoint del servidor `/api/validate-trial`.
+   * Zona de pedestales para introducir la contraseña maestra de 12 caracteres: `HERACLES.EXE`.
+
+4. **Pantalla 3 - Web Restaurada (`/restaurada`):**
+   * Archivo: `templates/webRestaurada.html` (extiende `base.html`).
+   * Muestra el templo glorificado con HTTP 200 tras introducir la clave correcta.
+   * Renderiza mediante Jinja2 la clasificacion oficial (Leaderboard) de equipos que han purificado el Olimpo.
+
+5. **Pantalla 4 - Panel Interno de Evaluacion Docente (`/admin`):**
+   * Archivo: `templates/admin.html` (extiende `base.html`).
+   * Cuadro de mandos para organizadores y profesores.
+   * Metricas KPI en tiempo real: grupos inscritos, templos purificados, total de envios y aciertos.
+   * Tabla con el progreso individual de cada grupo, PIN configurado, tiempo invertido y lista de trabajos superados.
+   * Registro historico de auditoria de envios (`submissions`).
+   * Boton de reseteo protegido para reiniciar la competicion entre turnos de alumnos.
+
+---
+
+## 3. Matriz Curricular: Los 12 Trabajos de Heracles
+
+| Num | Trabajo Mitologico | Modulo | Concepto Tecnico Evaluado | Solucion Canonica / Letra |
 |:---:|:---|:---:|:---|:---:|
 | 1 | Leon de Nemea | DIW | CSS Flexbox y Box Model | `align-items: center` (**H**) |
 | 2 | Hidra de Lerna | DWEC | JavaScript, Bucles y Cauterizacion | Ordenar bucle `for` y cortar/quemar cabezas (**E**) |
 | 3 | Cierva de Cerinea | DWEC | Eventos y Evasion de Cursor | Capturar a la cierva 6 veces en movimiento (**R**) |
 | 4 | Jabali de Erimanto | DIW / DWEC | Marcado HTML y Accesibilidad | Atributo `alt` para lectores de pantalla (**A**) |
-| 5 | Establos de Augias | DWES | Codigo Limpio y Buenas Practicas | Limpiar los manchas de codigo muerto del DOM (**C**) |
+| 5 | Establos de Augias | DWES | Codigo Limpio y Refactorizacion | Limpiar manchas de codigo muerto del DOM (**C**) |
 | 6 | Aves del Estinfalo | DAW | Depuracion de Sintaxis | Derribar las 5 erratas de codigo mal escritas (**L**) |
-| 7 | Toro de Creta | DWES | Flask, Rutas y Codigos HTTP | Manejo de ruta no existente HTTP 404 (**E**) |
-| 8 | Yeguas de Diomedes | DWEC / DWES | Memoria y Secuencia (Simon) | Memorizar y repetir el orden de las 4 yeguas (**S**) |
+| 7 | Toro de Creta | DWES | Flask, Rutas y Codigos HTTP | Manejo de ruta inexistente HTTP 404 (**E**) |
+| 8 | Yeguas de Diomedes | DWEC / DWES | Memoria y Secuencia (Simon) | Memorizar y reproducir el orden de 4 yeguas (**S**) |
 | 9 | Cinturon de Hipolita | DIW / DAW | HTML Semantico | Emparejar etiquetas con su funcion semantica (**.**) |
 | 10 | Bueyes de Gerion | DWEC / DWES | Comparacion Estricta y Tipos | Comparacion `'3' === 3` devuelve `false` (**E**) |
 | 11 | Manzanas Hesperides | DWEC | Criptografia Clasica (Cesar) | Descifrar `KHUFXOHV` con desplazamiento -3 -> `HERCULES` (**X**) |
@@ -63,82 +69,66 @@ La aplicacion consta de cuatro vistas conectadas entre si y sincronizadas con el
 
 ---
 
-## 3. Puesta en Marcha del Backend
+## 4. Despliegue y Puesta en Marcha
 
-### Opcion A: Servidor Node.js (Recomendado para pruebas rapidas)
-
-El proyecto incluye un servidor ligero sin librerias externas que sirve las plantillas y atiende a la API REST:
+### 4.1. Ejecucion Local con Python
 
 ```bash
-# Iniciar servidor
-node server.js
+# 1. Crear y activar entorno virtual
+python -m venv venv
+# En Linux/Mac:
+source venv/bin/activate
+# En Windows (PowerShell):
+.\venv\Scripts\Activate.ps1
 
-# Acceso en el navegador:
-# http://localhost:3000/
-# http://localhost:3000/mapa
-# http://localhost:3000/restaurada
-```
-
----
-
-### Opcion B: Backend Python con Flask, SQLAlchemy y Jinja2
-
-Para evaluar el modulo de DWES (Desarrollo Web en Entorno Servidor):
-
-```bash
-# 1. Instalar dependencias
+# 2. Instalar dependencias requeridas
 pip install -r requirements.txt
 
-# 2. Iniciar aplicacion Flask
+# 3. Configurar variables de entorno (opcional, utiliza .env por defecto)
+cp .env.example .env
+
+# 4. Iniciar el servidor Flask
 python app.py
 
-# Acceso en el navegador:
-# http://localhost:5000/
-# http://localhost:5000/mapa
-# http://localhost:5000/restaurada
+# El servidor arranca en http://localhost:3000/
 ```
 
-El servidor Flask inicializa automaticamente la base de datos relacional SQLite `heracles.db` con los modelos ORM `Trial`, `Team` y `Submission`.
+### 4.2. Ejecucion con Servidor WSGI de Produccion (Gunicorn)
 
----
+```bash
+gunicorn --config gunicorn.conf.py wsgi:application
+```
 
-## 4. Estructura de Carpetas
+### 4.3. Despliegue con Docker y Docker Compose
 
-```text
-sharp-bose/
-├── app.py                     # Backend Flask con SQLAlchemy y Jinja2
-├── server.js                  # Servidor local Node.js con API REST
-├── requirements.txt           # Dependencias Python (Flask, Flask-SQLAlchemy)
-├── README.md                  # Documentacion del proyecto
-├── templates/                 # Plantillas HTML originales del proyecto
-│   ├── index.html             # Pantalla 1: Web Averiada / Landing
-│   ├── mapa.html              # Pantalla 2: Mapa de la Helade y retos
-│   └── webRestaurada.html     # Pantalla 3: Olimpo Restaurado
-├── static/
-│   ├── css/
-│   │   ├── webAveriada.css    # Estilos del Templo Averiado
-│   │   ├── styles.css         # Estilos del Mapa y modales
-│   │   └── webRestaurada.css  # Estilos de la Web Restaurada
-│   ├── js/
-│   │   ├── webAveriada.js     # Logica de hidratacion de la landing
-│   │   ├── main.js            # Logica de retos, niebla y API verify
-│   │   └── webRestaurada_2.js # Logica del buscador y contacto
-│   └── images/
-│       └── mapaGriego.jpeg    # Cartografia historica de Grecia
-└── Escape-Room-Fase1/         # Paquete completo exportable idéntico
+El directorio `deploy/` contiene la infraestructura para contenedores:
+
+```bash
+# Construir y levantar el contenedor de la aplicacion y el proxy Nginx
+cd deploy
+docker compose up -d --build
+
+# Verificar estado y registros
+docker compose ps
+docker compose logs -f
 ```
 
 ---
 
 ## 5. Endpoints de la API REST
 
-* `POST /api/login`: Autentica o crea una nueva escuadra en la base de datos (`name`, `pin`).
-* `GET /api/teams`: Lista todos los equipos registrados y su estado.
-* `GET /api/team/current`: Devuelve los datos del equipo activo en la sesion actual.
-* `POST /api/verify`: Valida la clave `HERACLES.EXE`, asocia la victoria al equipo y devuelve `{ "success": true }`.
-* `GET /api/trials`: Devuelve el listado de los 12 trabajos con metadatos.
-* `POST /api/validate-trial`: Notifica y almacena en base de datos la superacion de un trabajo individual para el equipo activo.
-* `GET /api/leaderboard`: Clasificacion de tiempos y puntuaciones de las escuadras en la base de datos.
-* `POST /api/reset`: Reinicia el progreso en el backend.
+* `POST /api/login`: Autentica un grupo existente comprobando su PIN hasheado (401 si no coincide) o registra uno nuevo.
+* `GET /api/teams`: Lista todos los grupos registrados con su puntuacion y estado.
+* `GET /api/team/current`: Devuelve el grupo activo en la sesion actual de Flask.
+* `GET /api/trials`: Devuelve la definicion y estado de los 12 trabajos de Heracles.
+* `POST /api/validate-trial`: Valida la solucion en el servidor, vincula el trabajo resuelto a la tabla intermedia `team_trials`, asocia obligatoriamente `team_id` en la tabla `submissions` y actualiza la puntuacion.
+* `POST /api/verify`: Valida la clave maestra final `HERACLES.EXE` y registra la victoria del equipo.
+* `GET /api/leaderboard`: Devuelve el ranking de grupos victoriosos ordenados por menor tiempo.
+* `POST /api/reset`: Endpoint protegido mediante cabecera `X-Admin-Token` o parametro `token` que reinicia el progreso de las escuadras para un nuevo turno docente.
 
 ---
+
+## 6. Organizacion del Evento y Documentacion
+
+Para consultar el plan integral de difusion, inscripciones, contacto con colegios, turnos de 90 minutos y protocolo de atencion al participante, consulte el documento:
+* [EVENTO_ORGANIZACION.md](EVENTO_ORGANIZACION.md)

@@ -1,93 +1,110 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Heracles.exe - Los 12 Trabajos del Código</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:wght@400;500;700&family=Cinzel:wght@600;700;900&family=JetBrains+Mono:wght@400;500;600&family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+{% extends "base.html" %}
+
+{% block title %}Olimpo Digital · Mapa de la Hélade (Heracles.exe){% endblock %}
+
+{% block extra_css %}
     <link rel="stylesheet" href="/static/css/styles.css">
     <link rel="stylesheet" href="/static/css/gameover.css">
-</head>
-<body>
-    <div class="flash" id="flash" aria-hidden="true"></div>
-    <div class="wrap">
-        <header class="bar">
-            <div class="brand">
-                <a class="logo" href="/">Olimpo<span>.digital</span></a>
-                <small>Olympus Tech Solutions - Grupo 4</small>
+{% endblock %}
+
+{% block stats %}
+    <div class="stat"><dt>Sistema</dt><dd id="status">MALDECIDO / CORRUPTO</dd></div>
+    <div class="stat"><dt>Grupo</dt><dd id="teamDisplay">
+        {% if active_team %}
+            <a href="/login" style="color:var(--gold-ink);text-decoration:none;">{{ active_team }}</a>
+        {% else %}
+            <a href="/login" style="color:var(--gold-ink);text-decoration:none;">Elegir</a>
+        {% endif %}
+    </dd></div>
+    <div class="stat"><dt>Tiempo Restante</dt><dd id="timerVal" style="font-family:var(--f-mono);color:var(--gold-ink);font-weight:bold;">01:30:00</dd></div>
+    <div class="stat"><dt>Trabajos</dt><dd id="count">0/12</dd></div>
+    <div class="stat"><dt>Contraseña</dt><dd id="passMini">_ _ _ _ _ _ _ _ _ _ _ _</dd></div>
+{% endblock %}
+
+{% block nav %}
+    <a href="/">Inicio</a>
+    <a href="/login">Grupo</a>
+    <a href="#map">Mapa</a>
+    <a href="#list">Trabajos</a>
+    <a href="#unlock">Desbloqueo</a>
+    <a href="/restaurada">Restaurada</a>
+    <a href="/admin">Admin</a>
+{% endblock %}
+
+{% block content %}
+    <section class="intro">
+        <p class="lede" data-when="curse">Supera el trabajo de cada pin para disipar la niebla y obtener un carácter de la contraseña.</p>
+        <p class="lede" data-when="restored">Las doce hazañas están cumplidas. El Olimpo vuelve a funcionar.</p>
+    </section>
+
+    <!-- Contenedor del Mapa -->
+    <section class="mapsec" aria-label="Mapa de los doce trabajos">
+        <div class="mapscroll">
+            <div class="map" id="map">
+                <img class="base" src="/static/images/mapaGriego.jpeg" alt="Mapa de la antigua Grecia">
+                <canvas id="fog" aria-hidden="true"></canvas>
             </div>
-            <dl class="stats">
-                <div class="stat"><dt>Sistema</dt><dd id="status">MALDECIDO / CORRUPTO</dd></div>
-                <div class="stat"><dt>Grupo</dt><dd id="teamDisplay"><a href="/login" style="color:var(--gold-ink);text-decoration:none;">Elegir</a></dd></div>
-                <div class="stat"><dt>Tiempo Restante</dt><dd id="timerVal" style="font-family:var(--f-mono);color:var(--gold-ink);font-weight:bold;">01:30:00</dd></div>
-                <div class="stat"><dt>Trabajos</dt><dd id="count">0/12</dd></div>
-                <div class="stat"><dt>Contraseña</dt><dd id="passMini">_ _ _ _ _ _ _ _ _ _ _ _</dd></div>
-            </dl>
-        </header>
-        <div class="meander" aria-hidden="true"></div>
+        </div>
+    </section>
 
-        <nav class="menu" aria-label="Menú principal">
-            <a href="/">Inicio</a>
-            <a href="/login">Grupo</a>
-            <a href="#map">Mapa</a>
-            <a href="#list">Trabajos</a>
-            <a href="#unlock">Desbloqueo</a>
-        </nav>
+    <!-- Lista de pruebas renderizadas dinámicamente con Jinja2 -->
+    <section class="trials">
+        <h2 class="sec">Los doce trabajos (3, 11 y 12 Disponibles)</h2>
+        <ul class="tl" id="list">
+        {% for trial in trials %}
+            {% set is_unlocked = trial.num in [3, 11, 12] %}
+            <li>
+                <button class="tile{% if not is_unlocked %} locked{% endif %}" type="button">
+                    <span class="tgr">{{ trial.greek_letter }}</span>
+                    <span class="tbody">
+                        <span class="tname">{{ trial.name }}{% if not is_unlocked %} [Candado]{% endif %}</span>
+                        <span class="ttag">{{ trial.concept }}{% if not is_unlocked %} · Bloqueada con candado{% else %} · Desbloqueada{% endif %}</span>
+                    </span>
+                    <span class="tst">
+                        {% if is_unlocked %}
+                            DISPONIBLE
+                        {% else %}
+                            <svg class="lock-svg" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg> CANDADO
+                        {% endif %}
+                    </span>
+                </button>
+            </li>
+        {% else %}
+            <li>Cargando trabajos...</li>
+        {% endfor %}
+        </ul>
+    </section>
 
-        <main>
-            <section class="intro">
-                <p class="lede" data-when="curse">Supera el trabajo de cada pin para disipar la niebla y obtener un carácter de la contraseña.</p>
-                <p class="lede" data-when="restored">Las doce hazañas están cumplidas. El Olimpo vuelve a funcionar.</p>
-            </section>
+    <!-- Zona de desbloqueo final -->
+    <section class="unlock" id="unlock">
+        <h2 class="sec">Zona de desbloqueo</h2>
+        <div class="slots" id="slots"></div>
+        <div class="actions">
+            <button class="btn" id="restore" type="button">Restaurar el Olimpo</button>
+            <button class="btn ghost" id="reset" type="button">Reiniciar demo</button>
+        </div>
+        <p class="msg" id="msg" role="status"></p>
+    </section>
+{% endblock %}
 
-            <!-- Contenedor del Mapa -->
-            <section class="mapsec" aria-label="Mapa de los doce trabajos">
-                <div class="mapscroll">
-                    <div class="map" id="map">
-                        <img class="base" src="/static/images/mapaGriego.jpeg" alt="Mapa de la antigua Grecia">
-                        <canvas id="fog" aria-hidden="true"></canvas>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Lista de pruebas -->
-            <section class="trials">
-                <h2 class="sec">Los doce trabajos</h2>
-                <ul class="tl" id="list"></ul>
-            </section>
-
-            <!-- Zona de desbloqueo final -->
-            <section class="unlock" id="unlock">
-                <h2 class="sec">Zona de desbloqueo</h2>
-                <div class="slots" id="slots"></div>
-                <div class="actions">
-                    <button class="btn" id="restore" type="button">Restaurar el Olimpo</button>
-                    <button class="btn ghost" id="reset" type="button">Reiniciar demo</button>
-                </div>
-                <p class="msg" id="msg" role="status"></p>
-            </section>
-        </main>
-    </div>
-
+{% block modal %}
     <!-- Modal de diálogos para las pruebas -->
     <dialog id="dlg" aria-labelledby="dTitle">
         <div class="dhead">
-            <span class="dgr" id="dGr" aria-hidden="true"></span>
-            <div>
-                <p class="dtag" id="dTag"></p>
-                <h2 id="dTitle"></h2>
+            <span class="dgr" id="dGr" aria-hidden="true">Α</span>
+            <div class="dmeta">
+                <p class="dtag" id="dTag">Trabajo 1 de 12 · CSS</p>
+                <h3 class="dtitle" id="dTitle">El León de Nemea</h3>
             </div>
-            <button class="x" id="dClose" type="button" aria-label="Cerrar">×</button>
+            <button class="x" id="dClose" type="button" aria-label="Cerrar diálogo">X</button>
         </div>
-        <p class="dstory" id="dStory"></p>
+        <p class="story" id="dStory">Texto de la historia del trabajo.</p>
         <div class="dbody" id="dBody"></div>
-        <p class="fb" id="dFb" role="status"></p>
+        <p class="fb" id="dFb" role="status" aria-live="polite"></p>
     </dialog>
+{% endblock %}
 
-    <!-- Carga de JS estático con Jinja2 -->
+{% block scripts %}
     <script src="/static/js/main.js"></script>
     <script src="/static/js/gameover.js"></script>
-</body>
-</html>
+{% endblock %}

@@ -1,178 +1,93 @@
-<!DOCTYPE html>
-<html lang="es">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <title>Olimpo Digital · Error 500</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:wght@400;500;700&family=Cinzel:wght@600;700;900&family=JetBrains+Mono:wght@400;500;600&family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+{% block title %}Olimpo Digital · El Templo Averiado (Heracles.exe){% endblock %}
+
+{% block extra_css %}
     <link rel="stylesheet" href="/static/css/webAveriada.css">
     <link rel="stylesheet" href="/static/css/gameover.css">
     <link rel="stylesheet" href="/static/css/terminalIntro.css">
-</head>
+{% endblock %}
 
-<body>
-    <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
-        <defs>
-            <!-- Bidente de Hades -->
-            <symbol id="s-bident" viewBox="0 0 64 64"><path d="M17 5v20q0 10 15 10t15-10V5M32 35v26M13 11l4-8 4 8M43 11l4-8 4 8" /></symbol>
-            <!-- Óbolo: la moneda para Caronte -->
-            <symbol id="s-coin" viewBox="0 0 64 64"><circle cx="32" cy="32" r="22"/><circle cx="32" cy="32" r="16" stroke-dasharray="3 3"/><path d="M32 22l8 10-8 10-8-10z"/></symbol>
-            <!-- Montón de monedas: la avaricia -->
-            <symbol id="s-stack" viewBox="0 0 64 64"><ellipse cx="32" cy="50" rx="20" ry="7"/><path d="M12 50v-8M52 50v-8"/><ellipse cx="32" cy="42" rx="20" ry="7"/><path d="M12 42v-8M52 42v-8"/><ellipse cx="32" cy="34" rx="20" ry="7"/><path d="M12 34v-8M52 34v-8"/><ellipse cx="32" cy="26" rx="20" ry="7"/></symbol>
-            <!-- Granada: Perséfone y el Hades -->
-            <symbol id="s-pomegranate" viewBox="0 0 64 64"><circle cx="32" cy="38" r="20"/><path d="M24 19l4-9 4 5 4-5 4 9M32 20v36M20 28q12 10 0 22M44 28q-12 10 0 22"/></symbol>
-            <!-- Ánfora antigua -->
-            <symbol id="s-amphora" viewBox="0 0 64 64"><path d="M24 6h16M26 6v8q-14 6-14 22t14 18h12q14-2 14-18T38 14V6M26 14q-10-2-10 8M38 14q10-2 10 8M26 54v6h12v-6M18 30h28"/></symbol>
-            <!-- Cuerno de la abundancia: Pluto, dios de la riqueza -->
-            <symbol id="s-horn" viewBox="0 0 64 64"><path d="M8 14q4 34 38 36l10-8-6-10q-8 6-18 2Q22 30 22 14zM46 50l-4-8M20 24q8 6 18 4"/><circle cx="52" cy="20" r="5"/><circle cx="42" cy="12" r="4"/></symbol>
-        
-            <!-- Sellos del fondo: anillo de letras griegas + signo central -->
-            <symbol id="sigil-a" viewBox="0 0 400 400">
-                <defs><path id="ring-a" d="M200 200m-150 0a150 150 0 1 1 300 0a150 150 0 1 1-300 0"/></defs>
-                <circle cx="200" cy="200" r="190"/><circle cx="200" cy="200" r="122"/>
-                <text><textPath href="#ring-a" textLength="940">ΑΔΗΣ · ΠΛΟΥΤΩΝ · ΧΡΥΣΟΣ · ΛΗΘΗ · ΣΤΥΞ · ΚΕΡΒΕΡΟΣ ·</textPath></text>
-                <path d="M200 92v212M168 130h64M160 148q40 -28 80 0"/>
-                <ellipse cx="200" cy="170" rx="30" ry="58"/>
-                <path d="M120 210h160M120 210a14 14 0 1 0 0 .1M280 210a14 14 0 1 0 0 .1"/>
-                <path d="M150 120L100 86M250 120l50-34M92 78l16 16M108 78L92 94M292 78l16 16M308 78l-16 16"/>
-                <path d="M200 252q-34 8-34 34t34 20 34-20-34-34zM200 306v36"/>
-                <circle cx="200" cy="350" r="7"/><circle cx="148" cy="318" r="6"/><circle cx="252" cy="318" r="6"/>
-            </symbol>
-            <symbol id="sigil-b" viewBox="0 0 400 400">
-                <defs><path id="ring-b" d="M200 200m-158 0a158 158 0 1 1 316 0a158 158 0 1 1-316 0"/></defs>
-                <circle cx="200" cy="200" r="192"/><circle cx="200" cy="200" r="130"/>
-                <text><textPath href="#ring-b" textLength="990">ΣΦΑΛΜΑ · ΑΠΟΤΥΧΙΑ · ΑΠΛΗΣΤΙΑ · ΧΡΥΣΟΣ · ΦΘΟΝΟΣ · ΜΙΔΑΣ ·</textPath></text>
-                <path d="M200 84L232 168 316 200 232 232 200 316 168 232 84 200 168 168z"/>
-                <path d="M200 120v160M120 200h160M143 143l114 114M257 143L143 257"/>
-                <circle cx="200" cy="200" r="30"/><circle cx="200" cy="200" r="10"/>
-                <path d="M200 60l-8 14h16zM200 340l-8-14h16zM60 200l14-8v16zM340 200l-14-8v16z"/>
-            </symbol>
-            <symbol id="sigil-c" viewBox="0 0 400 400">
-                <defs><path id="ring-c" d="M200 200m-146 0a146 146 0 1 1 292 0a146 146 0 1 1-292 0"/></defs>
-                <circle cx="200" cy="200" r="194"/><circle cx="200" cy="200" r="170" stroke-dasharray="2 7"/><circle cx="200" cy="200" r="116"/>
-                <text><textPath href="#ring-c" textLength="905">ΝΕΚΡΟΙ · ΜΝΗΜΑ · ΣΚΟΝΗ · ΧΡΟΝΟΣ · ΚΑΤΑΡΑ · ΛΑΒΥΡΙΝΘΟΣ ·</textPath></text>
-                <path d="M200 120l60 104h-120z"/><path d="M200 280l-60-104h120z"/>
-                <path d="M200 100v-26M200 300v26M96 200H70M304 200h26"/>
-                <path d="M170 200q30-30 60 0q-30 30-60 0M200 188a12 12 0 1 0 .1 0"/>
-                <path d="M130 104l14 14M270 104l-14 14M130 296l14-14M270 296l-14-14"/>
-            </symbol>
-        </defs>
-    </svg>
-    <div class="sigils" aria-hidden="true">
-        <svg class="sg sg1"><use href="#sigil-a"/></svg>
-        <svg class="sg sg2"><use href="#sigil-b"/></svg>
-        <svg class="sg sg3"><use href="#sigil-c"/></svg>
-        <svg class="sg sg4"><use href="#sigil-a"/></svg>
-        <svg class="sg sg5"><use href="#sigil-b"/></svg>
-    </div>
-    <a class="skip" href="#aviso">Ir al aviso para reparar la web</a>
-    <div class="wrap">
-        <header class="bar">
-            <div class="brand">
-                <a class="logo" href="/">Olimpo<span>.digital</span></a>
-                <small>Portal oficial · build 0.404-corrupt</small>
-            </div>
-            <dl class="stats">
-                <div class="stat"><dt>Sistema</dt>
-                    <dd class="bad">MALDECIDO / CORRUPTO</dd>
-                </div>
-                <div class="stat"><dt>Grupo</dt>
-                    <dd id="teamDisplay"><a href="/login" style="color:var(--gold-ink);text-decoration:none;">Elegir</a></dd>
-                </div>
-                <div class="stat"><dt>Tiempo Restante</dt>
-                    <dd id="timerVal" style="font-family:var(--f-mono);color:var(--gold-ink);font-weight:bold;">01:30:00</dd>
-                </div>
-                <div class="stat"><dt>HTTP</dt>
-                    <dd class="bad">500 · ΣΦΑΛΜΑ</dd>
-                </div>
-            </dl>
-        </header>
-        <div class="meander" aria-hidden="true"></div>
-
-        <nav class="menu" aria-label="Menú principal (no disponible)">
-            <a aria-disabled="true" tabindex="-1">Inicio</a>
-            <a aria-disabled="true" tabindex="-1">Dioses</a>
-            <a aria-disabled="true" tabindex="-1">Oráculo</a>
-            <a aria-disabled="true" tabindex="-1">Contacto</a>
-        </nav>
-
-        <div class="ticker" aria-hidden="true">
-            <div class="track">
-                <span><b>ERROR</b> Uncaught TypeError: Cannot read properties of undefined (reading 'render') · <b>ΣΦΑΛΜΑ</b> Αποτυχία φόρτωσης /css/estilos.css · <b>500</b> /api/secciones · <b>ΠΡΟΣΟΧΗ</b> Κατεστραμμένο περιεχόμενο · <b>ΣΦΑΛΜΑ</b> Ο Άδης κρατά το αρχείο olimpo.js:12:34 · <b>404</b> Άγνωστος χρήστης</span>
-                <span><b>ERROR</b> Uncaught TypeError: Cannot read properties of undefined (reading 'render') · <b>ΣΦΑΛΜΑ</b> Αποτυχία φόρτωσης /css/estilos.css · <b>500</b> /api/secciones · <b>ΠΡΟΣΟΧΗ</b> Κατεστραμμένο περιεχόμενο · <b>ΣΦΑΛΜΑ</b> Ο Άδης κρατά το αρχείο olimpo.js:12:34 · <b>404</b> Άγνωστος χρήστης</span>
-            </div>
+{% block subheader %}
+    <div class="ticker" aria-hidden="true">
+        <div class="track">
+            <span><b>ERROR</b> Uncaught TypeError: Cannot read properties of undefined (reading 'render') · <b>ΣΦΑΛΜΑ</b> Αποτυχία φόρτωσης /css/estilos.css · <b>500</b> /api/secciones · <b>ΠΡΟΣΟΧΗ</b> Κατεστραμμένο περιεχόμενο · <b>ΣΦΑΛΜΑ</b> Ο Άδης κρατά το αρχείο olimpo.js:12:34 · <b>404</b> Άγνωστος χρήστης</span>
+            <span><b>ERROR</b> Uncaught TypeError: Cannot read properties of undefined (reading 'render') · <b>ΣΦΑΛΜΑ</b> Αποτυχία φόρτωσης /css/estilos.css · <b>500</b> /api/secciones · <b>ΠΡΟΣΟΧΗ</b> Κατεστραμμένο περιεχόμενο · <b>ΣΦΑΛΜΑ</b> Ο Άδης κρατά το αρχείο olimpo.js:12:34 · <b>404</b> Άγνωστος χρήστης</span>
         </div>
+    </div>
+{% endblock %}
 
-        <main>
-            <section class="intro">
-                <div class="hero-art">
-                <svg class="sym sym-l" aria-hidden="true"><use href="#s-bident"/></svg>
-                <svg class="temple" viewBox="0 0 360 170" role="img" aria-label="Templo griego agrietado">
-                    <polygon class="ped" points="20,52 150,12 170,30 158,42 190,52"/>
-                    <polygon class="ped r" points="204,52 214,38 200,24 222,12 340,52"/>
-                    <rect class="ent" x="24" y="54" width="130" height="12"/>
-                    <rect class="ent" x="176" y="58" width="160" height="12"/>
-                    <g class="shafts">
-                        <rect x="40" y="70" width="22" height="78"/><rect x="100" y="72" width="22" height="50"/><rect x="238" y="74" width="22" height="74"/><rect x="298" y="70" width="22" height="78"/>
-                    </g>
-                    <path class="crack" d="M180 8 L172 34 L186 52 L174 80 L190 104 L180 130 L188 150"/>
-                    <g class="rubble"><rect x="120" y="136" width="14" height="12" transform="rotate(14 127 142)"/><rect x="146" y="141" width="10" height="7" transform="rotate(-20 151 144)"/><rect x="196" y="140" width="12" height="8" transform="rotate(30 202 144)"/></g>
-                    <rect class="step" x="20" y="148" width="320" height="7"/>
-                    <rect class="step" x="10" y="155" width="340" height="7"/>
-                    <rect class="step" x="0" y="162" width="360" height="7"/>
-                </svg>
-                <svg class="sym sym-r" aria-hidden="true"><use href="#s-stack"/></svg>
-                </div>
-                <h1 class="title">Olimp<span class="mis">o</span> Digi&#8203;tal</h1>
-                <p class="lede">
-                    Un hacker de la antigüedad ha lanzado una maldición algorítmica sobre este templo. Los doce monstruos de Heracles se han apoderado del código.
-                </p>
-                <pre class="errbox" aria-hidden="true">Uncaught TypeError: Cannot read properties of undefined (reading 'render')
+{% block content %}
+    <section class="intro">
+        <div class="hero-art">
+            <svg class="sym sym-l" aria-hidden="true"><use href="#s-bident"/></svg>
+            <svg class="temple" viewBox="0 0 360 170" role="img" aria-label="Templo griego agrietado">
+                <polygon class="ped" points="20,52 150,12 170,30 158,42 190,52"/>
+                <polygon class="ped r" points="204,52 214,38 200,24 222,12 340,52"/>
+                <rect class="ent" x="24" y="54" width="130" height="12"/>
+                <rect class="ent" x="176" y="58" width="160" height="12"/>
+                <g class="shafts">
+                    <rect x="40" y="70" width="22" height="78"/><rect x="100" y="72" width="22" height="50"/><rect x="238" y="74" width="22" height="74"/><rect x="298" y="70" width="22" height="78"/>
+                </g>
+                <path class="crack" d="M180 8 L172 34 L186 52 L174 80 L190 104 L180 130 L188 150"/>
+                <g class="rubble"><rect x="120" y="136" width="14" height="12" transform="rotate(14 127 142)"/><rect x="146" y="141" width="10" height="7" transform="rotate(-20 151 144)"/><rect x="196" y="140" width="12" height="8" transform="rotate(30 202 144)"/></g>
+                <rect class="step" x="20" y="148" width="320" height="7"/>
+                <rect class="step" x="10" y="155" width="340" height="7"/>
+                <rect class="step" x="0" y="162" width="360" height="7"/>
+            </svg>
+            <svg class="sym sym-r" aria-hidden="true"><use href="#s-stack"/></svg>
+        </div>
+        <h1 class="title">Olimp<span class="mis">o</span> Digi&#8203;tal</h1>
+        <p class="lede">
+            Un hacker de la antigüedad ha lanzado una maldición algorítmica sobre este templo. Los doce monstruos de Heracles se han apoderado del código.
+        </p>
+        <pre class="errbox" aria-hidden="true">Uncaught TypeError: Cannot read properties of undefined (reading 'render')
     at Heracles.cargarSecciones (olimpo.js:12:34)
 ΣΦΑΛΜΑ 0x4B: Αποτυχία φόρτωσης — Η πρόσβαση απαγορεύεται (Απαγορεύεται)
 ΜΑΛΛΟΝ: τα δώδεκα τέρατα κρατούν τον κώδικα</pre>
-            </section>
+    </section>
 
-            <section class="notice" id="aviso" tabindex="-1" aria-labelledby="nt">
-                <h2 class="sec" id="nt">Cómo reparar esta web</h2>
-                <p>
-                    Para restaurar el Olimpo, debéis <b>identificar a vuestro grupo</b> y superar las 12 pruebas de los templos en el mapa para reunir los <b>12 caracteres</b> de la contraseña maestra.
-                </p>
-                <div class="actions">
-                    <a class="btn" id="btnAcceso" href="/login">Identificar Grupo y Entrar</a>
-                </div>
-            </section>
-
-            <div class="friso" aria-hidden="true">
-                <svg><use href="#s-amphora"/></svg><svg><use href="#s-coin"/></svg><svg><use href="#s-bident"/></svg><svg><use href="#s-pomegranate"/></svg><svg><use href="#s-horn"/></svg><svg><use href="#s-stack"/></svg><svg><use href="#s-coin"/></svg>
-            </div>
-            <p class="oracle">Hades guarda el oro de los muertos. Pluto se lo quedaría todo. Nada de lo que acumulan sale de aquí.</p>
-
-            <section class="trials" aria-labelledby="sec">
-                <h2 class="sec" id="sec">Secciones del portal</h2>
-                <ul class="tl" id="grid"></ul>
-            </section>
-        </main>
-
-        <p class="foot">
-            © Dódeka · Los 12 Trabajos del Código
-            <small>pista: lo que está oculto en el código también cuenta</small>
-            <a href="/restaurada?presentacion=1">Modo presentación: ver directamente la web restaurada</a>
+    <section class="notice" id="aviso" tabindex="-1" aria-labelledby="nt">
+        <h2 class="sec" id="nt">Cómo reparar esta web</h2>
+        <p>
+            Para restaurar el Olimpo, debéis <b>identificar a vuestro grupo</b> y superar las 12 pruebas de los templos en el mapa para reunir los <b>12 caracteres</b> de la contraseña maestra.
         </p>
-    </div>
+        <div class="actions">
+            {% if active_team %}
+                <a class="btn" id="btnAcceso" href="/mapa">Continuar al mapa ({{ active_team }})</a>
+            {% else %}
+                <a class="btn" id="btnAcceso" href="/login">Identificar Grupo y Entrar</a>
+            {% endif %}
+        </div>
+    </section>
 
-    <div class="ckb" role="note">
-        Este sitio usa cookies. <u>Aceptar</u> · <u>Rechazar</u>
-        <small>(error: handler undefined)</small>
-        <small>ΣΦΑΛΜΑ: Άγνωστος χειριστής</small>
+    <div class="friso" aria-hidden="true">
+        <svg><use href="#s-amphora"/></svg><svg><use href="#s-coin"/></svg><svg><use href="#s-bident"/></svg><svg><use href="#s-pomegranate"/></svg><svg><use href="#s-horn"/></svg><svg><use href="#s-stack"/></svg><svg><use href="#s-coin"/></svg>
     </div>
+    <p class="oracle">Hades guarda el oro de los muertos. Pluto se lo quedaría todo. Nada de lo que acumulan sale de aquí.</p>
 
-    <script src="/static/js/webAveriada.js"></script>
+    <!-- Renderizado dinámico con Jinja2 de las 12 secciones averiadas -->
+    <section class="trials" aria-labelledby="sec">
+        <h2 class="sec" id="sec">Secciones del portal (12 Bloqueos)</h2>
+        <ul class="tl" id="grid">
+        {% for trial in trials %}
+            <li class="tile">
+                <span class="tgr" aria-hidden="true">{{ trial.greek_letter }}</span>
+                <span class="tbody">
+                    <span class="tname">{{ trial.concept }}</span>
+                    <span class="ttag">Bloqueada · {{ trial.code }}</span>
+                </span>
+                <span class="tst">ΣΦΑΛΜΑ 403</span>
+            </li>
+        {% else %}
+            <li>Cargando secciones del templo...</li>
+        {% endfor %}
+        </ul>
+    </section>
+{% endblock %}
+
+{% block scripts %}
     <script src="/static/js/gameover.js"></script>
+    <script src="/static/js/webAveriada.js"></script>
     <script src="/static/js/terminalIntro.js"></script>
-</body>
-
-</html>
+{% endblock %}

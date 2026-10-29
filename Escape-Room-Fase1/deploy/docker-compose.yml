@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    container_name: heracles_web
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - FLASK_ENV=production
+      - FLASK_DEBUG=False
+      - PORT=3000
+      - SECRET_KEY=olimpo-sagrado-super-secreta-2024-cambiar-en-produccion
+      - ADMIN_TOKEN=OLIMPO_ADMIN_2024
+      - DATABASE_URL=sqlite:////app/data/heracles.db
+      - FINAL_PASSWORD=HERACLES.EXE
+    volumes:
+      - heracles_data:/app/data
+    networks:
+      - heracles_net
+
+  nginx:
+    image: nginx:alpine
+    container_name: heracles_proxy
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - web
+    networks:
+      - heracles_net
+
+volumes:
+  heracles_data:
+    driver: local
+
+networks:
+  heracles_net:
+    driver: bridge
