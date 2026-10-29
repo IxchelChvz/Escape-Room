@@ -52,7 +52,7 @@
     }
 
     function showGameOverScreen() {
-        if (isGameOverActive) return;
+        if (isGameOverActive || document.getElementById('crtGameOverModal')) return;
         // Si el Olimpo ya habia sido restaurado con exito antes de agotarse el tiempo, no mostrar derrota
         if (document.documentElement.classList.contains('restored')) return;
         try {
@@ -61,7 +61,6 @@
         } catch (e) {}
 
         isGameOverActive = true;
-        removeGameOverScreen();
 
         // Bloquear scroll de la pagina de fondo
         document.documentElement.classList.add('crt-active');
