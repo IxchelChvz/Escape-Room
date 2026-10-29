@@ -1369,3 +1369,57 @@ h2.sec::after {
   border-color: color-mix(in srgb, var(--gold) 65%, transparent);
   background: color-mix(in srgb, var(--gold) 10%, transparent);
 }
+
+/* Candado para pruebas bloqueadas */
+.pin.locked {
+  background: #110c08;
+  border-color: #5d452d;
+  color: #8c7355;
+  opacity: 0.85;
+  animation: none;
+}
+.pin.locked:hover,
+.pin.locked:focus-visible {
+  border-color: #e0a82e;
+  color: var(--gold-ink);
+  opacity: 1;
+}
+.pin .pin-lock-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 18px;
+  height: 18px;
+  background: #1e1308;
+  border: 1.5px solid #d4972e;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #f7ca68;
+  box-shadow: 0 0 6px rgba(212, 151, 46, 0.5);
+  pointer-events: none;
+}
+.tile.locked {
+  background: rgba(18, 14, 10, 0.7);
+  border-color: rgba(93, 69, 45, 0.5);
+  opacity: 0.88;
+}
+.tile.locked:hover {
+  border-color: #d4972e;
+  opacity: 1;
+}
+.tile.locked .tgr {
+  border-color: #5d452d;
+  color: #8c7355;
+}
+.tile.locked .tst {
+  color: #d4972e;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.lock-svg {
+  display: inline-block;
+  vertical-align: middle;
+}

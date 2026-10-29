@@ -393,15 +393,37 @@ const T=[
    ])}
 ];
 
+
+/* ---------- Configuracion de Candados: solo 3, 11 y 12 desbloqueadas ---------- */
+const UNLOCKED_TRIALS = new Set([2, 10, 11]); // Trabajos 3 (Cierva), 11 (Hespérides), 12 (Cerbero)
+const LOCK_SVG = '<svg class="lock-svg" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>';
+
 /* ---------- Mapa: pines y niebla ---------- */
 const IW=1998,IH=1115;
 const map=$('#map');
 const pins=T.map((t,i)=>{
+  const isLocked = !UNLOCKED_TRIALS.has(i);
   const px=t.pos[0]/IW*100,py=t.pos[1]/IH*100;
-  const cls='pin'+(px<22?' l':px>78?' r':'')+(py<26?' below':'');
+  let cls='pin'+(px<22?' l':px>78?' r':'')+(py<26?' below':'');
+  if(isLocked) cls += ' locked';
+
+  const badgeKids = isLocked ? [
+    h('span',{class:'pin-lock-badge','aria-label':'Candado activo',title:'Prueba bloqueada con candado'},
+      h('svg',{viewBox:'0 0 24 24',width:'10',height:'10',fill:'none',stroke:'currentColor','stroke-width':'2.5','stroke-linecap':'round','stroke-linejoin':'round'},
+        h('rect',{x:'3',y:'11',width:'18',height:'11',rx:'2',ry:'2'}),
+        h('path',{d:'M7 11V7a5 5 0 0 1 10 0v4'})
+      )
+    )
+  ] : [];
+
   const b=h('button',{class:cls,type:'button',style:`left:${px.toFixed(2)}%;top:${py.toFixed(2)}%;--d:${(i*.37).toFixed(2)}s`},
     h('span',{class:'pg','aria-hidden':'true'},t.gr),
-    h('span',{class:'tip','aria-hidden':'true'},h('b',{},t.name),h('i',{},t.tag)));
+    ...badgeKids,
+    h('span',{class:'tip','aria-hidden':'true'},
+      h('b',{},t.name + (isLocked ? ' [CANDADO]' : '')),
+      h('i',{},t.tag + (isLocked ? ' · Bloqueado con candado' : ' · Disponible'))
+    )
+  );
   b.addEventListener('click',()=>openTrial(i));
   map.append(b);
   return b;
@@ -459,11 +481,16 @@ else addEventListener('resize',drawFog);
 const list=$('#list');
 const tiles=[];
 T.forEach((t,i)=>{
+  const isLocked = !UNLOCKED_TRIALS.has(i);
   const st=h('span',{class:'tst'});
-  const b=h('button',{class:'tile',type:'button'},
+  const b=h('button',{class:'tile' + (isLocked ? ' locked' : ''),type:'button'},
     h('span',{class:'tgr'},t.gr),
-    h('span',{class:'tbody'},h('span',{class:'tname'},t.name),h('span',{class:'ttag'},t.tag)),
-    st);
+    h('span',{class:'tbody'},
+      h('span',{class:'tname'},t.name + (isLocked ? ' [Candado]' : '')),
+      h('span',{class:'ttag'},t.tag + (isLocked ? ' · Bloqueada con candado' : ' · Desbloqueada'))
+    ),
+    st
+  );
   b.addEventListener('click',()=>openTrial(i));
   tiles.push({b,st});
   list.append(h('li',{},b));
@@ -523,8 +550,15 @@ function update(){
     b.setAttribute('aria-label',`Trabajo ${i+1}: ${T[i].name}. ${done.has(i)?'Superado':'Pendiente'}`);
   });
   tiles.forEach(({b,st},i)=>{
+    const isLocked = !UNLOCKED_TRIALS.has(i);
     b.classList.toggle('done',done.has(i));
-    st.textContent=done.has(i)?`PURIFICADO · ${PASS[i]}`:'CORRUPTO';
+    if(done.has(i)){
+      st.textContent=`PURIFICADO · ${PASS[i]}`;
+    } else if(isLocked){
+      st.innerHTML=`${LOCK_SVG} CANDADO`;
+    } else {
+      st.textContent='DISPONIBLE';
+    }
   });
   slots.forEach((sl,i)=>{
     if(done.has(i)){sl.value=PASS[i];sl.readOnly=true;sl.classList.add('locked')}
@@ -570,6 +604,32 @@ function win(i){
 }
 function openTrial(i){
   const t=T[i];
+  const isLocked = !UNLOCKED_TRIALS.has(i);
+
+  if (isLocked) {
+    $('#dGr').textContent = t.gr;
+    $('#dTitle').textContent = t.name + ' [CANDADO]';
+    $('#dTag').textContent = `Trabajo ${i+1} de 12 · Prueba bloqueada`;
+    $('#dStory').textContent = 'Esta prueba está sellada bajo candado arcano por mandato divino. Solo las pruebas 3, 11 y 12 están disponibles.';
+    runCleanups();fb('','');
+
+    dBody.innerHTML = `
+      <div style="text-align:center;padding:2rem 1rem;">
+        <svg viewBox="0 0 24 24" width="46" height="46" fill="none" stroke="#e0a82e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin:0 auto 1.25rem;display:block;">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+        <h3 style="color:var(--gold-ink);font-family:var(--f-display);font-size:1.35rem;margin:0 0 0.5rem 0;">Prueba Bloqueada</h3>
+        <p style="color:var(--dim);font-family:var(--f-mono);font-size:0.9rem;max-width:44ch;margin:0 auto 1.5rem;line-height:1.5;">
+          Este templo permanece custodiado bajo candado. Para continuar vuestra gesta, debéis resolver las pruebas desbloqueadas (3, 11 y 12).
+        </p>
+        <button class="btn" type="button" onclick="document.getElementById('dlg').close()">Entendido</button>
+      </div>
+    `;
+    if(!dlg.open) dlg.showModal();
+    return;
+  }
+
   $('#dGr').textContent=t.gr;
   $('#dTitle').textContent=t.name;
   $('#dTag').textContent=`Trabajo ${i+1} de 12 · ${t.tag}`;
@@ -582,7 +642,7 @@ function openTrial(i){
     win:()=>win(i),
     reg:f=>cleanups.push(f),
     later:(f,ms)=>{
-      if(f===ctx.win)markDone(i); // se cuenta ya, aunque cierren la ventana antes del aviso
+      if(f===ctx.win)markDone(i);
       const x=setTimeout(f,ms);cleanups.push(()=>clearTimeout(x));
     }
   };
