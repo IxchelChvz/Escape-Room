@@ -1,5 +1,6 @@
 scratch/
 Escape-Room/
+node_modules/
 __pycache__/
 *.pyc
 .DS_Store
