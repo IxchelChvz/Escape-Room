@@ -79,3 +79,6 @@ python app.py
 ```
 
 El servidor arranca en `http://localhost:3000` inicializando automaticamente la base de datos `heracles.db`.
+
+
+<!-- Añado comentario de pruebaP. -->
