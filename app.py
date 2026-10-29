@@ -221,24 +221,30 @@ def is_valid_solution(num, sent_solution):
 
 # Datos iniciales para sembrar la base de datos
 DEFAULT_TRIALS = [
-    {"num": 1, "code": "ERR_LEON_DE_NEMEA", "greek": "Α", "name": "El León de Nemea", "module": "DIW", "concept": "CSS · Flexbox y Box Model", "char": "H", "pos": [1315, 528]},
-    {"num": 2, "code": "ERR_HIDRA_DE_LERNA", "greek": "Β", "name": "La Hidra de Lerna", "module": "DWEC", "concept": "JavaScript · Bucles y Eventos", "char": "E", "pos": [1480, 672]},
-    {"num": 3, "code": "ERR_CIERVA_DE_CERINEA", "greek": "Γ", "name": "La Cierva de Cerinea", "module": "DWEC", "concept": "JavaScript · Eventos y Evasión", "char": "R", "pos": [735, 372]},
-    {"num": 4, "code": "ERR_JABALI_DE_ERIMANTO", "greek": "Δ", "name": "El Jabalí de Erimanto", "module": "DIW / DWEC", "concept": "HTML · Accesibilidad y RegEx", "char": "A", "pos": [445, 392]},
-    {"num": 5, "code": "ERR_ESTABLOS_DE_AUGIAS", "greek": "Ε", "name": "Los Establos de Augías", "module": "DWES", "concept": "Código Limpio y SQL", "char": "C", "pos": [212, 502]},
-    {"num": 6, "code": "ERR_AVES_DEL_ESTINFALO", "greek": "Ζ", "name": "Las Aves del Estínfalo", "module": "DAW", "concept": "Depuración y Sintaxis", "char": "L", "pos": [545, 500]},
-    {"num": 7, "code": "ERR_TORO_DE_CRETA", "greek": "Η", "name": "El Toro de Creta", "module": "DWES", "concept": "Flask · HTTP y CORS", "char": "E", "pos": [1090, 925]},
-    {"num": 8, "code": "ERR_YEGUAS_DE_DIOMEDES", "greek": "Θ", "name": "Las Yeguas de Diomedes", "module": "DWEC / DWES", "concept": "Memoria y Permisos Unix", "char": "S", "pos": [1618, 375]},
-    {"num": 9, "code": "ERR_CINTURON_DE_HIPOLITA", "greek": "Ι", "name": "El Cinturón de Hipólita", "module": "DIW / DAW", "concept": "HTML Semántico y DevTools", "char": ".", "pos": [1750, 525]},
-    {"num": 10, "code": "ERR_BUEYES_DE_GERION", "greek": "Κ", "name": "Los Bueyes de Gerión", "module": "DWEC / DWES", "concept": "JavaScript · Tipos y Jinja2", "char": "E", "pos": [560, 740]},
-    {"num": 11, "code": "ERR_MANZANAS_HESPERIDES", "greek": "Λ", "name": "Las Manzanas de las Hespérides", "module": "DWEC", "concept": "Criptografía César", "char": "X", "pos": [325, 690]},
-    {"num": 12, "code": "ERR_CERBERO", "greek": "Μ", "name": "Cerbero", "module": "DWES", "concept": "Python, SQL y Tokens JWT", "char": "E", "pos": [1810, 770]}
+    {"num": 1, "code": "ERR_LEON_DE_NEMEA", "greek": "Α", "name": "El León de Nemea", "module": "DIW", "concept": "CSS · Flexbox y Box Model", "char": "H", "pos": [660, 265]},
+    {"num": 2, "code": "ERR_HIDRA_DE_LERNA", "greek": "Β", "name": "La Hidra de Lerna", "module": "DWEC", "concept": "JavaScript · Bucles y Eventos", "char": "E", "pos": [755, 335]},
+    {"num": 3, "code": "ERR_CIERVA_DE_CERINEA", "greek": "Γ", "name": "La Cierva de Cerinea", "module": "DWEC", "concept": "JavaScript · Eventos y Evasión", "char": "R", "pos": [365, 175]},
+    {"num": 4, "code": "ERR_JABALI_DE_ERIMANTO", "greek": "Δ", "name": "El Jabalí de Erimanto", "module": "DIW / DWEC", "concept": "HTML · Accesibilidad y RegEx", "char": "A", "pos": [230, 175]},
+    {"num": 5, "code": "ERR_ESTABLOS_DE_AUGIAS", "greek": "Ε", "name": "Los Establos de Augías", "module": "DWES", "concept": "Código Limpio y SQL", "char": "C", "pos": [105, 240]},
+    {"num": 6, "code": "ERR_AVES_DEL_ESTINFALO", "greek": "Ζ", "name": "Las Aves del Estínfalo", "module": "DAW", "concept": "Depuración y Sintaxis", "char": "L", "pos": [270, 240]},
+    {"num": 7, "code": "ERR_TORO_DE_CRETA", "greek": "Η", "name": "El Toro de Creta", "module": "DWES", "concept": "Flask · HTTP y CORS", "char": "E", "pos": [565, 470]},
+    {"num": 8, "code": "ERR_YEGUAS_DE_DIOMEDES", "greek": "Θ", "name": "Las Yeguas de Diomedes", "module": "DWEC / DWES", "concept": "Memoria y Permisos Unix", "char": "S", "pos": [710, 165]},
+    {"num": 9, "code": "ERR_CINTURON_DE_HIPOLITA", "greek": "Ι", "name": "El Cinturón de Hipólita", "module": "DIW / DAW", "concept": "HTML Semántico y DevTools", "char": ".", "pos": [890, 260]},
+    {"num": 10, "code": "ERR_BUEYES_DE_GERION", "greek": "Κ", "name": "Los Bueyes de Gerión", "module": "DWEC / DWES", "concept": "JavaScript · Tipos y Jinja2", "char": "E", "pos": [285, 360]},
+    {"num": 11, "code": "ERR_MANZANAS_HESPERIDES", "greek": "Λ", "name": "Las Manzanas de las Hespérides", "module": "DWEC", "concept": "Criptografía César", "char": "X", "pos": [160, 360]},
+    {"num": 12, "code": "ERR_CERBERO", "greek": "Μ", "name": "Cerbero", "module": "DWES", "concept": "Python, SQL y Tokens JWT", "char": "E", "pos": [895, 405]}
 ]
 
 def init_db():
     """Inicializa la base de datos y siembra los trabajos y equipos por defecto."""
     with app.app_context():
         db.create_all()
+        for t in DEFAULT_TRIALS:
+            trial = Trial.query.filter_by(num=t["num"]).first()
+            if trial:
+                trial.pos_x = t["pos"][0]
+                trial.pos_y = t["pos"][1]
+        db.session.commit()
         if Trial.query.count() == 0:
             for t in DEFAULT_TRIALS:
                 trial = Trial(

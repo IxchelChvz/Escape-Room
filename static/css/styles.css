@@ -247,7 +247,7 @@ body {
 .map {
   position: relative;
   min-width: 860px;
-  aspect-ratio: 2576/1438;
+  aspect-ratio: 1024/571;
   outline: 1px solid var(--line);
   transition: box-shadow 1.6s ease;
 }
