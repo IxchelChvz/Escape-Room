@@ -162,7 +162,8 @@
             line.className = 'intro-log-line ' + (className || '');
             line.textContent = text;
             consoleBox.appendChild(line);
-            consoleBox.scrollTop = consoleBox.scrollHeight;
+            // Desplazamiento normal hacia abajo a medida que aparecen las líneas
+            consoleBox.scrollTo({ top: consoleBox.scrollHeight, behavior: 'smooth' });
         }
 
         // FASE 1: ARRANQUE Y RECONOCIMIENTO (Verde fósforo, 0s - 3.2s)
