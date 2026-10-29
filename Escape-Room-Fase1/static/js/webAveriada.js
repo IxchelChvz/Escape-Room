@@ -76,21 +76,26 @@ try {
     setInterval(tick, 1000);
 })();
 
-// Interceptar acceso al mapa: verificar si hay grupo registrado
+// Comprobar sesion de grupo y gestionar boton principal
 (function() {
-    var btn = document.getElementById("btnIrMapa");
-    if (btn) {
-        btn.addEventListener("click", function(e) {
-            try {
-                var dk = JSON.parse(localStorage.getItem("dk") || "{}");
-                if (!dk || !dk.team || !dk.team.trim()) {
-                    e.preventDefault();
-                    window.location.href = "/login?msg=requerido";
-                }
-            } catch (err) {
-                e.preventDefault();
-                window.location.href = "/login?msg=requerido";
+    try {
+        var teamData = JSON.parse(localStorage.getItem("dk") || "{}");
+        var btnAcceso = document.getElementById("btnAcceso");
+        if (btnAcceso) {
+            if (teamData && teamData.team && teamData.team.trim()) {
+                btnAcceso.textContent = "Continuar al mapa (" + teamData.team + ")";
+                btnAcceso.href = "/mapa";
+            } else {
+                btnAcceso.textContent = "Identificar Grupo y Entrar";
+                btnAcceso.href = "/login";
+                btnAcceso.addEventListener("click", function(e) {
+                    var cur = JSON.parse(localStorage.getItem("dk") || "{}");
+                    if (!cur || !cur.team || !cur.team.trim()) {
+                        e.preventDefault();
+                        window.location.href = "/login?msg=requerido";
+                    }
+                });
             }
-        });
-    }
+        }
+    } catch (err) {}
 })();

@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <title>Olimpo Digital · Elección de Grupo (Heracles.exe)</title>
+    <title>Olimpo Digital · Identificación de Grupo (Heracles.exe)</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:wght@400;500;700&family=Cinzel:wght@600;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -21,7 +21,7 @@
             position: relative;
         }
         .login-wrap::before {
-            content: "[ ALTAR DE REGISTRO // JURAMENTO DE LOS GRUPOS ]";
+            content: "[ ALTAR DE REGISTRO // IDENTIFICACION DE GRUPO ]";
             display: block;
             font-family: var(--f-mono);
             font-size: 0.75rem;
@@ -41,7 +41,7 @@
             font-size: 0.95rem;
             color: var(--dim);
             text-align: center;
-            margin: 0 0 2rem 0;
+            margin: 0 0 1.75rem 0;
             line-height: 1.4;
         }
         .form-group {
@@ -55,7 +55,7 @@
             margin-bottom: 0.4rem;
             letter-spacing: 0.05em;
         }
-        .form-input, .form-select {
+        .form-input {
             width: 100%;
             box-sizing: border-box;
             background: #100b07;
@@ -63,45 +63,21 @@
             color: var(--text);
             padding: 0.75rem 1rem;
             font-family: var(--f-mono);
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             border-radius: 2px;
             transition: border-color 0.2s;
         }
-        .form-input:focus, .form-select:focus {
+        .form-input:focus {
             outline: none;
             border-color: var(--gold);
             background: #140d09;
         }
-        .radio-tabs {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            border-bottom: 1px solid var(--line);
-            padding-bottom: 0.75rem;
-        }
-        .tab-btn {
-            background: none;
-            border: none;
+        .form-hint {
+            display: block;
+            font-size: 0.8rem;
             color: var(--dim);
-            font-family: var(--f-display);
-            font-size: 0.95rem;
-            cursor: pointer;
-            padding: 0.4rem 0.8rem;
-            position: relative;
-            transition: color 0.2s;
-        }
-        .tab-btn.active {
-            color: var(--gold-ink);
-            font-weight: 700;
-        }
-        .tab-btn.active::after {
-            content: '';
-            position: absolute;
-            bottom: -0.85rem;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: var(--gold);
+            margin-top: 0.4rem;
+            font-family: var(--f-mono);
         }
         .btn-submit {
             display: block;
@@ -127,13 +103,26 @@
             box-shadow: 0 0 28px rgba(235, 189, 85, 0.55);
             transform: translateY(-1px);
         }
+        .existing-box {
+            margin-top: 2rem;
+            border-top: 1px solid var(--line);
+            padding-top: 1.25rem;
+        }
+        .existing-box-title {
+            font-family: var(--f-display);
+            font-size: 0.85rem;
+            color: var(--dim);
+            margin: 0 0 0.75rem 0;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
         .existing-list {
-            margin-top: 1.5rem;
-            max-height: 180px;
+            max-height: 160px;
             overflow-y: auto;
             border: 1px solid var(--line);
             background: #120e0a;
             padding: 0.5rem;
+            border-radius: 2px;
         }
         .team-item {
             display: flex;
@@ -153,12 +142,13 @@
         .team-item .team-name { color: var(--gold-ink); font-weight: bold; }
         .team-item .team-score { color: var(--dim); }
         .alert-msg {
-            margin-top: 1rem;
-            padding: 0.75rem;
+            margin-bottom: 1.25rem;
+            padding: 0.75rem 1rem;
             font-family: var(--f-mono);
             font-size: 0.85rem;
             border-radius: 2px;
             display: none;
+            line-height: 1.4;
         }
         .alert-msg.ok {
             background: rgba(111, 194, 173, 0.15);
@@ -186,10 +176,10 @@
         <header class="bar">
             <div class="brand">
                 <a class="logo" href="/">Olimpo<span>.digital</span></a>
-                <small>Portal oficial · Registro de Grupos</small>
+                <small>Portal oficial · Identificación de Grupos</small>
             </div>
             <dl class="stats">
-                <div class="stat"><dt>Modo</dt><dd class="ok">IDENTIFICACION</dd></div>
+                <div class="stat"><dt>Modo</dt><dd class="ok">IDENTIFICACION OBLIGATORIA</dd></div>
                 <div class="stat"><dt>Base de Datos</dt><dd>SQLite / ORM</dd></div>
             </dl>
         </header>
@@ -198,28 +188,25 @@
 
         <nav class="menu" aria-label="Menú principal">
             <a href="/">Inicio (Templo Averiado)</a>
-            <a href="/mapa">Mapa de la Hélade</a>
-            <a href="/login" class="active">Elegir Equipo</a>
+            <a href="/login" class="active">Identificar Grupo</a>
             <a href="/restaurada">Web Restaurada</a>
         </nav>
 
         <main>
             <div class="login-wrap">
-                <h1 class="login-title">Elección de Grupo</h1>
+                <h1 class="login-title">Identificación de Grupo</h1>
                 <p class="login-subtitle">
-                    Identifica a tu grupo de desarrollo para registrar vuestro progreso, tiempos y puntuación en la base de datos sagrada del Olimpo.
+                    Introduce el nombre de tu grupo. Si ya existe en la base de datos se iniciará tu sesión; si es nuevo, se creará automáticamente y accederás de inmediato al mapa.
                 </p>
 
-                <div class="radio-tabs">
-                    <button class="tab-btn active" id="tabNew" type="button">Crear Nuevo Grupo</button>
-                    <button class="tab-btn" id="tabExisting" type="button">Seleccionar Grupo Existente</button>
-                </div>
+                <div class="alert-msg" id="alertBox"></div>
 
-                <!-- Formulario Nuevo Grupo -->
-                <form id="formNewTeam">
+                <form id="formLogin" autocomplete="off">
                     <div class="form-group">
                         <label class="form-label" for="teamNameInput">Nombre del Grupo</label>
-                        <input class="form-input" id="teamNameInput" type="text" placeholder="Ej: Argonautas del Código, Espartanos DAW..." required autocomplete="off">
+                        <input class="form-input" id="teamNameInput" list="existingTeamsDatalist" type="text" placeholder="Ej: Argonautas del Código, Espartanos DAW..." required autofocus>
+                        <datalist id="existingTeamsDatalist"></datalist>
+                        <span class="form-hint">Escribe tu nombre de grupo (creación o inicio de sesión transparente).</span>
                     </div>
 
                     <div class="form-group">
@@ -227,20 +214,13 @@
                         <input class="form-input" id="pinInput" type="password" maxlength="4" placeholder="Ej: 1234">
                     </div>
 
-                    <button class="btn-submit" type="submit">Jurar y Entrar al Mapa de la Hélade</button>
+                    <button class="btn-submit" type="submit">Entrar al Mapa de la Hélade</button>
                 </form>
 
-                <!-- Vista Grupos Existentes -->
-                <div id="viewExisting" style="display: none;">
-                    <p style="font-size: 0.9rem; color: var(--dim); margin-bottom: 0.75rem;">
-                        Haz clic en un grupo para cargarlo en esta sesión:
-                    </p>
-                    <div class="existing-list" id="existingList">
-                        <div style="color: var(--dim); padding: 0.5rem; text-align: center;">Cargando grupos de la base de datos...</div>
-                    </div>
+                <div class="existing-box" id="existingBox" style="display: none;">
+                    <div class="existing-box-title">O pulsa en un grupo ya registrado para entrar:</div>
+                    <div class="existing-list" id="existingList"></div>
                 </div>
-
-                <div class="alert-msg" id="alertBox"></div>
             </div>
         </main>
 
@@ -254,150 +234,107 @@
         (function() {
             'use strict';
 
-            const tabNew = document.getElementById('tabNew');
-            const tabExisting = document.getElementById('tabExisting');
-            const formNewTeam = document.getElementById('formNewTeam');
-            const viewExisting = document.getElementById('viewExisting');
-            const existingList = document.getElementById('existingList');
-            const alertBox = document.getElementById('alertBox');
+            const formLogin = document.getElementById('formLogin');
             const teamNameInput = document.getElementById('teamNameInput');
             const pinInput = document.getElementById('pinInput');
+            const alertBox = document.getElementById('alertBox');
+            const existingBox = document.getElementById('existingBox');
+            const existingList = document.getElementById('existingList');
+            const datalist = document.getElementById('existingTeamsDatalist');
 
-            // Comprobar si fue redirigido por intentar entrar sin grupo
+            function showAlert(msg, type) {
+                alertBox.textContent = msg;
+                alertBox.className = 'alert-msg ' + (type === 'ok' ? 'ok' : type === 'warn' ? 'warn' : 'err');
+            }
+
+            // Aviso si fue redirigido por intentar entrar al mapa sin identificarse
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('msg') === 'requerido' || urlParams.get('requerido') === '1') {
-                alertBox.textContent = 'Acceso restringido: debes registrar o seleccionar un grupo antes de entrar al mapa de pruebas.';
-                alertBox.className = 'alert-msg warn';
+                showAlert('Acceso restringido: debes identificarte con tu grupo antes de entrar al mapa de pruebas.', 'warn');
             }
 
-
-            function showAlert(msg, isOk) {
-                alertBox.textContent = msg;
-                alertBox.className = 'alert-msg ' + (isOk ? 'ok' : 'err');
-            }
-
-            // Cambiar pestañas
-            tabNew.addEventListener('click', () => {
-                tabNew.classList.add('active');
-                tabExisting.classList.remove('active');
-                formNewTeam.style.display = 'block';
-                viewExisting.style.display = 'none';
-            });
-
-            tabExisting.addEventListener('click', () => {
-                tabExisting.classList.add('active');
-                tabNew.classList.remove('active');
-                formNewTeam.style.display = 'none';
-                viewExisting.style.display = 'block';
-                loadExistingTeams();
-            });
-
-            function loadExistingTeams() {
-                fetch('/api/teams')
-                    .then(res => res.json())
-                    .then(teams => {
+            // Cargar grupos existentes para autocompletado y selección rápida con un clic
+            fetch('/api/teams')
+                .then(res => res.json())
+                .then(teams => {
+                    if (!Array.isArray(teams) || teams.length === 0) return;
+                    if (datalist) {
+                        datalist.innerHTML = teams.map(t => '<option value="' + t.name.replace(/"/g, '&quot;') + '">').join('');
+                    }
+                    if (existingList && existingBox) {
+                        existingBox.style.display = 'block';
                         existingList.innerHTML = '';
-                        if (!Array.isArray(teams) || teams.length === 0) {
-                            existingList.innerHTML = '<div style="color:var(--dim);padding:0.75rem;text-align:center;">No hay grupos registrados todavía. Crea el primero.</div>';
-                            return;
-                        }
                         teams.forEach(t => {
                             const item = document.createElement('div');
                             item.className = 'team-item';
-                            item.innerHTML = `
-                                <div>
-                                    <span class="team-name">${t.name}</span>
-                                </div>
-                                <span class="team-score">${t.trials_completed || 0}/12 trabajos</span>
-                            `;
+                            item.innerHTML = '<div><span class="team-name">' + t.name + '</span></div><span class="team-score">' + (t.trials_completed || 0) + '/12 trabajos</span>';
                             item.addEventListener('click', () => {
-                                selectTeam(t.name);
+                                teamNameInput.value = t.name;
+                                submitLogin(t.name);
                             });
                             existingList.appendChild(item);
                         });
-                    })
-                    .catch(() => {
-                        existingList.innerHTML = '<div style="color:var(--dim);padding:0.75rem;text-align:center;">Modo local: no se pudo consultar la base de datos.</div>';
-                    });
-            }
-
-            function selectTeam(teamName) {
-                showAlert(`Autenticando grupo «${teamName}»...`, true);
-                fetch('/api/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name: teamName })
-                })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.success) {
-                        try {
-                            localStorage.setItem('dk', JSON.stringify({
-                                team: teamName,
-                                loggedAt: new Date().toISOString()
-                            }));
-                        } catch (e) {}
-                        showAlert(`Grupo «${teamName}» vinculado en base de datos. Redirigiendo a la Hélade...`, true);
-                        setTimeout(() => {
-                            window.location.href = '/mapa';
-                        }, 900);
-                    } else {
-                        showAlert(data.message || 'Error al iniciar sesión.', false);
                     }
                 })
-                .catch(() => {
-                    // Fallback local
-                    try {
-                        localStorage.setItem('dk', JSON.stringify({ team: teamName }));
-                    } catch (e) {}
-                    showAlert(`Grupo «${teamName}» seleccionado localmente. Entrando al mapa...`, true);
-                    setTimeout(() => { window.location.href = '/mapa'; }, 800);
-                });
-            }
+                .catch(() => {});
 
-            // Enviar formulario
-            formNewTeam.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const name = teamNameInput.value.trim();
+            function submitLogin(name) {
+                const teamName = (name || teamNameInput.value).trim();
                 const pin = pinInput.value.trim();
 
-                if (!name) {
-                    showAlert('Por favor, indica un nombre para tu grupo.', false);
+                if (!teamName) {
+                    showAlert('Por favor, indica el nombre de tu grupo.', 'err');
+                    teamNameInput.focus();
                     return;
                 }
 
-                showAlert(`Registrando «${name}» en la base de datos...`, true);
+                showAlert('Identificando grupo «' + teamName + '» en el Olimpo...', 'ok');
 
                 fetch('/api/login', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name: name, pin: pin })
+                    body: JSON.stringify({ name: teamName, pin: pin })
                 })
                 .then(res => res.json())
                 .then(data => {
                     if (data.success) {
                         try {
                             localStorage.setItem('dk', JSON.stringify({
-                                team: name,
+                                team: data.team ? data.team.name : teamName,
                                 loggedAt: new Date().toISOString()
                             }));
                         } catch (e) {}
-                        showAlert(`Grupo «${name}» registrado. Partiendo a la Hélade...`, true);
+
+                        const msg = data.is_new 
+                            ? 'Grupo «' + teamName + '» registrado. Partiendo al mapa de la Hélade...'
+                            : 'Sesión iniciada con «' + teamName + '». Partiendo al mapa de la Hélade...';
+                        showAlert(msg, 'ok');
+
                         setTimeout(() => {
                             window.location.href = '/mapa';
-                        }, 900);
+                        }, 700);
                     } else {
-                        showAlert(data.message || 'Error al registrar el grupo.', false);
+                        showAlert(data.message || 'Error al procesar el grupo.', 'err');
                     }
                 })
                 .catch(() => {
-                    // Fallback local
+                    // Fallback local en caso de desconexión
                     try {
-                        localStorage.setItem('dk', JSON.stringify({ team: name }));
+                        localStorage.setItem('dk', JSON.stringify({
+                            team: teamName,
+                            loggedAt: new Date().toISOString()
+                        }));
                     } catch (e) {}
-                    showAlert(`Grupo «${name}» guardado localmente. Redirigiendo...`, true);
-                    setTimeout(() => { window.location.href = '/mapa'; }, 800);
+                    showAlert('Grupo «' + teamName + '» guardado. Accediendo al mapa...', 'ok');
+                    setTimeout(() => {
+                        window.location.href = '/mapa';
+                    }, 600);
                 });
+            }
+
+            formLogin.addEventListener('submit', (e) => {
+                e.preventDefault();
+                submitLogin();
             });
         })();
     </script>
