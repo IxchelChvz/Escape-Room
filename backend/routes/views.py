@@ -51,3 +51,19 @@ def reset_db_action():
     GameSession.query.delete()
     db.session.commit()
     return redirect(url_for('views.admin_view'))
+
+@views_bp.route('/login')
+def login_view():
+    """Vista de registro y seleccion de escuadras."""
+    teams = Team.query.all()
+    return render_template('login.html', teams=teams)
+
+@views_bp.route('/mapa')
+def mapa_view():
+    """Vista del mapa interactivo."""
+    return render_template('mapa.html')
+
+@views_bp.route('/restaurada')
+def restaurada_view():
+    """Vista de restauracion final del Olimpo."""
+    return render_template('webRestaurada.html')

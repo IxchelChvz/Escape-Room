@@ -110,7 +110,7 @@ const server = http.createServer(async (req, res) => {
   // 1. Login y registro de equipos
   if (pathname === '/api/login' && req.method === 'POST') {
     const data = await parseBody(req);
-    const teamName = (data.name || '').trim();
+    const teamName = (data.name || data.teamName || '').trim();
 
     if (!teamName) {
       return sendJSON(res, 400, { success: false, message: 'El nombre del equipo no puede estar vacío.' });

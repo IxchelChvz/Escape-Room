@@ -538,10 +538,15 @@ function markDone(i){
   if(done.has(i))return;
   done.add(i);save();update();animFog(i);
   try {
+    let currentTeam = 'Héroes del Código';
+    try {
+      const dk = JSON.parse(localStorage.getItem('dk') || '{}');
+      if (dk && dk.team) currentTeam = dk.team;
+    } catch(e){}
     fetch('/api/validate-trial', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ trial_id: i + 1, solution: 'SOLVED' })
+      body: JSON.stringify({ trial_id: i + 1, solution: 'SOLVED', team_name: currentTeam })
     }).catch(()=>{});
   } catch(e){}
 }

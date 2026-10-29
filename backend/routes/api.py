@@ -131,3 +131,40 @@ def get_leaderboard_json():
         "status": "ok",
         "leaderboard": [s.to_dict() for s in sessions]
     }), 200
+
+@api_bp.route('/login', methods=['POST'])
+def login_team():
+    """Autentica o registra una escuadra sin seleccion de deidades."""
+    data = request.get_json() or {}
+    team_name = (data.get('name') or data.get('teamName') or '').strip()
+    if not team_name:
+        return jsonify({"success": False, "message": "El nombre del equipo no puede estar vacio."}), 400
+
+    team = Team.query.filter_by(name=team_name).first()
+    if not team:
+        team = Team(name=team_name)
+        db.session.add(team)
+        db.session.commit()
+
+    return jsonify({
+        "success": True,
+        "message": f"Escuadra '{team.name}' registrada correctamente en la base de datos.",
+        "team": team.to_dict()
+    }), 200
+
+@api_bp.route('/teams', methods=['GET'])
+def get_teams():
+    """Lista todas las escuadras registradas."""
+    teams = Team.query.all()
+    return jsonify([t.to_dict() for t in teams]), 200
+
+@api_bp.route('/team/current', methods=['GET'])
+def get_current_team():
+    """Devuelve la escuadra activa."""
+    team = Team.query.first()
+    return jsonify({"authenticated": bool(team), "team": team.to_dict() if team else None}), 200
+
+@api_bp.route('/verify', methods=['POST'])
+def verify_password_alias():
+    """Alias de verificacion final compatible con /restore."""
+    return restore_temple()

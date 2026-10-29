@@ -102,7 +102,8 @@ try {
 // Cargar clasificacion desde la base de datos
 fetch("/api/leaderboard")
     .then(function(res) { return res.json(); })
-    .then(function(teams) {
+    .then(function(data) {
+        var teams = Array.isArray(data) ? data : (data.leaderboard || data.teams || []);
         var lbRows = document.getElementById("lbRows");
         if (lbRows && Array.isArray(teams) && teams.length > 0) {
             lbRows.innerHTML = "";
