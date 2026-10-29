@@ -142,8 +142,3 @@ sharp-bose/
 * `POST /api/reset`: Reinicia el progreso en el backend.
 
 ---
-
-## 6. Politica de Estilo
-
-* **Cero Emojis:** Todo el codigo fuente, comentarios y documentacion estan rigurosamente libres de emojis.
-* **Codificacion:** UTF-8 limpio sin mojibake.
