@@ -279,8 +279,8 @@
 
 .intro-spider-pre {
     font-family: 'Courier New', monospace;
-    font-size: clamp(3px, 0.76vh, 8.5px);
-    line-height: clamp(3px, 0.76vh, 8.5px);
+    font-size: clamp(3px, 0.72vh, 8.5px);
+    line-height: clamp(3px, 0.72vh, 8.5px);
     letter-spacing: -0.5px;
     white-space: pre;
     color: #ff3355;
