@@ -22,12 +22,21 @@ db = SQLAlchemy(app)
 # Contraseña final configurada en el servidor
 FINAL_PASSWORD = "HERACLES.EXE"
 
+
 # ==========================================
 # MODELOS DE BASE DE DATOS (SQLAlchemy ORM)
 # ==========================================
 
+# 1. Tabla intermedia de asociacion N:M (Muchos a Muchos entre Equipos y Trabajos superados)
+team_trials = db.Table(
+    'team_trials',
+    db.Column('team_id', db.Integer, db.ForeignKey('teams.id', ondelete='CASCADE'), primary_key=True),
+    db.Column('trial_id', db.Integer, db.ForeignKey('trials.id', ondelete='CASCADE'), primary_key=True),
+    db.Column('solved_at', db.DateTime, default=datetime.utcnow)
+)
+
 class Trial(db.Model):
-    """Modelo para representar los 12 Trabajos de Heracles en la base de datos."""
+    """Modelo ORM para los 12 Trabajos de Heracles en la base de datos."""
     __tablename__ = 'trials'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -43,6 +52,9 @@ class Trial(db.Model):
     is_solved = db.Column(db.Boolean, default=False)
     solved_at = db.Column(db.DateTime, nullable=True)
 
+    # Relaciones ORM 1:N
+    submissions = db.relationship('Submission', backref='trial', lazy=True, cascade='all, delete-orphan')
+
     def to_dict(self):
         return {
             "id": self.id,
@@ -54,22 +66,30 @@ class Trial(db.Model):
             "concept": self.concept,
             "char": self.password_char,
             "pos": [self.pos_x, self.pos_y],
-            "solved": self.is_solved
+            "solved": self.is_solved,
+            "solved_by_count": len(self.solved_by_teams)
         }
 
 class Team(db.Model):
-    """Modelo para registrar equipos, login y clasificacion en base de datos."""
+    """Modelo ORM para registrar escuadras, progreso y clasificacion."""
     __tablename__ = 'teams'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), unique=True, nullable=False)
-    access_pin = db.Column(db.String(10), nullable=True)
+    access_pin = db.Column(db.String(20), nullable=True)
     elapsed_seconds = db.Column(db.Integer, default=0)
     trials_completed = db.Column(db.Integer, default=0)
     score = db.Column(db.Integer, default=1000)
     is_restored = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     completed_at = db.Column(db.DateTime, nullable=True)
+
+    # Relaciones ORM 1:N (Un equipo tiene multiples envios y sesiones de juego)
+    submissions = db.relationship('Submission', backref='team', lazy=True, cascade='all, delete-orphan')
+    sessions = db.relationship('GameSession', backref='team', lazy=True, cascade='all, delete-orphan')
+
+    # Relacion ORM N:M (Un equipo resuelve varios trabajos; un trabajo es resuelto por varios equipos)
+    solved_trials = db.relationship('Trial', secondary=team_trials, backref=db.backref('solved_by_teams', lazy=True))
 
     def to_dict(self):
         return {
@@ -79,19 +99,58 @@ class Team(db.Model):
             "elapsed_seconds": self.elapsed_seconds,
             "score": self.score,
             "is_restored": self.is_restored,
-            "completed_at": self.completed_at.strftime('%Y-%m-%d %H:%M:%S') if self.completed_at else None
+            "completed_at": self.completed_at.strftime('%Y-%m-%d %H:%M:%S') if self.completed_at else None,
+            "solved_trial_ids": [t.num for t in self.solved_trials]
         }
 
 class Submission(db.Model):
-    """Registro de intentos de resolucion de trabajos vinculados al equipo."""
+    """Registro relacional ORM de cada intento de resolucion de trabajo por un equipo (1:N)."""
     __tablename__ = 'submissions'
 
     id = db.Column(db.Integer, primary_key=True)
+    team_id = db.Column(db.Integer, db.ForeignKey('teams.id', ondelete='CASCADE'), nullable=False)
+    trial_id = db.Column(db.Integer, db.ForeignKey('trials.id', ondelete='CASCADE'), nullable=False)
     team_name = db.Column(db.String(100), nullable=False)
-    trial_id = db.Column(db.Integer, nullable=False)
     solution_sent = db.Column(db.Text, nullable=False)
     is_correct = db.Column(db.Boolean, default=False)
     submitted_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "team_id": self.team_id,
+            "team_name": self.team_name,
+            "trial_id": self.trial_id,
+            "solution": self.solution_sent,
+            "is_correct": self.is_correct,
+            "submitted_at": self.submitted_at.strftime('%Y-%m-%d %H:%M:%S')
+        }
+
+class GameSession(db.Model):
+    """Registro relacional ORM del historial de partidas completadas por escuadra (1:N)."""
+    __tablename__ = 'game_sessions'
+
+    id = db.Column(db.Integer, primary_key=True)
+    team_id = db.Column(db.Integer, db.ForeignKey('teams.id', ondelete='CASCADE'), nullable=False)
+    team_name = db.Column(db.String(100), nullable=False)
+    duration_seconds = db.Column(db.Integer, default=0)
+    formatted_time = db.Column(db.String(20), default='00:00:00')
+    labors_solved = db.Column(db.Integer, default=0)
+    completed = db.Column(db.Boolean, default=False)
+    password_entered = db.Column(db.String(30), nullable=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "team_id": self.team_id,
+            "team_name": self.team_name,
+            "duration_seconds": self.duration_seconds,
+            "time": self.formatted_time,
+            "labors_solved": self.labors_solved,
+            "completed": self.completed,
+            "created_at": self.created_at.strftime('%Y-%m-%d %H:%M:%S')
+        }
 
 # Datos iniciales para sembrar la base de datos
 DEFAULT_TRIALS = [
