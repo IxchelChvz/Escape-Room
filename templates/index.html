@@ -1,20 +1,17 @@
-<!DOCTYPE html>
-<html lang="es">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <title>Olimpo Digital · Error 500</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:wght@400;500;700&family=Cinzel:wght@600;700;900&family=JetBrains+Mono:wght@400;500;600&family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/css/webAveriada.css">
-    <link rel="stylesheet" href="/static/css/gameover.css">
-    <link rel="stylesheet" href="/static/css/terminalIntro.css">
-</head>
+{% block title %}Olimpo Digital · Error 500{% endblock %}
 
-<body>
-    <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+{% block fonts %}<link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:wght@400;500;700&family=Cinzel:wght@600;700;900&family=JetBrains+Mono:wght@400;500;600&family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/webAveriada.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/gameover.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/terminalIntro.css') }}">
+{% endblock %}
+
+{% block body %}
+    <svg class="svg-defs" width="0" height="0" aria-hidden="true" focusable="false">
         <defs>
             <!-- Bidente de Hades -->
             <symbol id="s-bident" viewBox="0 0 64 64"><path d="M17 5v20q0 10 15 10t15-10V5M32 35v26M13 11l4-8 4 8M43 11l4-8 4 8" /></symbol>
@@ -72,7 +69,7 @@
     <div class="wrap">
         <header class="bar">
             <div class="brand">
-                <a class="logo" href="/">Olimpo<span>.digital</span></a>
+                <a class="logo" href="{{ url_for('main.home') }}">Olimpo<span>.digital</span></a>
                 <small>Portal oficial · build 0.404-corrupt</small>
             </div>
             <dl class="stats">
@@ -80,10 +77,10 @@
                     <dd class="bad">MALDECIDO / CORRUPTO</dd>
                 </div>
                 <div class="stat"><dt>Grupo</dt>
-                    <dd id="teamDisplay"><a href="/login" style="color:var(--gold-ink);text-decoration:none;">Elegir</a></dd>
+                    <dd id="teamDisplay"><a class="link-gold" href="{{ url_for('main.login') }}">{{ active_team or 'Elegir' }}</a></dd>
                 </div>
                 <div class="stat"><dt>Tiempo Restante</dt>
-                    <dd id="timerVal" style="font-family:var(--f-mono);color:var(--gold-ink);font-weight:bold;">01:30:00</dd>
+                    <dd id="timerVal" class="timer-val">01:30:00</dd>
                 </div>
                 <div class="stat"><dt>HTTP</dt>
                     <dd class="bad">500 · ΣΦΑΛΜΑ</dd>
@@ -136,15 +133,22 @@
 ΜΑΛΛΟΝ: τα δώδεκα τέρατα κρατούν τον κώδικα</pre>
             </section>
 
+            <!--
+        NOTA DEL LEÓN DE NEMEA (pista 1 de 3, hallada inspeccionando el código fuente):
+        "Ninguna flecha me atraviesa, pero una sola propiedad de flexbox me deja centrado en mi guarida:
+        la que alinea en el eje cruzado. Su nombre lleva un guion."
+        -->
             <section class="notice" id="aviso" tabindex="-1" aria-labelledby="nt">
                 <h2 class="sec" id="nt">Cómo reparar esta web</h2>
                 <p>
                     Para restaurar el Olimpo, debéis <b>identificar a vuestro grupo</b> y superar las 12 pruebas de los templos en el mapa para reunir los <b>12 caracteres</b> de la contraseña maestra.
                 </p>
                 <div class="actions">
-                    <a class="btn" id="btnAcceso" href="/login">Identificar Grupo y Entrar</a>
+                    <a class="btn" id="btnAcceso" href="{{ url_for('main.login') }}">Identificar Grupo y Entrar</a>
                 </div>
             </section>
+
+            <p class="reliquia">Pista 3 de 3 (oculta con CSS, visible con las herramientas de desarrollo): Hipólita solo entrega el cinturón a quien sabe que <code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code> y <code>&lt;footer&gt;</code> nombran la función de cada pieza del templo.</p>
 
             <div class="friso" aria-hidden="true">
                 <svg><use href="#s-amphora"/></svg><svg><use href="#s-coin"/></svg><svg><use href="#s-bident"/></svg><svg><use href="#s-pomegranate"/></svg><svg><use href="#s-horn"/></svg><svg><use href="#s-stack"/></svg><svg><use href="#s-coin"/></svg>
@@ -158,9 +162,9 @@
         </main>
 
         <p class="foot">
-            © Dódeka · Los 12 Trabajos del Código
+            © {{ company }} · Los 12 Trabajos del Código
             <small>pista: lo que está oculto en el código también cuenta</small>
-            <a href="/restaurada?presentacion=1">Modo presentación: ver directamente la web restaurada</a>
+            <a href="{{ url_for('main.restaurada', presentacion=1) }}">Modo presentación: ver directamente la web restaurada</a>
         </p>
     </div>
 
@@ -170,9 +174,10 @@
         <small>ΣΦΑΛΜΑ: Άγνωστος χειριστής</small>
     </div>
 
-    <script src="/static/js/webAveriada.js"></script>
-    <script src="/static/js/gameover.js"></script>
-    <script src="/static/js/terminalIntro.js"></script>
-</body>
+{% endblock %}
 
-</html>
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/webAveriada.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/gameover.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/terminalIntro.js') }}"></script>
+{% endblock %}

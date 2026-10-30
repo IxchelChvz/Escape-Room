@@ -14,6 +14,11 @@ try {
 }
 
 const PASS='HERACLES.EXE';
+
+// Pista de la Hidra de Lerna: solo se ve en la consola del navegador (F12 > Consola)
+console.log('%cENIGMA DE LA HIDRA DE LERNA','color:#e0a82e;font-weight:bold;font-size:14px');
+console.log('Por cada cabeza cortada nacen dos más, salvo que cada muñón se cauterice.');
+console.log('El bucle empieza en 0 y termina antes de 9. Dentro: primero cortarCabeza(i), después quemarMuñon(i).');
 const root=document.documentElement;
 const $=s=>document.querySelector(s);
 const rm=matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -75,14 +80,10 @@ function initCountdown() {
     
     if (timerEl) {
       timerEl.textContent = formatCountdown(remaining);
-      if (remaining <= 600 && remaining > 0) {
-        timerEl.style.color = '#e5603f';
-      } else if (remaining <= 0) {
-        timerEl.style.color = '#e5603f';
+      timerEl.classList.toggle('timer-danger', remaining <= 600);
+      if (remaining <= 0) {
         timerEl.textContent = '00:00:00';
         handleTimeExpired();
-      } else {
-        timerEl.style.color = 'var(--gold-ink)';
       }
     }
   }
@@ -108,6 +109,7 @@ function handleTimeExpired() {
 function quiz(items){
   return ctx=>{
     let k=0;
+    const picked=[];
     const show=()=>{
       const it=items[k];
       const box=h('div',{class:'quiz'});
@@ -122,7 +124,8 @@ function quiz(items){
             b.classList.add('ok');
             opts.querySelectorAll('button').forEach(x=>{x.disabled=true});
             ctx.fb('Correcto.','ok');
-            if(k+1>=items.length)ctx.later(ctx.win,700);
+            picked.push(o);
+            if(k+1>=items.length)ctx.later(ctx.win,700,picked.join('|'));
             else ctx.later(()=>{k++;ctx.fb('','');show()},700);
           }else{
             b.classList.add('bad');b.disabled=true;
@@ -328,7 +331,7 @@ function cipher(text,answer){
     form.addEventListener('submit',e=>{
       e.preventDefault();
       if(inp.value.trim().toUpperCase()===answer){
-        inp.disabled=true;go.disabled=true;ctx.fb('Las manzanas son tuyas.','ok');ctx.later(ctx.win,800);
+        inp.disabled=true;go.disabled=true;ctx.fb('Las manzanas son tuyas.','ok');ctx.later(ctx.win,800,inp.value.trim().toUpperCase());
       }else{
         shakeEl(form);ctx.fb('No coincide. Retrocede tres letras: la K pasa a ser H.','err');
       }
@@ -581,24 +584,27 @@ function reward(i,again){
       h('p',{class:'dim'},done.size===12?'Tienes los doce caracteres. Baja a la zona de desbloqueo y restaura el Olimpo.':`Llevas ${done.size} de 12 trabajos.`)),
     h('button',{class:'btn',type:'button',onclick:()=>dlg.close()},'Volver al mapa')));
 }
-function markDone(i){
+function markDone(i,solution){
   if(done.has(i))return;
   done.add(i);save();update();animFog(i);
-  try {
-    let currentTeam = 'Héroes del Código';
-    try {
-      const dk = JSON.parse(localStorage.getItem('dk') || '{}');
-      if (dk && dk.team) currentTeam = dk.team;
-    } catch(e){}
-    fetch('/api/validate-trial', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ trial_id: i + 1, solution: 'SOLVED', team_name: currentTeam })
-    }).catch(()=>{});
-  } catch(e){}
+  // El servidor comprueba la solucion y guarda el progreso del grupo.
+  fetch('/api/validate-trial',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({trial_id:i+1,solution:solution||'SOLVED'})
+  }).then(r=>{
+    if(r.status===401){window.location.replace('/login?msg=requerido');return null}
+    return r.json();
+  }).then(d=>{
+    if(d&&d.success===false){
+      // El servidor no lo da por bueno: se deshace el progreso local.
+      done.delete(i);save();update();drawFog();
+      msg(d.message||'El servidor no ha aceptado la solución.','err');
+    }
+  }).catch(()=>{});
 }
-function win(i){
-  markDone(i);
+function win(i,sol){
+  markDone(i,sol);
   runCleanups();fb('','');
   reward(i,false);
 }
@@ -614,18 +620,19 @@ function openTrial(i){
     runCleanups();fb('','');
 
     dBody.innerHTML = `
-      <div style="text-align:center;padding:2rem 1rem;">
-        <svg viewBox="0 0 24 24" width="46" height="46" fill="none" stroke="#e0a82e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin:0 auto 1.25rem;display:block;">
+      <div class="lock-box">
+        <svg class="lock-icon" viewBox="0 0 24 24" width="46" height="46" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
           <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
         </svg>
-        <h3 style="color:var(--gold-ink);font-family:var(--f-display);font-size:1.35rem;margin:0 0 0.5rem 0;">Prueba Bloqueada</h3>
-        <p style="color:var(--dim);font-family:var(--f-mono);font-size:0.9rem;max-width:44ch;margin:0 auto 1.5rem;line-height:1.5;">
+        <h3 class="lock-title">Prueba Bloqueada</h3>
+        <p class="lock-text">
           Este templo permanece custodiado bajo candado. Para continuar vuestra gesta, debéis resolver las pruebas desbloqueadas (3, 11 y 12).
         </p>
-        <button class="btn" type="button" onclick="document.getElementById('dlg').close()">Entendido</button>
+        <button class="btn" type="button" id="lockOk">Entendido</button>
       </div>
     `;
+    $('#lockOk').addEventListener('click',()=>dlg.close());
     if(!dlg.open) dlg.showModal();
     return;
   }
@@ -639,11 +646,11 @@ function openTrial(i){
   if(done.has(i)){reward(i,true);return}
   const ctx={
     body:dBody,fb,
-    win:()=>win(i),
+    win:sol=>win(i,sol),
     reg:f=>cleanups.push(f),
-    later:(f,ms)=>{
-      if(f===ctx.win)markDone(i);
-      const x=setTimeout(f,ms);cleanups.push(()=>clearTimeout(x));
+    later:(f,ms,sol)=>{
+      if(f===ctx.win)markDone(i,sol);
+      const x=setTimeout(()=>f(sol),ms);cleanups.push(()=>clearTimeout(x));
     }
   };
   t.run(ctx);
@@ -654,7 +661,9 @@ $('#dClose').addEventListener('click',()=>dlg.close());
 /* ---------- Restaurar y reiniciar ---------- */
 const msgEl=$('#msg'),flash=$('#flash');
 const msg=(t,k)=>{msgEl.textContent=t;msgEl.className='msg '+(k||'')};
+let restoring=false;
 function restore(){
+  if(restoring)return;
   if(root.classList.contains('restored')){msg('El Olimpo ya está restaurado.','ok');return}
   const v=slots.map(x=>x.value.toUpperCase());
   const filled=v.filter(Boolean).length;
@@ -662,47 +671,38 @@ function restore(){
   if(v.join('')!==PASS){msg('Esa contraseña no abre el templo. Revisa los caracteres escritos a mano.','err');shakeEl(slotsEl);return}
   if(done.size<12){msg('Aún te faltan trabajos por superar en el mapa.','err');shakeEl(slotsEl);return}
   
-  msg('Contraseña correcta. Las doce hazañas se cumplen…','ok');
-  flash.classList.add('go');
-  
-  // Calcular tiempo invertido y detener cuenta atras
-  const endTime = getEndTime();
-  const remaining = Math.max(0, Math.floor((endTime - Date.now()) / 1000));
-  const elapsed = Math.max(1, COUNTDOWN_SECONDS - remaining);
-  if (timerInterval) clearInterval(timerInterval);
+  msg('Comprobando la contraseña con el servidor…','ok');
+  restoring=true;
+  fetch('/api/verify',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({password:v.join('')})
+  }).then(r=>{
+    if(r.status===401){window.location.replace('/login?msg=requerido');return null}
+    return r.json();
+  }).then(d=>{
+    restoring=false;
+    if(!d)return;
+    if(!d.success){msg(d.message||'El servidor no ha aceptado la contraseña.','err');shakeEl(slotsEl);return}
 
-  // Guardamos la bandera de victoria para la siguiente pantalla
-  let activeTeam = "Héroes del Código";
-  try {
-    const dk = JSON.parse(localStorage.getItem("dk") || "{}");
-    if (dk.team) activeTeam = dk.team;
-    localStorage.setItem("dk", JSON.stringify(Object.assign({}, dk, {
-      team: activeTeam,
-      completed: true,
-      elapsed: elapsed,
-      timeString: formatCountdown(elapsed)
-    })));
-  } catch(e){}
+    msg('Contraseña correcta. Las doce hazañas se cumplen…','ok');
+    flash.classList.add('go');
+    if(timerInterval)clearInterval(timerInterval);
 
-  // Llamada al backend para validar y registrar la finalización
-  try {
-    fetch('/api/verify', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ password: v.join(''), team: activeTeam, elapsed: elapsed })
-    }).catch(()=>{});
-  } catch(e){}
+    // Tiempo calculado por el servidor, para la pantalla de victoria
+    try{
+      const dk=JSON.parse(localStorage.getItem('dk')||'{}');
+      localStorage.setItem('dk',JSON.stringify(Object.assign({},dk,{
+        completed:true,elapsed:d.elapsed,timeString:d.time
+      })));
+    }catch(e){}
 
-  setTimeout(()=>{
-    root.classList.add('restored');
-    applyState();
-  }, 420);
-
-  // REDIRECCIÓN AUTOMÁTICA A LA PÁGINA RESTAURADA
-  setTimeout(()=>{
-    // Si estás en Flask, usa la ruta correspondiente de tu servidor
-    window.location.href = "/restaurada"; 
-  }, 1500);
+    setTimeout(()=>{root.classList.add('restored');applyState()},420);
+    setTimeout(()=>{window.location.href='/restaurada'},1500);
+  }).catch(()=>{
+    restoring=false;
+    msg('No se pudo contactar con el servidor. Inténtalo de nuevo.','err');
+  });
 }
 $('#restore').addEventListener('click',restore);
 $('#reset').addEventListener('click', () => {
@@ -713,7 +713,7 @@ $('#reset').addEventListener('click', () => {
   // 2. Borrar del almacenamiento local del navegador y reiniciar contador a 1.30h
   try {
     localStorage.removeItem(KEY); // Elimina 'heracles-mapa-done'
-    localStorage.removeItem("dk"); // Elimina datos del equipo
+    try{const dk0=JSON.parse(localStorage.getItem("dk")||'{}');localStorage.setItem("dk",JSON.stringify({team:dk0.team,loggedAt:dk0.loggedAt}))}catch(e){} // conserva el grupo, quita la victoria
     localStorage.setItem(TIMER_KEY, (Date.now() + COUNTDOWN_SECONDS * 1000).toString());
   } catch (e) {}
   initCountdown();
@@ -739,6 +739,14 @@ $('#reset').addEventListener('click', () => {
   update();   // Al estar 'done' vacío, quita la clase .done de los pines y tiles
   drawFog();  // Vuelve a dibujar la niebla completa
 });
+/* ---------- Sincronizar con el servidor (fuente de verdad del progreso) ---------- */
+fetch('/api/team/current').then(r=>r.json()).then(d=>{
+  if(!d||!d.authenticated){window.location.replace('/login?msg=requerido');return}
+  done.clear();
+  (d.team.solved_trial_ids||[]).forEach(n=>{if(Number.isInteger(n)&&n>=1&&n<=12)done.add(n-1)});
+  save();update();drawFog();
+}).catch(()=>{});
+
 /* ---------- Texto corrupto ---------- */
 function scramble(){
   if(rm||root.classList.contains('restored'))return;
@@ -761,7 +769,13 @@ try {
   const dk = JSON.parse(localStorage.getItem("dk") || "{}");
   if (dk.team) {
     const td = document.getElementById("teamDisplay");
-    if (td) td.innerHTML = '<a href="/login" style="color:var(--gold-ink);text-decoration:none;">' + dk.team + '</a>';
+    if (td) {
+      const a = document.createElement('a');
+      a.href = '/login';
+      a.className = 'link-gold';
+      a.textContent = dk.team;
+      td.replaceChildren(a);
+    }
   }
 } catch (e) {}
 

@@ -1,27 +1,27 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Heracles.exe - Los 12 Trabajos del Código</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:wght@400;500;700&family=Cinzel:wght@600;700;900&family=JetBrains+Mono:wght@400;500;600&family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/css/styles.css">
-    <link rel="stylesheet" href="/static/css/gameover.css">
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block title %}Heracles.exe - Los 12 Trabajos del Código{% endblock %}
+
+{% block fonts %}<link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:wght@400;500;700&family=Cinzel:wght@600;700;900&family=JetBrains+Mono:wght@400;500;600&family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/gameover.css') }}">
+{% endblock %}
+
+{% block body %}
     <div class="flash" id="flash" aria-hidden="true"></div>
+    <a class="skip" href="#contenido">Saltar al contenido</a>
     <div class="wrap">
         <header class="bar">
             <div class="brand">
-                <a class="logo" href="/">Olimpo<span>.digital</span></a>
-                <small>Olympus Tech Solutions - Grupo 4</small>
+                <a class="logo" href="{{ url_for('main.home') }}">Olimpo<span>.digital</span></a>
+                <small>{{ company }} - Grupo 4</small>
             </div>
             <dl class="stats">
                 <div class="stat"><dt>Sistema</dt><dd id="status">MALDECIDO / CORRUPTO</dd></div>
-                <div class="stat"><dt>Grupo</dt><dd id="teamDisplay"><a href="/login" style="color:var(--gold-ink);text-decoration:none;">Elegir</a></dd></div>
-                <div class="stat"><dt>Tiempo Restante</dt><dd id="timerVal" style="font-family:var(--f-mono);color:var(--gold-ink);font-weight:bold;">01:30:00</dd></div>
+                <div class="stat"><dt>Grupo</dt><dd id="teamDisplay"><a class="link-gold" href="{{ url_for('main.login') }}">{{ active_team or 'Elegir' }}</a></dd></div>
+                <div class="stat"><dt>Tiempo Restante</dt><dd id="timerVal" class="timer-val">01:30:00</dd></div>
                 <div class="stat"><dt>Trabajos</dt><dd id="count">0/12</dd></div>
                 <div class="stat"><dt>Contraseña</dt><dd id="passMini">_ _ _ _ _ _ _ _ _ _ _ _</dd></div>
             </dl>
@@ -29,24 +29,48 @@
         <div class="meander" aria-hidden="true"></div>
 
         <nav class="menu" aria-label="Menú principal">
-            <a href="/">Inicio</a>
-            <a href="/login">Grupo</a>
+            <a href="{{ url_for('main.home') }}">Inicio</a>
+            <a href="{{ url_for('main.login') }}">Grupo</a>
+            <a href="#como-jugar">Cómo jugar</a>
             <a href="#map">Mapa</a>
             <a href="#list">Trabajos</a>
             <a href="#unlock">Desbloqueo</a>
         </nav>
 
-        <main>
+        <main id="contenido">
             <section class="intro">
                 <p class="lede" data-when="curse">Supera el trabajo de cada pin para disipar la niebla y obtener un carácter de la contraseña.</p>
                 <p class="lede" data-when="restored">Las doce hazañas están cumplidas. El Olimpo vuelve a funcionar.</p>
             </section>
 
+
+            <!-- Instrucciones del juego -->
+            <section class="howto" id="como-jugar" aria-labelledby="ht">
+                <details open>
+                    <summary id="ht">Cómo jugar</summary>
+                    <ol>
+                        <li><b>Objetivo:</b> restaurar el Olimpo Digital reuniendo los <b>12 caracteres</b> de la contraseña maestra antes de que se agote el reloj de <b>1 h 30 min</b>.</li>
+                        <li><b>El mapa:</b> cada pin es un trabajo de Heracles. Púlsalo, supera la prueba y la niebla se disipará mostrando un carácter.</li>
+                        <li><b>Candados:</b> algunos templos están sellados. Empieza por los que están disponibles.</li>
+                        <li><b>La zona de desbloqueo:</b> cuando tengas los 12 caracteres, escríbelos en las casillas y pulsa <i>Restaurar el Olimpo</i>.</li>
+                        <li><b>Pistas:</b> no todo está a la vista. Mira el código fuente de la web averiada, la consola del navegador y los elementos que el CSS esconde.</li>
+                        <li><b>Si se acaba el tiempo</b> aparece la pantalla de derrota; puedes reiniciar la misión desde ella.</li>
+                    </ol>
+                </details>
+            </section>
+
+            <!--
+            PISTA DEL LEÓN DE NEMEA (hallada inspeccionando el código fuente del mapa):
+            "Ninguna flecha me atraviesa, pero una sola propiedad de flexbox me deja centrado en mi guarida:
+            la que alinea en el eje cruzado. Su nombre lleva un guion."
+            -->
+            <p class="reliquia">Pista oculta con CSS (visible con las herramientas de desarrollo): Hipólita solo entrega el cinturón a quien sabe que <code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code> y <code>&lt;footer&gt;</code> nombran la función de cada pieza del templo.</p>
+
             <!-- Contenedor del Mapa -->
             <section class="mapsec" aria-label="Mapa de los doce trabajos">
                 <div class="mapscroll">
                     <div class="map" id="map">
-                        <img class="base" src="/static/images/mapaGriego.jpeg" alt="Mapa de la antigua Grecia">
+                        <img class="base" src="{{ url_for('static', filename='images/mapaGriego.jpeg') }}" alt="Mapa de la antigua Grecia con los doce templos de los trabajos" width="1998" height="1115" decoding="async">
                         <canvas id="fog" aria-hidden="true"></canvas>
                     </div>
                 </div>
@@ -86,8 +110,9 @@
         <p class="fb" id="dFb" role="status"></p>
     </dialog>
 
-    <!-- Carga de JS estático con Jinja2 -->
-    <script src="/static/js/main.js"></script>
-    <script src="/static/js/gameover.js"></script>
-</body>
-</html>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/gameover.js') }}"></script>
+{% endblock %}

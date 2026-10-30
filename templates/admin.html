@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% block title %}Panel de administración · Olimpo Digital{% endblock %}
+{% block css %}<link rel="stylesheet" href="{{ url_for('static', filename='css/webAveriada.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">{% endblock %}
+{% block body %}
+<a class="skip" href="#contenido">Saltar al contenido</a>
+<div class="wrap">
+    <header class="bar">
+        <div class="brand">
+            <a class="logo" href="{{ url_for('main.home') }}">Olimpo<span>.digital</span></a>
+            <small>Panel interno · {{ company }}</small>
+        </div>
+        <dl class="stats">
+            <div class="stat"><dt>Grupos</dt><dd>{{ filas|length }}</dd></div>
+            <div class="stat"><dt>Han restaurado</dt><dd class="ok">{{ filas|selectattr('team.is_restored')|list|length }}</dd></div>
+        </dl>
+    </header>
+    <div class="meander" aria-hidden="true"></div>
+
+    <nav class="menu" aria-label="Menú de administración">
+        <a href="{{ url_for('main.home') }}">Inicio</a>
+        <a href="{{ url_for('main.mapa') }}">Mapa</a>
+        <form class="adm-inline" method="post" action="{{ url_for('admin.admin_logout') }}">
+            <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+            <button class="adm-link" type="submit">Cerrar sesión de administración</button>
+        </form>
+    </nav>
+
+    <main id="contenido">
+        {% for category, message in get_flashed_messages(with_categories=true) %}
+        <p class="adm-flash {{ category }}" role="status">{{ message }}</p>
+        {% endfor %}
+
+        <section aria-labelledby="t-grupos">
+            <h1 class="sec" id="t-grupos">Grupos</h1>
+            <div class="adm-scroll">
+                <table class="adm-table">
+                    <caption class="sr-only">Progreso de cada grupo</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Grupo</th>
+                            <th scope="col">Trabajos</th>
+                            <th scope="col">Intentos</th>
+                            <th scope="col">Aciertos</th>
+                            <th scope="col">Partidas</th>
+                            <th scope="col">Tiempo</th>
+                            <th scope="col">Puntos</th>
+                            <th scope="col">Estado</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for f in filas %}
+                        <tr>
+                            <th scope="row">{{ f.team.name }}{% if f.team.has_pin %} <span title="Protegido con PIN">🔒</span>{% endif %}</th>
+                            <td>{{ f.solved }}/12</td>
+                            <td>{{ f.attempts }}</td>
+                            <td>{{ f.correct }}</td>
+                            <td>{{ f.sessions }}</td>
+                            <td>{{ f.time }}</td>
+                            <td>{{ f.team.score }}</td>
+                            <td>{% if f.team.is_restored %}<span class="ok">Restaurado</span>{% else %}En juego{% endif %}</td>
+                            <td class="adm-actions">
+                                <form method="post" action="{{ url_for('admin.reset_team', team_id=f.team.id) }}">
+                                    <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+                                    <button class="adm-btn small" type="submit">Reiniciar</button>
+                                </form>
+                                <form method="post" action="{{ url_for('admin.delete_team', team_id=f.team.id) }}"
+                                      data-confirm="¿Eliminar el grupo y todo su historial?">
+                                    <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+                                    <button class="adm-btn small danger" type="submit">Eliminar</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr><td colspan="9">Todavía no hay grupos registrados.</td></tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <form method="post" action="{{ url_for('admin.reset_all') }}"
+                  data-confirm="¿Reiniciar el progreso de TODOS los grupos?">
+                <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+                <button class="adm-btn danger" type="submit">Reiniciar a todos los grupos</button>
+            </form>
+        </section>
+
+        <section aria-labelledby="t-trabajos">
+            <h2 class="sec" id="t-trabajos">Trabajos</h2>
+            <div class="adm-scroll">
+                <table class="adm-table">
+                    <caption class="sr-only">Estadísticas por trabajo</caption>
+                    <thead>
+                        <tr><th scope="col">#</th><th scope="col">Trabajo</th><th scope="col">Módulo</th><th scope="col">Carácter</th><th scope="col">Superado por</th><th scope="col">Intentos</th></tr>
+                    </thead>
+                    <tbody>
+                    {% for p in por_trabajo %}
+                        <tr>
+                            <td>{{ p.trial.num }}</td>
+                            <th scope="row">{{ p.trial.name }}</th>
+                            <td>{{ p.trial.module }}</td>
+                            <td><code>{{ p.trial.password_char }}</code></td>
+                            <td>{{ p.solved_by }} grupos</td>
+                            <td>{{ p.attempts }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section aria-labelledby="t-envios">
+            <h2 class="sec" id="t-envios">Últimos envíos</h2>
+            <ul class="adm-log">
+            {% for s in ultimos %}
+                <li class="{{ 'ok' if s.is_correct else 'bad' }}">
+                    <time datetime="{{ s.submitted_at.strftime('%Y-%m-%dT%H:%M:%S') }}">{{ s.submitted_at.strftime('%d/%m %H:%M:%S') }}</time>
+                    · <b>{{ s.team_name }}</b> · trabajo {{ s.trial.num }} ·
+                    {{ 'correcto' if s.is_correct else 'incorrecto' }}
+                </li>
+            {% else %}
+                <li>Aún no hay envíos.</li>
+            {% endfor %}
+            </ul>
+        </section>
+    </main>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+{% endblock %}

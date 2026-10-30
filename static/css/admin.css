@@ -1,0 +1,31 @@
+/* Panel /admin (se apoya en las variables de webAveriada.css) */
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.adm-box{max-width:420px;margin:2rem auto;padding:1.75rem;background:#1c140d;border:2px solid var(--line);border-radius:4px}
+.adm-title{font-family:var(--f-display);color:var(--gold-ink);font-size:1.5rem;margin:0 0 1rem}
+.adm-label{display:block;font-family:var(--f-display);margin-bottom:.4rem}
+.adm-input{width:100%;box-sizing:border-box;background:#100b07;border:1px solid var(--line);color:var(--text);padding:.7rem 1rem;font-family:var(--f-mono);border-radius:2px}
+.adm-input:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.adm-btn{background:linear-gradient(135deg,#e0a82e,#b8861b);color:#1a1204;border:2px solid #ebbd55;font-family:var(--f-display);font-weight:700;padding:.6rem 1.1rem;cursor:pointer;border-radius:2px;margin-top:1rem}
+.adm-btn.small{padding:.25rem .6rem;margin:0;font-size:.8rem}
+.adm-btn.danger{background:#5a1f14;color:#ffd9cf;border-color:#e5603f}
+.adm-btn:focus-visible,.adm-link:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.adm-link{background:none;border:0;color:var(--gold-ink);font:inherit;cursor:pointer;text-decoration:underline}
+.adm-inline{display:inline}
+.adm-flash{padding:.7rem 1rem;border:1px solid var(--line);font-family:var(--f-mono);font-size:.9rem;margin:1rem 0}
+.adm-flash.ok{border-color:#6fc2ad;color:#6fc2ad}
+.adm-flash.err{border-color:#e5603f;color:#ff9b82}
+.adm-scroll{overflow-x:auto;margin:1rem 0}
+.adm-table{width:100%;border-collapse:collapse;font-family:var(--f-mono);font-size:.85rem}
+.adm-table th,.adm-table td{padding:.5rem .7rem;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+.adm-table thead th{color:var(--gold-ink);font-family:var(--f-display);white-space:nowrap}
+.adm-table tbody th{color:var(--text);font-weight:700}
+.adm-table .ok{color:#6fc2ad}
+.adm-actions{display:flex;gap:.4rem;flex-wrap:wrap}
+.adm-log{list-style:none;padding:0;margin:1rem 0;font-family:var(--f-mono);font-size:.85rem}
+.adm-log li{padding:.35rem 0;border-bottom:1px solid rgba(77,59,36,.5)}
+.adm-log .ok{color:#6fc2ad}
+.adm-log .bad{color:#ff9b82}
+@media (max-width:600px){
+  .adm-table{font-size:.78rem}
+  .adm-box{margin:1rem 0;padding:1.25rem}
+}

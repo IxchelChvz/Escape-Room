@@ -877,3 +877,13 @@ textarea {
     white-space: nowrap;
     border: 0;
 }
+
+/* Utilidades (antes eran estilos en linea en el HTML) */
+.link-gold {
+    color: var(--gold-ink);
+    text-decoration: none;
+}
+
+.time-taken {
+    font-family: var(--f-mono);
+}

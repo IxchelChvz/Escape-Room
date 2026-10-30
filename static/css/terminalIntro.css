@@ -348,3 +348,18 @@
     border-color: #ff2244;
     box-shadow: 0 0 12px #ff2244;
 }
+
+/* ==========================================================================
+   RESPONSIVE: moviles y pantallas estrechas
+   ========================================================================== */
+@media (max-width: 640px) {
+    .intro-console-box { padding: 0 8px; max-height: 76vh; }
+    .intro-log-line { font-size: 0.7rem; }
+    .intro-spider-pre { font-size: 2.4px; line-height: 2.4px; max-width: 100%; overflow: hidden; }
+    .intro-spider-footer { font-size: 0.75rem; padding: 6px 10px; }
+    .intro-skip-btn { top: 0.6rem; right: 0.6rem; font-size: 0.7rem; padding: 6px 10px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .intro-crt-tube-content { animation: none; }
+}

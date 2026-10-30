@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Olimpo Digital · 404{% endblock %}
+{% block css %}<link rel="stylesheet" href="{{ url_for('static', filename='css/webAveriada.css') }}">{% endblock %}
+{% block body %}
+<a class="skip" href="#contenido">Saltar al contenido</a>
+<div class="wrap">
+    <header class="bar">
+        <div class="brand">
+            <a class="logo" href="{{ url_for('main.home') }}">Olimpo<span>.digital</span></a>
+            <small>Portal oficial · {{ company }}</small>
+        </div>
+        <dl class="stats">
+            <div class="stat"><dt>HTTP</dt><dd class="bad">404 · ΣΦΑΛΜΑ</dd></div>
+        </dl>
+    </header>
+    <div class="meander" aria-hidden="true"></div>
+    <main id="contenido">
+        <section class="notice">
+            <h1 class="sec">Esta ruta no existe</h1>
+            <p>El Toro de Creta se ha llevado esta página. Vuelve al templo.</p>
+            <div class="actions"><a class="btn" href="{{ url_for('main.home') }}">Volver al inicio</a></div>
+        </section>
+    </main>
+</div>
+{% endblock %}

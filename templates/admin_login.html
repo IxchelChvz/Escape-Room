@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Administración · Olimpo Digital{% endblock %}
+{% block css %}<link rel="stylesheet" href="{{ url_for('static', filename='css/webAveriada.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">{% endblock %}
+{% block body %}
+<div class="wrap">
+    <header class="bar">
+        <div class="brand">
+            <a class="logo" href="{{ url_for('main.home') }}">Olimpo<span>.digital</span></a>
+            <small>Panel interno · {{ company }}</small>
+        </div>
+    </header>
+    <div class="meander" aria-hidden="true"></div>
+    <main id="contenido">
+        <section class="adm-box">
+            <h1 class="adm-title">Acceso de administración</h1>
+            {% for category, message in get_flashed_messages(with_categories=true) %}
+            <p class="adm-flash {{ category }}" role="alert">{{ message }}</p>
+            {% endfor %}
+            <form method="post" action="{{ url_for('admin.admin_login') }}">
+                <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+                <label class="adm-label" for="password">Contraseña de administración</label>
+                <input class="adm-input" id="password" name="password" type="password" required autofocus autocomplete="current-password">
+                <button class="adm-btn" type="submit">Entrar</button>
+            </form>
+        </section>
+    </main>
+</div>
+{% endblock %}

@@ -1,0 +1,174 @@
+/* Pagina de identificacion de grupo (usa las variables de webAveriada.css) */
+.login-wrap {
+    max-width: 680px;
+    margin: 2rem auto;
+    background: #1c140d;
+    border: 2px solid var(--line);
+    border-radius: 4px;
+    padding: 2rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7);
+    position: relative;
+}
+.login-wrap::before {
+    content: "[ ALTAR DE REGISTRO // IDENTIFICACION DE GRUPO ]";
+    display: block;
+    font-family: var(--f-mono);
+    font-size: 0.75rem;
+    color: var(--gold-ink);
+    letter-spacing: 0.15em;
+    margin-bottom: 1.25rem;
+    text-transform: uppercase;
+}
+.login-title {
+    font-family: var(--f-display);
+    font-size: 1.8rem;
+    color: var(--gold-ink);
+    margin: 0 0 0.5rem 0;
+    text-align: center;
+}
+.login-subtitle {
+    font-size: 0.95rem;
+    color: var(--dim);
+    text-align: center;
+    margin: 0 0 1.75rem 0;
+    line-height: 1.4;
+}
+.form-group {
+    margin-bottom: 1.25rem;
+}
+.form-label {
+    display: block;
+    font-family: var(--f-display);
+    font-size: 0.9rem;
+    color: var(--text);
+    margin-bottom: 0.4rem;
+    letter-spacing: 0.05em;
+}
+.form-input {
+    width: 100%;
+    box-sizing: border-box;
+    background: #100b07;
+    border: 1px solid var(--line);
+    color: var(--text);
+    padding: 0.75rem 1rem;
+    font-family: var(--f-mono);
+    font-size: 0.95rem;
+    border-radius: 2px;
+    transition: border-color 0.2s;
+}
+.form-input:focus {
+    outline: none;
+    border-color: var(--gold);
+    background: #140d09;
+}
+.form-input:focus-visible, .team-item:focus-visible, .btn-submit:focus-visible {
+    outline: 2px solid var(--gold-ink);
+    outline-offset: 2px;
+}
+.form-hint {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--dim);
+    margin-top: 0.4rem;
+    font-family: var(--f-mono);
+}
+.btn-submit {
+    display: block;
+    width: 100%;
+    background: linear-gradient(135deg, #e0a82e 0%, #b8861b 100%);
+    color: #1a1204;
+    font-family: var(--f-display);
+    font-size: 1.1rem;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    padding: 1rem;
+    border: 2px solid #ebbd55;
+    cursor: pointer;
+    text-transform: uppercase;
+    text-align: center;
+    border-radius: 2px;
+    margin-top: 1.5rem;
+    transition: all 0.25s ease-in-out;
+    box-shadow: 0 0 16px rgba(224, 168, 46, 0.3);
+}
+.btn-submit:hover {
+    background: linear-gradient(135deg, #ebbd55 0%, #c99320 100%);
+    box-shadow: 0 0 28px rgba(235, 189, 85, 0.55);
+    transform: translateY(-1px);
+}
+.existing-box {
+    margin-top: 2rem;
+    border-top: 1px solid var(--line);
+    padding-top: 1.25rem;
+}
+.existing-box-title {
+    font-family: var(--f-display);
+    font-size: 0.85rem;
+    color: var(--dim);
+    margin: 0 0 0.75rem 0;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+.existing-list {
+    max-height: 160px;
+    overflow-y: auto;
+    border: 1px solid var(--line);
+    background: #120e0a;
+    padding: 0.5rem;
+    border-radius: 2px;
+}
+.team-item {
+    width: 100%;
+    background: none;
+    border: 0;
+    color: inherit;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid rgba(77, 59, 36, 0.4);
+    font-family: var(--f-mono);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+.team-item:last-child { border-bottom: none; }
+.team-item .lock { margin-left: .4rem; }
+.team-item:hover {
+    background: rgba(224, 168, 46, 0.12);
+}
+.team-item .team-name { color: var(--gold-ink); font-weight: bold; }
+.team-item .team-score { color: var(--dim); }
+.alert-msg {
+    margin-bottom: 1.25rem;
+    padding: 0.75rem 1rem;
+    font-family: var(--f-mono);
+    font-size: 0.85rem;
+    border-radius: 2px;
+    display: none;
+    line-height: 1.4;
+}
+.alert-msg.ok {
+    background: rgba(111, 194, 173, 0.15);
+    border: 1px solid #6fc2ad;
+    color: #6fc2ad;
+    display: block;
+}
+.alert-msg.warn {
+    background: rgba(224, 168, 46, 0.15);
+    border: 1px solid #e0a82e;
+    color: #f7ca68;
+    display: block;
+}
+.alert-msg.err {
+    background: rgba(229, 96, 63, 0.15);
+    border: 1px solid #e5603f;
+    color: #e5603f;
+    display: block;
+}
+@media (max-width: 600px) {
+    .login-wrap { margin: 1rem 0; padding: 1.25rem; }
+    .login-title { font-size: 1.45rem; }
+    .team-item { font-size: 0.8rem; }
+}

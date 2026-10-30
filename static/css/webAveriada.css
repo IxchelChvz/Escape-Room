@@ -769,3 +769,28 @@ h2.sec::after {
         animation: none !important;
     }
 }
+
+/* Pista oculta con CSS: solo se ve inspeccionando el elemento con las herramientas de desarrollo */
+.reliquia {
+    display: none;
+}
+
+/* Utilidades (antes eran estilos en linea en el HTML) */
+.link-gold {
+    color: var(--gold-ink);
+    text-decoration: none;
+}
+
+.timer-val {
+    font-family: var(--f-mono);
+    color: var(--gold-ink);
+    font-weight: bold;
+}
+
+.timer-val.timer-danger {
+    color: #e5603f;
+}
+
+.svg-defs {
+    position: absolute;
+}

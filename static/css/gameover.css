@@ -310,3 +310,20 @@ html.crt-active, body.crt-active {
     background: #ff2a2a;
     border-radius: 4px;
 }
+
+/* ==========================================================================
+   RESPONSIVE: moviles y pantallas estrechas
+   ========================================================================== */
+@media (max-width: 640px) {
+    .crt-content-wrap { padding: 2rem 1rem 4rem 1rem; }
+    .crt-sep { overflow: hidden; white-space: nowrap; }
+    .crt-telemetry-row { flex-direction: column; gap: 2px; }
+    .crt-telemetry-val { word-break: break-word; }
+    .crt-actions { flex-direction: column; gap: 0.8rem; }
+    .crt-btn { width: 100%; font-size: 0.8rem; padding: 12px 14px; }
+    .crt-reopen-pill { left: 8px; right: 8px; bottom: 8px; font-size: 0.7rem; text-align: center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .crt-sweep-line, .crt-cursor, .crt-reopen-pill { animation: none !important; }
+}

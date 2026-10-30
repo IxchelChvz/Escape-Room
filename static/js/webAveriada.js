@@ -39,7 +39,13 @@ try {
     var teamData = JSON.parse(localStorage.getItem("dk") || "{}");
     if (teamData.team) {
         var td = document.getElementById("teamDisplay");
-        if (td) td.innerHTML = '<a href="/login" style="color:var(--gold-ink);text-decoration:none;">' + teamData.team + '</a>';
+        if (td) {
+            var a = document.createElement("a");
+            a.href = "/login";
+            a.className = "link-gold";
+            a.textContent = teamData.team;
+            td.replaceChildren(a);
+        }
     }
 } catch (e) {}
 
@@ -62,10 +68,8 @@ try {
         var m = Math.floor((rem % 3600) / 60);
         var s = rem % 60;
         timerEl.textContent = (h < 10 ? '0' : '') + h + ':' + (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
-        if (rem <= 600 && rem > 0) {
-            timerEl.style.color = '#e5603f';
-        } else if (rem <= 0) {
-            timerEl.style.color = '#e5603f';
+        timerEl.classList.toggle('timer-danger', rem <= 600);
+        if (rem <= 0) {
             timerEl.textContent = '00:00:00';
             if (typeof window.showGameOverScreen === 'function') {
                 window.showGameOverScreen();
@@ -99,3 +103,8 @@ try {
         }
     } catch (err) {}
 })();
+
+// Pista 2 de 3 (solo visible en la consola del navegador)
+console.log("%cENIGMA DE LA HIDRA DE LERNA", "color:#e0a82e;font-weight:bold;font-size:14px");
+console.log("Por cada cabeza cortada nacen dos mas, salvo que cada munon se cauterice.");
+console.log("El bucle empieza en 0 y termina antes de 9. Dentro: primero cortarCabeza(i), despues quemarMuñon(i).");

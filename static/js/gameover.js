@@ -109,7 +109,7 @@
                     '</div>' +
                     '<div class="crt-telemetry-row">' +
                         '<span class="crt-telemetry-label">ESCUADRA AFECTADA   :</span>' +
-                        '<span class="crt-telemetry-val">' + teamName + '</span>' +
+                        '<span class="crt-telemetry-val" id="crtTeamName"></span>' +
                     '</div>' +
                     '<div class="crt-telemetry-row">' +
                         '<span class="crt-telemetry-label">TRABAJOS SUPERADOS  :</span>' +
@@ -140,20 +140,27 @@
             '</div>';
 
         document.body.appendChild(overlay);
+        var teamEl = document.getElementById('crtTeamName');
+        if (teamEl) teamEl.textContent = teamName;
 
         // Accion: Reiniciar mision
         var resetBtn = document.getElementById('crtResetBtn');
         if (resetBtn) {
             resetBtn.onclick = function () {
+                resetBtn.disabled = true;
                 try {
                     localStorage.removeItem('heracles-mapa-done');
                     localStorage.setItem(TIMER_KEY, (Date.now() + COUNTDOWN_SECONDS * 1000).toString());
-                    fetch('/api/reset', { method: 'POST' }).catch(function () {});
                 } catch (e) {}
-                removeGameOverScreen();
-                var pill = document.getElementById('crtReopenPill');
-                if (pill) pill.remove();
-                window.location.reload();
+                // Se espera a que el servidor reinicie el progreso del grupo antes de recargar.
+                fetch('/api/reset', { method: 'POST' })
+                    .catch(function () {})
+                    .then(function () {
+                        removeGameOverScreen();
+                        var pill = document.getElementById('crtReopenPill');
+                        if (pill) pill.remove();
+                        window.location.reload();
+                    });
             };
         }
 

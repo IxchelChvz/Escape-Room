@@ -1,31 +1,12 @@
-<!DOCTYPE html>
-<html lang="es">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <title>Olimpo Digital · Restaurado</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:wght@400;500;700&family=Cinzel:wght@600;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/css/webRestaurada.css">
-</head>
+{% block title %}Olimpo Digital · Restaurado{% endblock %}
 
-<body>
-    <script>
-        // Verificar si se completaron los 12 trabajos antes de permitir el acceso
-        // Modo presentación (?presentacion=1): se salta la comprobación
-        const presentacion = new URLSearchParams(location.search).has('presentacion');
-        if (!presentacion) try {
-            const done = JSON.parse(localStorage.getItem('heracles-mapa-done') || '[]');
-            if (!Array.isArray(done) || done.length < 12) {
-                alert("Acceso denegado: Primero debes descifrar los 12 caracteres en el mapa.");
-                window.location.href = "/mapa"; // Redirige de vuelta al mapa si no ha terminado
-            }
-        } catch(e) {
-            window.location.href = "/mapa";
-        }
-    </script>
+{% block css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/webRestaurada.css') }}">
+{% endblock %}
+
+{% block body %}
     <div class="flash" aria-hidden="true"></div>
     <a class="skip" href="#contenido">Saltar al contenido</a>
     <div class="wrap">
@@ -42,7 +23,7 @@
                     <dd>12/12</dd>
                 </div>
                 <div class="stat"><dt>Tiempo Empleado</dt>
-                    <dd id="timeTakenStat" class="ok" style="font-family:var(--f-mono);">--:--:--</dd>
+                    <dd id="timeTakenStat" class="ok time-taken">{{ tiempo or '--:--:--' }}</dd>
                 </div>
                 <div class="stat"><dt>HTTP</dt>
                     <dd class="ok">200</dd>
@@ -56,8 +37,8 @@
             <a href="#secciones">Dioses</a>
             <a href="#clasificacion">Clasificación</a>
             <a href="#oraculo">Oráculo</a>
-            <a href="/mapa">Volver al Mapa</a>
-            <a href="/login" style="color:var(--gold-ink);">Cambiar Grupo</a>
+            <a href="{{ url_for('main.mapa') }}">Volver al Mapa</a>
+            <a class="link-gold" href="{{ url_for('main.login') }}">Cambiar Grupo</a>
         </nav>
 
         <main id="contenido">
@@ -91,7 +72,7 @@
                 <p id="who">
                     Habéis superado las pruebas del mapa y reunido los <b>12 caracteres</b> de la contraseña. El Olimpo Digital vuelve a estar en línea.
                 </p>
-                <div class="actions"><a class="btn" href="#secciones">Explorar el templo</a><a class="btn ghost" href="/mapa">Volver al mapa</a></div>
+                <div class="actions"><a class="btn" href="#secciones">Explorar el templo</a><a class="btn ghost" href="{{ url_for('main.mapa') }}">Volver al mapa</a></div>
             </section>
 
             <section class="trials" id="secciones" aria-labelledby="sec">
@@ -108,10 +89,9 @@
                 <h2 class="sec" id="lb-title">Tabla de Honor de los Grupos</h2>
                 <p class="podio-nota">Los cuatro últimos grupos registrados, de mayor a menor puntuación.</p>
                 <ol class="podio" id="podio">
-                    <li class="puesto p1"><span class="pnombre">—</span><span class="ppuntos">Cargando…</span><img class="peana-img" src="/static/images/podio-1.webp" alt="Primer puesto"></li>
-                    <li class="puesto p2"><span class="pnombre">—</span><span class="ppuntos"></span><img class="peana-img" src="/static/images/podio-2.webp" alt="Segundo puesto"></li>
-                    <li class="puesto p3"><span class="pnombre">—</span><span class="ppuntos"></span><img class="peana-img" src="/static/images/podio-3.webp" alt="Tercer puesto"></li>
-                    <li class="puesto p4"><span class="pnombre">—</span><span class="ppuntos"></span><img class="peana-img" src="/static/images/podio-4.webp" alt="Cuarto puesto"></li>
+                    {% for p in podio %}
+                    <li class="puesto p{{ loop.index }}"><span class="pnombre">{{ p.name if p else '—' }}</span><span class="ppuntos">{% if p %}{{ p.score }} pts{% endif %}</span><img class="peana-img" src="{{ url_for('static', filename='images/podio-%d.webp' % loop.index) }}" alt="{{ ['Primer','Segundo','Tercer','Cuarto'][loop.index0] }} puesto" width="480" height="{{ [360,280,210,150][loop.index0] }}" loading="lazy" decoding="async"></li>
+                    {% endfor %}
                 </ol>
             </section>
 
@@ -137,12 +117,13 @@
 
         <div class="meander" aria-hidden="true"></div>
         <p class="foot">
-            © Dódeka · Los 12 Trabajos del Código
+            © {{ company }} · Los 12 Trabajos del Código
             <small>Aprende programando, juega depurando.</small>
         </p>
     </div>
 
-    <script src="/static/js/webRestaurada_2.js"></script>
-</body>
+{% endblock %}
 
-</html>
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/webRestaurada_2.js') }}"></script>
+{% endblock %}

@@ -1,6 +1,20 @@
+# Python
+__pycache__/
+*.pyc
+escapeVenv/
+venv/
+.venv/
+
+# Base de datos y secretos locales (NO subir)
+*.db
+instance/
+.env
+.secret_key
+.admin_password
+
+# Otros
 scratch/
 Escape-Room/
 node_modules/
-__pycache__/
-*.pyc
 .DS_Store
+.claude/
