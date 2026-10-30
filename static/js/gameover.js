@@ -9,9 +9,10 @@
     var TIMER_KEY = 'heracles-timer-end';
     var COUNTDOWN_SECONDS = 90 * 60; // 5400s (1.30h)
     var isGameOverActive = false;
+    var dismissed = false; // true si el usuario pulso "Inspeccionar ruinas"
 
     function getTeamInfo() {
-        var name = 'Grupo sin registrar';
+        var name = 'Escuadra sin registrar';
         try {
             var dk = JSON.parse(localStorage.getItem('dk') || '{}');
             if (dk && dk.team) name = dk.team;
@@ -60,8 +61,11 @@
             if (dk && dk.completed) return;
         } catch (e) {}
 
-        isGameOverActive = true;
+        // Primero se limpia (esto pone el indicador a false) y despues se marca como activa;
+        // asi la comprobacion de cada segundo no reconstruye la pantalla y el scroll no se reinicia.
         removeGameOverScreen();
+        isGameOverActive = true;
+        dismissed = false;
 
         // Bloquear scroll de la pagina de fondo
         document.documentElement.classList.add('crt-active');
@@ -104,7 +108,7 @@
                         '<span class="crt-telemetry-val bad">00:00:00 [TIEMPO AGOTADO]</span>' +
                     '</div>' +
                     '<div class="crt-telemetry-row">' +
-                        '<span class="crt-telemetry-label">GRUPO AFECTADO   :</span>' +
+                        '<span class="crt-telemetry-label">ESCUADRA AFECTADA   :</span>' +
                         '<span class="crt-telemetry-val">' + teamName + '</span>' +
                     '</div>' +
                     '<div class="crt-telemetry-row">' +
@@ -157,6 +161,7 @@
         var closeBtn = document.getElementById('crtCloseBtn');
         if (closeBtn) {
             closeBtn.onclick = function () {
+                dismissed = true;
                 removeGameOverScreen();
                 ensureReopenPill();
             };
@@ -180,7 +185,7 @@
         var end = localStorage.getItem(TIMER_KEY);
         if (!end || isNaN(parseInt(end, 10))) return;
         var diff = parseInt(end, 10) - Date.now();
-        if (diff <= 0) {
+        if (diff <= 0 && !dismissed) {
             showGameOverScreen();
         }
     }

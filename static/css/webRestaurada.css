@@ -41,12 +41,6 @@ html {
 
 body {
     margin: 0;
-    background-color: var(--bg);
-    background-image:
-        radial-gradient(1000px 560px at 85% -5%, color-mix(in srgb, var(--gold) 20%, transparent), transparent 70%),
-        radial-gradient(800px 520px at -5% 55%, color-mix(in srgb, var(--accent) 9%, transparent), transparent 70%),
-        linear-gradient(180deg, transparent 60%, color-mix(in srgb, var(--gold) 10%, transparent));
-    background-attachment: fixed;
     color: var(--text);
     font-family: var(--f-body);
     font-size: 17px;
@@ -55,6 +49,20 @@ body {
     padding-left: max(16px, env(safe-area-inset-left, 0px));
     padding-right: max(16px, env(safe-area-inset-right, 0px));
     overflow-x: hidden;
+}
+
+/* Resplandor de fondo en su propia capa fija: no se repinta al hacer scroll
+   (con background-attachment: fixed se repintaba toda la pantalla en cada fotograma) */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image:
+        radial-gradient(1000px 560px at 85% -5%, color-mix(in srgb, var(--gold) 20%, transparent), transparent 70%),
+        radial-gradient(800px 520px at -5% 55%, color-mix(in srgb, var(--accent) 9%, transparent), transparent 70%),
+        linear-gradient(180deg, transparent 60%, color-mix(in srgb, var(--gold) 10%, transparent));
 }
 
 :focus-visible {
@@ -206,9 +214,8 @@ body {
     font: 500 12px var(--f-mono);
     letter-spacing: .12em;
     text-transform: uppercase;
-    background: color-mix(in srgb, var(--bg) 86%, transparent);
-    -webkit-backdrop-filter: blur(8px);
-    backdrop-filter: blur(8px);
+    /* fondo casi opaco en vez de backdrop-filter: el desenfoque se recalculaba en cada fotograma de scroll */
+    background: color-mix(in srgb, var(--bg) 96%, transparent);
     border-bottom: 1px solid color-mix(in srgb, var(--line) 60%, transparent);
 }
 
@@ -719,7 +726,7 @@ textarea {
 }
 
 .menu {
-    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    background: color-mix(in srgb, var(--bg) 96%, transparent);
 }
 
 
