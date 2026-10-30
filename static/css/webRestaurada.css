@@ -732,6 +732,81 @@ textarea {
 
 /* ---- Móvil ---- */
 
+/* ---- Podio griego (clasificación) ---- */
+
+.podio-nota {
+    margin: 14px 0 0;
+    color: var(--dim);
+}
+
+.podio {
+    list-style: none;
+    margin: 28px auto 0;
+    padding: 0;
+    max-width: 860px;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    align-items: end;
+    gap: 0 10px;
+}
+
+/* Los cuatro puestos van en escalera descendente: 1.º a la izquierda (el más alto) y 4.º a la derecha (el más bajo) */
+
+.puesto {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    min-width: 0;
+}
+
+.pnombre {
+    max-width: 100%;
+    font: 700 1.05rem/1.2 var(--f-display);
+    letter-spacing: .03em;
+    overflow-wrap: anywhere;
+}
+
+.ppuntos {
+    margin: 4px 0 10px;
+    font: 600 12px var(--f-mono);
+    letter-spacing: .08em;
+    color: var(--gold);
+}
+
+/* Peanas: imagenes (podio-1 a podio-4). Todas miden lo mismo de ancho; el alto sale solo de la
+   proporcion de cada imagen, asi bajan de mayor a menor y quedan alineadas por la base. */
+.peana-img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.p1 .pnombre { font-size: 1.25rem; }
+
+/* corona de laurel sobre el ganador */
+.p1::before {
+    content: "";
+    width: 46px;
+    height: 30px;
+    margin-bottom: 6px;
+    background: var(--gold);
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 46 30' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='M23 27C10 27 4 18 4 6M23 27c13 0 19-9 19-21M7 12l-4-2M8 18l-5 0M12 23l-4 2M39 12l4-2M38 18l5 0M34 23l4 2'/%3E%3C/svg%3E") center/contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 46 30' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='M23 27C10 27 4 18 4 6M23 27c13 0 19-9 19-21M7 12l-4-2M8 18l-5 0M12 23l-4 2M39 12l4-2M38 18l5 0M34 23l4 2'/%3E%3C/svg%3E") center/contain no-repeat;
+}
+
+.puesto.vacio .pnombre,
+.puesto.vacio .ppuntos {
+    color: var(--dim);
+}
+
+@media (max-width: 480px) {
+    .podio { gap: 0 6px; }
+    .pnombre { font-size: .9rem; }
+    .p1 .pnombre { font-size: 1rem; }
+    .ppuntos { font-size: 10.5px; letter-spacing: .04em; }
+}
+
 @media (max-width: 760px) {
     .contact {
         grid-template-columns: 1fr;

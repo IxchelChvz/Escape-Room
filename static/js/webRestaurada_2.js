@@ -99,27 +99,18 @@ try {
     }
 } catch (e) {}
 
-// Cargar clasificacion desde la base de datos
-fetch("/api/leaderboard")
+// Podio: el servidor devuelve los 4 ultimos grupos registrados, ya ordenados de mayor a menor puntuacion
+function pintarPodio(teams) {
+    var puestos = document.querySelectorAll("#podio .puesto");
+    Array.prototype.forEach.call(puestos, function(li, i) {
+        var tm = teams[i];
+        li.classList.toggle("vacio", !tm);
+        // textContent: los nombres los escriben los jugadores, no se interpretan como HTML
+        li.querySelector(".pnombre").textContent = tm ? tm.name : "Puesto libre";
+        li.querySelector(".ppuntos").textContent = tm ? tm.score + " pts" : "—";
+    });
+}
+fetch("/api/podio")
     .then(function(res) { return res.json(); })
-    .then(function(data) {
-        var teams = Array.isArray(data) ? data : (data.leaderboard || data.teams || []);
-        var lbRows = document.getElementById("lbRows");
-        if (lbRows && Array.isArray(teams) && teams.length > 0) {
-            lbRows.innerHTML = "";
-            teams.forEach(function(tm, idx) {
-                var tr = document.createElement("tr");
-                tr.style.borderBottom = "1px solid rgba(77, 59, 36, 0.3)";
-                    var es = Number(tm.elapsed_seconds) || 0;
-                    var mins = Math.floor(es / 60);
-                    var secs = es % 60;
-                    var timeStr = mins + "m " + (secs < 10 ? "0" : "") + secs + "s";
-                    tr.innerHTML = "<td style='padding:0.5rem;color:var(--gold-ink);'>#" + (idx + 1) + "</td>" +
-                        "<td style='padding:0.5rem;color:var(--text);font-weight:bold;'>" + tm.name + "</td>" +
-                        "<td style='padding:0.5rem;color:var(--text);'>" + (tm.trials_completed || 12) + "/12</td>" +
-                        "<td style='padding:0.5rem;color:var(--gold-ink);'>" + timeStr + "</td>";
-                lbRows.appendChild(tr);
-            });
-        }
-    })
-    .catch(function() {});
+    .then(function(data) { pintarPodio(Array.isArray(data) ? data : []); })
+    .catch(function() { pintarPodio([]); });

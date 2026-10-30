@@ -56,7 +56,6 @@
             <a href="#secciones">Dioses</a>
             <a href="#clasificacion">Clasificación</a>
             <a href="#oraculo">Oráculo</a>
-            <a href="#contacto">Contacto</a>
             <a href="/mapa">Volver al Mapa</a>
             <a href="/login" style="color:var(--gold-ink);">Cambiar Grupo</a>
         </nav>
@@ -107,21 +106,13 @@
 
             <section class="section" id="clasificacion" aria-labelledby="lb-title">
                 <h2 class="sec" id="lb-title">Tabla de Honor de los Grupos</h2>
-                <div style="background:#1c140d;border:1px solid var(--line);padding:1rem;border-radius:4px;overflow-x:auto;">
-                    <table style="width:100%;border-collapse:collapse;font-family:var(--f-mono);font-size:0.85rem;" id="leaderboardTable">
-                        <thead>
-                            <tr style="border-bottom:1px solid var(--gold);color:var(--gold-ink);text-align:left;">
-                                <th style="padding:0.5rem;">Pos</th>
-                                <th style="padding:0.5rem;">Grupo</th>
-                                <th style="padding:0.5rem;">Hazañas</th>
-                                <th style="padding:0.5rem;">Tiempo</th>
-                            </tr>
-                        </thead>
-                        <tbody id="lbRows">
-                            <tr><td colspan="4" style="padding:0.75rem;color:var(--dim);text-align:center;">Cargando grupos de la base de datos...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
+                <p class="podio-nota">Los cuatro últimos grupos registrados, de mayor a menor puntuación.</p>
+                <ol class="podio" id="podio">
+                    <li class="puesto p1"><span class="pnombre">—</span><span class="ppuntos">Cargando…</span><img class="peana-img" src="/static/images/podio-1.webp" alt="Primer puesto"></li>
+                    <li class="puesto p2"><span class="pnombre">—</span><span class="ppuntos"></span><img class="peana-img" src="/static/images/podio-2.webp" alt="Segundo puesto"></li>
+                    <li class="puesto p3"><span class="pnombre">—</span><span class="ppuntos"></span><img class="peana-img" src="/static/images/podio-3.webp" alt="Tercer puesto"></li>
+                    <li class="puesto p4"><span class="pnombre">—</span><span class="ppuntos"></span><img class="peana-img" src="/static/images/podio-4.webp" alt="Cuarto puesto"></li>
+                </ol>
             </section>
 
             <section class="section" id="oraculo" aria-labelledby="or">

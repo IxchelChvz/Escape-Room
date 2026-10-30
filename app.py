@@ -378,6 +378,13 @@ def get_leaderboard():
     teams = Team.query.filter_by(is_restored=True).order_by(Team.elapsed_seconds.asc()).limit(20).all()
     return jsonify([t.to_dict() for t in teams])
 
+@app.route('/api/podio', methods=['GET'])
+def get_podio():
+    """Podio: los 4 ultimos grupos registrados, ordenados de mayor a menor puntuacion (los antiguos no cuentan)."""
+    ultimos = Team.query.order_by(Team.created_at.desc(), Team.id.desc()).limit(4).all()
+    ultimos.sort(key=lambda t: (-(t.score or 0), t.elapsed_seconds or 0))
+    return jsonify([{"name": t.name, "score": t.score or 0} for t in ultimos[:4]])
+
 @app.route('/api/reset', methods=['POST'])
 def reset_progress():
     """Reinicia el estado de los trabajos en la base de datos."""
