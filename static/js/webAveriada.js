@@ -80,30 +80,6 @@ try {
     setInterval(tick, 1000);
 })();
 
-// Comprobar sesion de grupo y gestionar boton principal
-(function() {
-    try {
-        var teamData = JSON.parse(localStorage.getItem("dk") || "{}");
-        var btnAcceso = document.getElementById("btnAcceso");
-        if (btnAcceso) {
-            if (teamData && teamData.team && teamData.team.trim()) {
-                btnAcceso.textContent = "Continuar al mapa (" + teamData.team + ")";
-                btnAcceso.href = "/mapa";
-            } else {
-                btnAcceso.textContent = "Identificar Grupo y Entrar";
-                btnAcceso.href = "/login";
-                btnAcceso.addEventListener("click", function(e) {
-                    var cur = JSON.parse(localStorage.getItem("dk") || "{}");
-                    if (!cur || !cur.team || !cur.team.trim()) {
-                        e.preventDefault();
-                        window.location.href = "/login?msg=requerido";
-                    }
-                });
-            }
-        }
-    } catch (err) {}
-})();
-
 // Pista 2 de 3 (solo visible en la consola del navegador)
 console.log("%cENIGMA DE LA HIDRA DE LERNA", "color:#e0a82e;font-weight:bold;font-size:14px");
 console.log("Por cada cabeza cortada nacen dos mas, salvo que cada munon se cauterice.");
