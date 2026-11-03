@@ -873,7 +873,10 @@ dialog .cin:focus-visible {
 }
 
 .line {
-  white-space: pre;
+  /* pre-wrap conserva la sangría del código pero deja partir las líneas largas */
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  min-width: 0;
 }
 
 .opt:hover:not(:disabled),
