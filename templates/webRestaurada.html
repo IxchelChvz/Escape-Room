@@ -1,49 +1,42 @@
-{% extends "base.html" %}
-
-{% block title %}Olimpo Digital · Restaurado{% endblock %}
-
-{% block css %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/webRestaurada.css') }}">
-{% endblock %}
-
-{% block body %}
-    <div class="flash" aria-hidden="true"></div>
-    <a class="skip" href="#contenido">Saltar al contenido</a>
-    <div class="wrap">
-        <header class="bar">
-            <div class="brand">
-                <a class="logo" href="#inicio">Olimpo<span>.digital</span></a>
-                <small>Portal oficial · build 1.0.0</small>
+{% extends "base.html" %} {% block title %}Olimpo Digital · Restaurado{% endblock %} {% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/webRestaurada.css') }}"> {% endblock %} {% block body %}
+<div class="flash" aria-hidden="true"></div>
+<a class="skip" href="#contenido">Saltar al contenido</a>
+<div class="wrap">
+    <header class="bar">
+        <div class="brand">
+            <a class="logo" href="#inicio">Olimpo<span>.digital</span></a>
+            <small>Portal oficial · build 1.0.0</small>
+        </div>
+        <dl class="stats">
+            <div class="stat"><dt>Sistema</dt>
+                <dd class="ok">RESTAURADO</dd>
             </div>
-            <dl class="stats">
-                <div class="stat"><dt>Sistema</dt>
-                    <dd class="ok">RESTAURADO</dd>
-                </div>
-                <div class="stat"><dt>Secciones</dt>
-                    <dd>12/12</dd>
-                </div>
-                <div class="stat"><dt>Tiempo Empleado</dt>
-                    <dd id="timeTakenStat" class="ok time-taken">{{ tiempo or '--:--:--' }}</dd>
-                </div>
-                <div class="stat"><dt>HTTP</dt>
-                    <dd class="ok">200</dd>
-                </div>
-            </dl>
-        </header>
-        <div class="meander" aria-hidden="true"></div>
+            <div class="stat"><dt>Secciones</dt>
+                <dd>12/12</dd>
+            </div>
+            <div class="stat"><dt>Tiempo Empleado</dt>
+                <dd id="timeTakenStat" class="ok time-taken">{{ tiempo or '--:--:--' }}</dd>
+            </div>
+            <div class="stat"><dt>HTTP</dt>
+                <dd class="ok">200</dd>
+            </div>
+        </dl>
+    </header>
+    <div class="meander" aria-hidden="true"></div>
 
-        <nav class="menu" aria-label="Menú principal">
-            <a href="#inicio">Inicio</a>
-            <a href="#secciones">Dioses</a>
-            <a href="#clasificacion">Clasificación</a>
-            <a href="#oraculo">Oráculo</a>
-            <a href="{{ url_for('main.mapa') }}">Volver al Mapa</a>
-            <a class="link-gold" href="{{ url_for('main.login') }}">Cambiar Grupo</a>
-        </nav>
+    <nav class="menu" aria-label="Menú principal">
+        <a href="#inicio">Inicio</a>
+        <a href="#secciones">Dioses</a>
+        <a href="#clasificacion">Clasificación</a>
+        <a href="#oraculo">Oráculo</a>
+        <a href="{{ url_for('main.mapa') }}">Volver al Mapa</a>
+        <a class="link-gold" href="{{ url_for('main.login') }}">Cambiar Grupo</a>
+    </nav>
 
-        <main id="contenido">
-            <section class="intro" id="inicio">
-                <svg class="temple" viewBox="0 0 360 170" role="img" aria-label="Templo griego iluminado">
+    <main id="contenido">
+        <section class="intro" id="inicio">
+            <svg class="temple" viewBox="0 0 360 170" role="img" aria-label="Templo griego iluminado">
                     <defs>
                         <linearGradient id="shaft" x1="0" x2="1"><stop offset="0" stop-color="#d9c48c"/><stop offset=".5" stop-color="#fbf3da"/><stop offset="1" stop-color="#d9c48c"/></linearGradient>
                     </defs>
@@ -61,20 +54,21 @@
                     <rect class="step" x="10" y="155" width="340" height="7"/>
                     <rect class="step" x="0" y="162" width="360" height="7"/>
                 </svg>
-                <h1 class="title">Olimpo <br class="br">Digital</h1>
-                <p class="lede">
-                    La maldición se ha roto. Los doce monstruos de Heracles han sido derrotados y el templo vuelve a brillar con todas sus secciones operativas.
-                </p>
-            </section>
+            <h1 class="title">Olimpo <br class="br">Digital</h1>
+            <p class="lede">
+                La maldición se ha roto. Los doce monstruos de Heracles han sido derrotados y el templo vuelve a brillar con todas sus secciones operativas.
+            </p>
+        </section>
 
-            <section class="notice" aria-labelledby="nt">
-                <h2 class="sec" id="nt">Web restaurada</h2>
-                <p id="who">
-                    Habéis superado las pruebas del mapa y reunido los <b>12 caracteres</b> de la contraseña. El Olimpo Digital vuelve a estar en línea.
-                </p>
-                <div class="actions"><a class="btn" href="#secciones">Explorar el templo</a><a class="btn ghost" href="{{ url_for('main.mapa') }}">Volver al mapa</a></div>
-            </section>
+        <section class="notice" aria-labelledby="nt">
+            <h2 class="sec" id="nt">Web restaurada</h2>
+            <p id="who">
+                Habéis superado las pruebas del mapa y reunido los <b>12 caracteres</b> de la contraseña. El Olimpo Digital vuelve a estar en línea.
+            </p>
+            <div class="actions"><a class="btn" href="#secciones">Explorar el templo</a><a class="btn ghost" href="{{ url_for('main.mapa') }}">Volver al mapa</a></div>
+        </section>
 
+<<<<<<< HEAD
             <section class="trials" id="secciones" aria-labelledby="sec">
                 <h2 class="sec" id="sec">Secciones del portal</h2>
                 <div class="tools">
@@ -84,46 +78,56 @@
                 <ul class="tl" id="grid"></ul>
                 <p id="none">No hay ninguna sección que coincida con la búsqueda.</p>
             </section>
+=======
+        <section class="trials" id="secciones" aria-labelledby="sec">
+            <h2 class="sec" id="sec">Secciones del portal</h2>
+            <div class="tools">
+                <label for="q" class="sr-only">Buscar sección</label>
+                <input id="q" type="search" placeholder="Buscar sección">
+            </div>
+            <ul class="tl" id="grid"></ul>
+            <p id="none">No hay ninguna sección que coincida con la búsqueda.</p>
+        </section>
+>>>>>>> 7219700fecff7177a942a3ee3df219137fa9ab69
 
-            <section class="section" id="clasificacion" aria-labelledby="lb-title">
-                <h2 class="sec" id="lb-title">Tabla de Honor de los Grupos</h2>
-                <p class="podio-nota">Los cuatro últimos grupos registrados, de mayor a menor puntuación.</p>
-                <ol class="podio" id="podio">
-                    {% for p in podio %}
-                    <li class="puesto p{{ loop.index }}"><span class="pnombre">{{ p.name if p else '—' }}</span><span class="ppuntos">{% if p %}{{ p.score }} pts{% endif %}</span><img class="peana-img" src="{{ url_for('static', filename='images/podio-%d.webp' % loop.index) }}" alt="{{ ['Primer','Segundo','Tercer','Cuarto'][loop.index0] }} puesto" width="480" height="{{ [360,280,210,150][loop.index0] }}" loading="lazy" decoding="async"></li>
-                    {% endfor %}
-                </ol>
-            </section>
+        <section class="section" id="clasificacion" aria-labelledby="lb-title">
+            <h2 class="sec" id="lb-title">Tabla de Honor de los Grupos</h2>
+            <p class="podio-nota">Los cuatro últimos grupos registrados, de mayor a menor puntuación.</p>
+            <ol class="podio" id="podio">
+                {% for p in podio %}
+                <li class="puesto p{{ loop.index }}"><span class="pnombre">{{ p.name if p else '—' }}</span><span class="ppuntos">{% if p %}{{ p.score }} pts{% endif %}</span><img class="peana-img" src="{{ url_for('static', filename='images/podio-%d.webp' % loop.index) }}" alt="{{ ['Primer','Segundo','Tercer','Cuarto'][loop.index0] }} puesto"
+                        width="480" height="{{ [360,280,210,150][loop.index0] }}" loading="lazy" decoding="async"></li>
+                {% endfor %}
+            </ol>
+        </section>
 
-            <section class="section" id="oraculo" aria-labelledby="or">
-                <h2 class="sec" id="or">Oráculo · cómo se restauró</h2>
-                <ol class="crew">
-                    <li><b>1. Inspeccionar</b>
-                        <p>El código fuente guardaba la nota del León.</p>
-                    </li>
-                    <li><b>2. Depurar</b>
-                        <p>La consola reveló el enigma de la Hidra.</p>
-                    </li>
-                    <li><b>3. Corregir</b>
-                        <p>Las herramientas de desarrollo sacaron a la luz el elemento que el CSS escondía.</p>
-                    </li>
-                    <li><b>4. Unir las piezas</b>
-                        <p>Cada carácter ocupó su posición y la contraseña purificó la web.</p>
-                    </li>
-                </ol>
-            </section>
+        <section class="section" id="oraculo" aria-labelledby="or">
+            <h2 class="sec" id="or">Oráculo · cómo se restauró</h2>
+            <ol class="crew">
+                <li><b>1. Inspeccionar</b>
+                    <p>El código fuente guardaba la nota del León.</p>
+                </li>
+                <li><b>2. Depurar</b>
+                    <p>La consola reveló el enigma de la Hidra.</p>
+                </li>
+                <li><b>3. Corregir</b>
+                    <p>Las herramientas de desarrollo sacaron a la luz el elemento que el CSS escondía.</p>
+                </li>
+                <li><b>4. Unir las piezas</b>
+                    <p>Cada carácter ocupó su posición y la contraseña purificó la web.</p>
+                </li>
+            </ol>
+        </section>
 
-        </main>
+    </main>
 
-        <div class="meander" aria-hidden="true"></div>
-        <p class="foot">
-            © {{ company }} · Los 12 Trabajos del Código
-            <small>Aprende programando, juega depurando.</small>
-        </p>
-    </div>
+    <div class="meander" aria-hidden="true"></div>
+    <p class="foot">
+        © {{ company }} · Los 12 Trabajos del Código
+        <small>Aprende programando, juega depurando.</small>
+    </p>
+</div>
 
-{% endblock %}
-
-{% block scripts %}
-    <script src="{{ url_for('static', filename='js/webRestaurada_2.js') }}"></script>
+{% endblock %} {% block scripts %}
+<script src="{{ url_for('static', filename='js/webRestaurada_2.js') }}"></script>
 {% endblock %}
