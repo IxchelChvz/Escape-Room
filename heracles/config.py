@@ -10,7 +10,8 @@ import os
 import secrets
 from datetime import timedelta
 
-BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+# Raiz del proyecto (un nivel por encima de heracles/): ahi viven heracles.db, .secret_key y .admin_password
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 def _persisted(filename, factory):

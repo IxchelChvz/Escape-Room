@@ -7,9 +7,9 @@ from functools import wraps
 from flask import (Blueprint, abort, current_app, flash, redirect,
                    render_template, request, session, url_for)
 
-from extensions import db
-from game_data import format_seconds
-from models import Submission, Team, Trial
+from ..extensions import db
+from ..game_data import format_seconds
+from ..models import Submission, Team, Trial
 
 admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
 

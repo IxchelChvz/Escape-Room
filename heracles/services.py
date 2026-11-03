@@ -1,6 +1,6 @@
 """Consultas reutilizadas por las vistas y por la API."""
 
-from models import Team, Trial
+from .models import Team, Trial
 
 
 def podio_teams():

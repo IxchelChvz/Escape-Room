@@ -6,10 +6,10 @@ from flask import Blueprint, current_app, jsonify, request
 from flask_login import current_user, login_required, login_user, logout_user
 from sqlalchemy.exc import IntegrityError
 
-from extensions import db
-from game_data import DEFAULT_TRIALS, format_seconds, normalize
-from models import Submission, Team, Trial
-from services import all_trials, podio_teams
+from ..extensions import db
+from ..game_data import DEFAULT_TRIALS, format_seconds, normalize
+from ..models import Submission, Team, Trial
+from ..services import all_trials, podio_teams
 
 api_bp = Blueprint('api', __name__, url_prefix='/api')
 

@@ -3,10 +3,10 @@
 from flask import Blueprint, render_template, redirect, url_for, request
 from flask_login import current_user, login_required, logout_user
 
-from extensions import db
-from game_data import format_seconds
-from models import Team
-from services import all_trials, podio_teams
+from ..extensions import db
+from ..game_data import format_seconds
+from ..models import Team
+from ..services import all_trials, podio_teams
 
 main_bp = Blueprint('main', __name__)
 

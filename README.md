@@ -90,16 +90,17 @@ El servidor Flask inicializa automaticamente la base de datos SQLite `heracles.d
 Escape-Room/
 ├── app.py                     # Punto de entrada Flask (crea la app y registra los blueprints)
 ├── wsgi.py                    # Entrada WSGI para servidores de produccion
-├── config.py                  # Configuracion (base de datos, claves, entorno)
-├── extensions.py              # Extensiones compartidas (SQLAlchemy, Flask-Login)
-├── models.py                  # Modelos ORM: Trial, Team, Submission, GameSession
-├── services.py                # Consultas reutilizadas por vistas y API
-├── game_data.py               # Los doce trabajos y sus soluciones
 ├── requirements.txt           # Dependencias Python
-├── blueprints/
-│   ├── main.py                # Vistas publicas (portada, login, mapa, restaurada)
-│   ├── api.py                 # API REST
-│   └── admin.py               # Panel de administracion
+├── heracles/                  # Paquete del backend
+│   ├── config.py              # Configuracion (base de datos, claves, entorno)
+│   ├── extensions.py          # Extensiones compartidas (SQLAlchemy, Flask-Login)
+│   ├── models.py              # Modelos ORM: Trial, Team, Submission, GameSession
+│   ├── services.py            # Consultas reutilizadas por vistas y API
+│   ├── game_data.py           # Los doce trabajos y sus soluciones
+│   └── blueprints/
+│       ├── main.py            # Vistas publicas (portada, login, mapa, restaurada)
+│       ├── api.py             # API REST
+│       └── admin.py           # Panel de administracion
 ├── templates/                 # Plantillas Jinja2 (index, login, mapa, webRestaurada, admin, 404...)
 └── static/
     ├── css/                   # Estilos de cada pantalla

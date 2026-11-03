@@ -3,14 +3,16 @@ HERACLES.EXE // Backend Flask + SQLAlchemy + Flask-Login + Jinja2
 Dódeka - Grupo 4 (DAW)
 
 Estructura:
-    app.py            -> crea la aplicacion (factory) y arranca el servidor
-    config.py         -> configuracion (variables de entorno)
-    extensions.py     -> db y login_manager
-    models.py         -> modelos ORM
-    game_data.py      -> los 12 trabajos y sus soluciones
-    services.py       -> consultas compartidas
-    blueprints/       -> main (vistas), api (JSON), admin (panel)
-    templates/        -> plantillas Jinja2 (base.html + paginas)
+    app.py                  -> crea la aplicacion (factory) y arranca el servidor
+    heracles/               -> paquete del backend
+        config.py           -> configuracion (variables de entorno)
+        extensions.py       -> db y login_manager
+        models.py           -> modelos ORM
+        game_data.py        -> los 12 trabajos y sus soluciones
+        services.py         -> consultas compartidas
+        blueprints/         -> main (vistas), api (JSON), admin (panel)
+    templates/              -> plantillas Jinja2 (base.html + paginas)
+    static/                 -> CSS, JS e imagenes
 """
 
 import os
@@ -18,10 +20,10 @@ import os
 from flask import Flask, jsonify, redirect, render_template, request, url_for
 from flask_login import current_user
 
-from config import Config
-from extensions import db, login_manager
-from game_data import DEFAULT_TRIALS, DEMO_TEAMS
-from models import Team, Trial
+from heracles.config import Config
+from heracles.extensions import db, login_manager
+from heracles.game_data import DEFAULT_TRIALS, DEMO_TEAMS
+from heracles.models import Team, Trial
 
 
 def create_app():
@@ -56,9 +58,9 @@ def create_app():
             return jsonify({"success": False, "message": "Ruta no encontrada."}), 404
         return render_template('404.html'), 404
 
-    from blueprints.main import main_bp
-    from blueprints.api import api_bp
-    from blueprints.admin import admin_bp
+    from heracles.blueprints.main import main_bp
+    from heracles.blueprints.api import api_bp
+    from heracles.blueprints.admin import admin_bp
     app.register_blueprint(main_bp)
     app.register_blueprint(api_bp)
     app.register_blueprint(admin_bp)

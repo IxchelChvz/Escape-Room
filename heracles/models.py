@@ -5,8 +5,8 @@ from datetime import datetime
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from extensions import db
-from game_data import format_seconds
+from .extensions import db
+from .game_data import format_seconds
 
 # Tabla intermedia N:M: que trabajos ha superado cada grupo.
 team_trials = db.Table(
