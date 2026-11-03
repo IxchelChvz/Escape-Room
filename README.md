@@ -65,25 +65,7 @@ La aplicacion consta de cuatro vistas conectadas entre si y sincronizadas con el
 
 ## 3. Puesta en Marcha del Backend
 
-### Opcion A: Servidor Node.js (Recomendado para pruebas rapidas)
-
-El proyecto incluye un servidor ligero sin librerias externas que sirve las plantillas y atiende a la API REST:
-
-```bash
-# Iniciar servidor
-node server.js
-
-# Acceso en el navegador:
-# http://localhost:3000/
-# http://localhost:3000/mapa
-# http://localhost:3000/restaurada
-```
-
----
-
-### Opcion B: Backend Python con Flask, SQLAlchemy y Jinja2
-
-Para evaluar el modulo de DWES (Desarrollo Web en Entorno Servidor):
+Backend Python con Flask, SQLAlchemy y Jinja2:
 
 ```bash
 # 1. Instalar dependencias
@@ -98,34 +80,31 @@ python app.py
 # http://localhost:5000/restaurada
 ```
 
-El servidor Flask inicializa automaticamente la base de datos relacional SQLite `heracles.db` con los modelos ORM `Trial`, `Team` y `Submission`.
+El servidor Flask inicializa automaticamente la base de datos SQLite `heracles.db` con los modelos ORM `Trial`, `Team`, `Submission` y `GameSession`. La base de datos es local y no se sube al repositorio.
 
 ---
 
 ## 4. Estructura de Carpetas
 
 ```text
-sharp-bose/
-├── app.py                     # Backend Flask con SQLAlchemy y Jinja2
-├── server.js                  # Servidor local Node.js con API REST
-├── requirements.txt           # Dependencias Python (Flask, Flask-SQLAlchemy)
-├── README.md                  # Documentacion del proyecto
-├── templates/                 # Plantillas HTML originales del proyecto
-│   ├── index.html             # Pantalla 1: Web Averiada / Landing
-│   ├── mapa.html              # Pantalla 2: Mapa de la Helade y retos
-│   └── webRestaurada.html     # Pantalla 3: Olimpo Restaurado
-├── static/
-│   ├── css/
-│   │   ├── webAveriada.css    # Estilos del Templo Averiado
-│   │   ├── styles.css         # Estilos del Mapa y modales
-│   │   └── webRestaurada.css  # Estilos de la Web Restaurada
-│   ├── js/
-│   │   ├── webAveriada.js     # Logica de hidratacion de la landing
-│   │   ├── main.js            # Logica de retos, niebla y API verify
-│   │   └── webRestaurada_2.js # Logica del buscador y contacto
-│   └── images/
-│       └── mapaGriego.jpeg    # Cartografia historica de Grecia
-└── Escape-Room-Fase1/         # Paquete completo exportable idéntico
+Escape-Room/
+├── app.py                     # Punto de entrada Flask (crea la app y registra los blueprints)
+├── wsgi.py                    # Entrada WSGI para servidores de produccion
+├── config.py                  # Configuracion (base de datos, claves, entorno)
+├── extensions.py              # Extensiones compartidas (SQLAlchemy, Flask-Login)
+├── models.py                  # Modelos ORM: Trial, Team, Submission, GameSession
+├── services.py                # Consultas reutilizadas por vistas y API
+├── game_data.py               # Los doce trabajos y sus soluciones
+├── requirements.txt           # Dependencias Python
+├── blueprints/
+│   ├── main.py                # Vistas publicas (portada, login, mapa, restaurada)
+│   ├── api.py                 # API REST
+│   └── admin.py               # Panel de administracion
+├── templates/                 # Plantillas Jinja2 (index, login, mapa, webRestaurada, admin, 404...)
+└── static/
+    ├── css/                   # Estilos de cada pantalla
+    ├── js/                    # Logica de cada pantalla (main.js: retos, niebla y API)
+    └── images/                # Mapa de la Helade e imagenes del podio
 ```
 
 ---
