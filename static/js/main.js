@@ -398,7 +398,7 @@ const T=[
 
 
 /* ---------- Configuracion de Candados: solo 3, 11 y 12 desbloqueadas ---------- */
-const UNLOCKED_TRIALS = new Set([2, 10, 11]); // Trabajos 3 (Cierva), 11 (Hespérides), 12 (Cerbero)
+const UNLOCKED_TRIALS = new Set([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]); // Los 12 trabajos desbloqueados
 const LOCK_SVG = '<svg class="lock-svg" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>';
 
 /* ---------- Mapa: pines y niebla ---------- */
