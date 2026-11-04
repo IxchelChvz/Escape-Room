@@ -407,34 +407,89 @@ function dibujarLeon(c,x,y,s,col,feliz){
   c.beginPath();c.moveTo(0,23);c.quadraticCurveTo(-7,32,-13,28);c.moveTo(0,23);c.quadraticCurveTo(7,32,13,28);c.stroke();
   c.restore();
 }
+// León de Nemea: imagen original sin fondo (static/images/leon-nemea.png). En la imagen la melena es azul:
+// se detectan esos píxeles y se repintan con el color elegido, conservando sus luces, sombras y
+// trazos de tinta. La cara, los ojos y el fondo no cambian.
+const MELENA_LUZ=103; // luminosidad media del azul de la melena original
+let LEON=null;
+(()=>{
+  const im=new Image();
+  im.onload=()=>{
+    const w=im.naturalWidth,h=im.naturalHeight,lz=document.createElement('canvas');lz.width=w;lz.height=h;
+    const k=lz.getContext('2d',{willReadFrequently:true});k.drawImage(im,0,0);
+    const base=k.getImageData(0,0,w,h),s=base.data,n=w*h;
+    const mascara=new Float32Array(n),luz=new Float32Array(n);
+    for(let i=0,j=0;i<n;i++,j+=4){
+      const r=s[j],g=s[j+1],b=s[j+2];
+      // azul: más azul que rojo y que verde (la cara y el pergamino son ocres; la tinta, casi negra)
+      mascara[i]=clamp((b-r)/18,0,1)*clamp((b-g+6)/12,0,1);
+      luz[i]=(.299*r+.587*g+.114*b)/MELENA_LUZ;
+    }
+    LEON={w,h,base,mascara,luz};
+  };
+  im.src='/static/images/leon-nemea.png';
+})();
+// Cada color de melena se pinta una vez y se reutiliza mientras no cambie
+const cacheLeon=new Map();
+function lienzoLeon(col){
+  const clave=col.map(Math.round).join(',');
+  if(cacheLeon.has(clave))return cacheLeon.get(clave);
+  const {w,h,base,mascara,luz}=LEON,lz=document.createElement('canvas');lz.width=w;lz.height=h;
+  const k=lz.getContext('2d'),out=k.createImageData(w,h),s=base.data,d=out.data;
+  for(let i=0,j=0;i<w*h;i++,j+=4){
+    const m=mascara[i],l=luz[i];
+    d[j]=m?lerp(s[j],Math.min(255,col[0]*l),m):s[j];
+    d[j+1]=m?lerp(s[j+1],Math.min(255,col[1]*l),m):s[j+1];
+    d[j+2]=m?lerp(s[j+2],Math.min(255,col[2]*l),m):s[j+2];
+    d[j+3]=s[j+3]; // se conserva la transparencia del fondo
+  }
+  k.putImageData(out,0,0);
+  if(cacheLeon.size>8)cacheLeon.delete(cacheLeon.keys().next().value);
+  cacheLeon.set(clave,lz);
+  return lz;
+}
+function dibujarLeonImg(c,x,y,alto,col){
+  if(!LEON){dibujarLeon(c,x,y,.95,col,false);return} // mientras carga la imagen, el león sencillo
+  const ancho=alto*LEON.w/LEON.h;
+  c.imageSmoothingQuality='high';
+  c.drawImage(lienzoLeon(col),x-ancho/2,y-alto/2,ancho,alto);
+}
 const leon={
-  how:['Pinta tu león del mismo dorado que el león de Nemea con los deslizadores Rojo, Verde y Azul.','Cuando creas que coincide, pulsa «Sellar». Son dos tonos distintos.'],
+  how:['Pinta la melena de tu león del mismo color que la del león de Nemea con los deslizadores Rojo, Verde y Azul.','Bajo cada deslizador veréis hacia dónde moverlo y cuánto le falta. Cuando los tres digan «Bien», pulsad «Sellar». Son dos tonos distintos.'],
   limite:80,castigo:20,penal:'Sellar mal: 6 s de espera',
   aviso:{x:235,y:426,w:390}, // dentro del panel de los leones: así no tapa el botón Sellar
   hud:'Arrastra los deslizadores (o usa ↑ ↓ para elegir y ← → para mover; Mayús va más rápido).',
   start(g){
-    const TONOS=[[226,170,58],[214,150,40],[238,186,74],[205,140,45],[230,160,30],[196,128,52]];
-    const TOL=10; // margen de acierto por canal
-    const variar=t=>t.map(v=>clamp(v+ri(-8,8),0,255));
+    // Cinco dorados bien distintos entre sí: oro claro, oro, ámbar, bronce y miel
+    const TONOS=[[240,205,100],[222,168,40],[205,118,32],[160,104,56],[238,150,95]];
+    const TOL=8; // margen de acierto por canal: hay que dejarlo casi exacto
+    const variar=t=>t.map(v=>clamp(v+ri(-5,5),0,255));
     const separados=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1],a[2]-b[2]);
     let ronda=1,objetivo=variar(pick(TONOS));
     // El segundo tono tiene que verse claramente distinto del primero (si no, se sellaría sin tocar nada)
     const segundo=()=>{
       let mejor=null;
-      for(let n=0;n<200;n++){const t=variar(pick(TONOS));if(!mejor||separados(t,objetivo)>separados(mejor,objetivo))mejor=t;if(separados(t,objetivo)>=45)return t}
+      for(let n=0;n<200;n++){const t=variar(pick(TONOS));if(!mejor||separados(t,objetivo)>separados(mejor,objetivo))mejor=t;if(separados(t,objetivo)>=70)return t}
       return mejor;
     };
     const cur=[ri(20,90),ri(60,140),ri(150,230)];
-    const sl=[0,1,2].map(k=>({k,x:470,y:170+k*76,w:270}));
+    const sl=[0,1,2].map(k=>({k,x:470,y:160+k*84,w:270}));
     const NOM=['ROJO','VERDE','AZUL'];
     const SELLO={x:520,y:410,w:170,h:46};
     let act=-1,sel=0,hoverS=false;
     const exacto=()=>cur.every((v,k)=>Math.abs(v-objetivo[k])<=TOL);
-    // La pista solo dice «Exacto» cuando el sello se va a aceptar, para no castigar a quien se fía de ella
+    // La pista solo dice «Ya está» cuando el sello se va a aceptar, para no castigar a quien se fía de ella
     const pista=()=>{
-      if(exacto())return ['¡Exacto! Sellad',P.oliva];
+      if(exacto())return ['¡Ya está! Sellad',P.oliva];
       const d=separados(cur,objetivo);
-      return d>120?['Muy lejos',P.alerta]:d>60?['Lejos',P.alerta]:d>30?['Cerca',P.oroT]:['Casi…',P.oroT];
+      return d>130?['Muy lejos',P.alerta]:d>80?['Lejos',P.alerta]:d>30?['Cerca',P.oroT]:['Casi…',P.oroT];
+    };
+    // Pista de cada deslizador: hacia dónde moverlo y cuánto le falta
+    const consejo=k=>{
+      const dif=objetivo[k]-cur[k],a=Math.abs(dif);
+      if(a<=TOL)return ['✓ Bien',P.oliva];
+      const lado=dif>0?'→':'←',mas=dif>0?'más':'menos';
+      return a>60?[`${lado} Mucho ${mas}`,P.alerta]:a>25?[`${lado} Bastante ${mas}`,P.oroT]:[`${lado} Un poco ${mas}`,P.oroT];
     };
     const fijar=(k,x)=>{cur[k]=Math.round(clamp((x-sl[k].x)/sl[k].w,0,1)*255)};
     const sobre=p=>sl.find(s=>Math.abs(p.y-s.y)<24&&p.x>s.x-16&&p.x<s.x+s.w+16);
@@ -464,8 +519,8 @@ const leon={
         caja(c,30,64,410,410,{fondo:'rgba(234,217,174,.45)'});
         txt(c,'LEÓN DE NEMEA',135,92,{size:15,font:F_TIT});txt(c,'TU LEÓN',335,92,{size:15,font:F_TIT});
         c.strokeStyle=P.linea;c.beginPath();c.moveTo(235.5,80);c.lineTo(235.5,320);c.stroke();
-        dibujarLeon(c,135,210,.95,objetivo,false);
-        dibujarLeon(c,335,210,.95,cur,false);
+        dibujarLeonImg(c,135,212,212,objetivo);
+        dibujarLeonImg(c,335,212,212,cur);
         const [pt,pc]=pista();
         txt(c,'¿Se parecen?',235,350,{size:15,font:F_MONO,weight:600,color:P.dim});
         txt(c,pt.toUpperCase(),235,380,{size:22,font:F_TIT,color:pc});
@@ -479,6 +534,8 @@ const leon={
           c.lineWidth=sel===s.k?2:1;c.strokeStyle=sel===s.k?P.tinta:P.linea;c.strokeRect(s.x+.5,s.y-8.5,s.w-1,17);
           txt(c,NOM[s.k],s.x,s.y-26,{size:13,font:F_MONO,align:'left',color:sel===s.k?P.tinta:P.dim});
           txt(c,String(cur[s.k]),s.x+s.w,s.y-26,{size:13,font:F_MONO,align:'right',color:P.dim});
+          const [ct,cc]=consejo(s.k);
+          txt(c,ct,s.x,s.y+30,{size:13,font:F_MONO,align:'left',color:cc});
           const kx=s.x+cur[s.k]/255*s.w;
           c.fillStyle=P.papel;c.fillRect(kx-7,s.y-16,14,32);c.lineWidth=2;c.strokeStyle=P.tinta;c.strokeRect(kx-7,s.y-16,14,32);
         });
@@ -733,7 +790,15 @@ const augias={
 };
 
 /* 6 · Aves del Estínfalo · Lag del Olimpo */
+// Ave de bronce (static/images/ave-bronce.png, fondo transparente). Si no carga, se dibuja la sencilla.
+const imgAve=new Image();imgAve.src='/static/images/ave-bronce.png';
 function dibujarAve(c,x,y,ala,s=1){
+  if(imgAve.complete&&imgAve.naturalWidth){
+    const w=86*s,h=w*imgAve.naturalHeight/imgAve.naturalWidth;
+    c.save();c.translate(x,y+(ala-.5)*5*s);c.rotate((ala-.5)*.08); // vaivén al batir las alas
+    c.drawImage(imgAve,-w/2,-h/2,w,h);c.restore();
+    return;
+  }
   c.save();c.translate(x,y);c.scale(s,s);
   c.fillStyle='#b98a4e';c.strokeStyle=P.tinta;c.lineWidth=1.6;
   c.beginPath();c.ellipse(0,0,20,9,0,0,TAU);c.fill();c.stroke();
@@ -1092,12 +1157,19 @@ const hesperides={
 /* 12 · Cerbero · Tres cabezas, tres sentidos */
 const LETRA_R=[[0,0],[0,1.5],[0,3],[0,4.5],[0,6],[1.5,0],[3,0],[4,1],[4,2],[3,3],[1.5,3],[2.6,4.4],[3.6,5.6]];
 const ESTRELLAS_FALSAS=[[-2,1],[6,0],[7,4],[-1,5],[2,7],[6,6],[1,-.4],[5,-.4]];
+// Ilustración de Cerbero sin fondo (static/images/cerbero.png, 752x600). Si no carga, se dibujan las cabezas sencillas.
+const imgCerbero=new Image();imgCerbero.src='/static/images/cerbero.png';
+const CERB_IMG={x:218,y:92,h:290};            // dónde va la ilustración en el canvas
+const CERB_CABEZAS=[[130,250],[376,270],[622,250]]; // centro de cada cabeza dentro de la imagen
 const cerbero={
   how:['Cerbero tiene tres cabezas y cada una guarda una letra: una se ve, otra se oye (subid el volumen) y otra se lee.','Pulsad las tres cabezas y escribid las tres letras en orden, de izquierda a derecha.'],
   penal:'Respuesta incorrecta: 20 s de espera',
   hud:'Pulsad las tres cabezas de Cerbero.',
   start(g){
+    const conImagen=imgCerbero.complete&&imgCerbero.naturalWidth>0;
+    const esc=CERB_IMG.h/(conImagen?imgCerbero.naturalHeight:600);
     const CAB=[{x:240,y:205,ico:'ojo',nom:'VISTA'},{x:400,y:178,ico:'oreja',nom:'OÍDO'},{x:560,y:205,ico:'pergamino',nom:'TEXTO'}];
+    if(conImagen)CAB.forEach((h,k)=>{h.x=CERB_IMG.x+CERB_CABEZAS[k][0]*esc;h.y=CERB_IMG.y+CERB_CABEZAS[k][1]*esc});
     const visto=[false,false,false];
     let act=-1,dormidos=false,ocupado=false,anim=0,sinVoz=false,hov=-1;
     const hablar=()=>{
@@ -1119,7 +1191,8 @@ const cerbero={
         });
       });
     };
-    const bajo=p=>CAB.findIndex(h=>Math.hypot(p.x-h.x,p.y-h.y)<56);
+    // la cabeza más cercana al clic (en la ilustración las cabezas se tocan)
+    const bajo=p=>{let k=-1,m=conImagen?66:56;CAB.forEach((h,i)=>{const d=Math.hypot(p.x-h.x,p.y-h.y);if(d<m){m=d;k=i}});return k};
     return {
       down(p){
         if(dormidos)return;
@@ -1134,6 +1207,20 @@ const cerbero={
       cerrar(){try{window.speechSynthesis&&speechSynthesis.cancel()}catch(e){}},
       draw(c){
         papel(c);
+        if(conImagen){
+          const w=imgCerbero.naturalWidth*esc;
+          c.imageSmoothingQuality='high';
+          c.drawImage(imgCerbero,CERB_IMG.x,CERB_IMG.y,w,CERB_IMG.h);
+          CAB.forEach((h,k)=>{
+            if(hov===k&&!dormidos&&act!==k){c.lineWidth=2;c.strokeStyle='rgba(243,232,200,.9)';c.beginPath();c.ellipse(h.x,h.y,60,56,0,0,TAU);c.stroke()}
+            if(act===k){c.lineWidth=3;c.strokeStyle=P.oro;c.setLineDash([6,4]);c.beginPath();c.ellipse(h.x,h.y,60,56,0,0,TAU);c.stroke();c.setLineDash([])}
+            // rótulo de cada cabeza, encima de la ilustración
+            caja(c,h.x-46,54,92,32,{fondo:P.papel,borde:visto[k]?P.oro:P.linea,grosor:visto[k]?2:1});
+            icono(c,h.ico,h.x-26,70,18,visto[k]?P.oroT:P.tinta,1.8);
+            txt(c,h.nom,h.x+10,71,{size:12,font:F_TIT,color:visto[k]?P.oroT:P.tinta});
+            if(dormidos)txt(c,'z z z',h.x+36,h.y-50-(g.t*20%20),{size:18,color:P.papel});
+          });
+        }else{
         c.fillStyle=P.papel2;c.strokeStyle=P.tinta;c.lineWidth=2;
         c.beginPath();c.ellipse(400,345,220,70,0,0,TAU);c.fill();c.stroke();
         CAB.forEach((h,k)=>{
@@ -1154,6 +1241,7 @@ const cerbero={
           txt(c,h.nom,h.x+12,h.y-90,{size:13,font:F_TIT,color:visto[k]?P.oroT:P.tinta});
           if(dormidos)txt(c,'z z z',h.x+42,h.y-56-(g.t*20%20),{size:16,color:P.dim});
         });
+        }
         caja(c,150,384,500,92,{fondo:P.papel,borde:P.oro,grosor:2});
         if(act===-1)txt(c,'Pulsad una cabeza para que os dé su letra',400,430,{size:17,weight:500,color:P.dim});
         if(act===0){
