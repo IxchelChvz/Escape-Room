@@ -482,6 +482,19 @@ fetch('/api/team/current').then(r=>r.json()).then(d=>{
   (d.team.solved_trial_ids||[]).forEach(n=>{if(Number.isInteger(n)&&n>=1&&n<=12)done.add(n-1)});
   save();update();drawFog();
 }).catch(()=>{});
+// Cada 15 s se recogen las pruebas que la administración haya dado por superadas
+// (si un grupo se atasca), sin tener que recargar el mapa.
+setInterval(()=>{
+  if(document.hidden)return;
+  fetch('/api/team/current').then(r=>r.json()).then(d=>{
+    if(!d||!d.authenticated)return;
+    const nuevas=(d.team.solved_trial_ids||[]).filter(n=>Number.isInteger(n)&&n>=1&&n<=12&&!done.has(n-1));
+    if(!nuevas.length)return;
+    nuevas.forEach(n=>{done.add(n-1);animFog(n-1)});
+    save();update();
+    msg(`La administración os ha concedido: ${nuevas.map(n=>T[n-1].name).join(', ')}. Ya podéis seguir con otras pruebas.`,'ok');
+  }).catch(()=>{});
+},15000);
 
 /* ---------- Texto corrupto ---------- */
 function scramble(){

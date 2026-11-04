@@ -66,8 +66,10 @@ def admin_logout():
 @admin_required
 def dashboard():
     teams = Team.query.order_by(Team.trials_completed.desc(), Team.elapsed_seconds.asc()).all()
+    trials = Trial.query.order_by(Trial.num.asc()).all()
     filas = []
     for t in teams:
+        superadas = {tr.id for tr in t.solved_trials}
         filas.append({
             "team": t,
             "solved": len(t.solved_trials),
@@ -75,8 +77,9 @@ def dashboard():
             "correct": t.submissions.filter_by(is_correct=True).count(),
             "sessions": t.sessions.count(),
             "time": format_seconds(t.elapsed_seconds) if t.is_restored else '—',
+            # pruebas que aun no ha superado: las que se pueden desbloquear si el grupo se atasca
+            "pendientes": [tr for tr in trials if tr.id not in superadas],
         })
-    trials = Trial.query.order_by(Trial.num.asc()).all()
     por_trabajo = [{
         "trial": tr,
         "solved_by": tr.solved_by_teams.count(),
@@ -105,6 +108,33 @@ def reset_team(team_id):
     team.reset_progress()
     db.session.commit()
     flash(f'Progreso de «{team.name}» reiniciado.', 'ok')
+    return redirect(url_for('admin.dashboard'))
+
+
+@admin_bp.route('/team/<int:team_id>/pass', methods=['POST'])
+@admin_required
+def pass_trial(team_id):
+    """Da por superada una prueba a un grupo que se ha quedado atascado, para que pueda seguir."""
+    _check_csrf()
+    team = db.session.get(Team, team_id) or abort(404)
+    try:
+        num = int(request.form.get('trial', ''))
+    except ValueError:
+        num = 0
+    trial = Trial.query.filter_by(num=num).first()
+    if trial is None:
+        flash('Elige una prueba válida.', 'err')
+        return redirect(url_for('admin.dashboard'))
+    if trial in team.solved_trials:
+        flash(f'«{team.name}» ya tenía superada la prueba {trial.num}.', 'ok')
+        return redirect(url_for('admin.dashboard'))
+    team.solved_trials.append(trial)
+    team.trials_completed = len(team.solved_trials)
+    # Queda registrado en el historial de intentos para saber que lo concedio la administracion
+    db.session.add(Submission(team_id=team.id, team_name=team.name, trial_id=trial.id,
+                              solution_sent='(superada por la administración)', is_correct=True))
+    db.session.commit()
+    flash(f'Prueba {trial.num} ({trial.name}) marcada como superada para «{team.name}».', 'ok')
     return redirect(url_for('admin.dashboard'))
 
 

@@ -62,6 +62,17 @@
                             <td>{{ f.team.score }}</td>
                             <td>{% if f.team.is_restored %}<span class="ok">Restaurado</span>{% else %}En juego{% endif %}</td>
                             <td class="adm-actions">
+                                {% if f.pendientes and not f.team.is_restored %}
+                                <form class="adm-pass" method="post" action="{{ url_for('admin.pass_trial', team_id=f.team.id) }}"
+                                      data-confirm="¿Dar por superada esta prueba a «{{ f.team.name }}»?">
+                                    <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+                                    <label class="sr-only" for="pass-{{ f.team.id }}">Prueba que se da por superada</label>
+                                    <select class="adm-select" id="pass-{{ f.team.id }}" name="trial" required>
+                                        {% for tr in f.pendientes %}<option value="{{ tr.num }}">{{ tr.num }}. {{ tr.name }}</option>{% endfor %}
+                                    </select>
+                                    <button class="adm-btn small" type="submit">Dar por superada</button>
+                                </form>
+                                {% endif %}
                                 <form method="post" action="{{ url_for('admin.reset_team', team_id=f.team.id) }}">
                                     <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
                                     <button class="adm-btn small" type="submit">Reiniciar</button>

@@ -29,3 +29,6 @@
   .adm-table{font-size:.78rem}
   .adm-box{margin:1rem 0;padding:1.25rem}
 }
+.adm-pass{display:flex;gap:.3rem;align-items:center}
+.adm-select{max-width:13rem;padding:.2rem .3rem;font:500 .78rem var(--f-mono);color:#eadbb4;background:#1d150d;border:1px solid #4d3b24;border-radius:2px}
+.adm-select:focus-visible{outline:2px solid #fff;outline-offset:2px}
