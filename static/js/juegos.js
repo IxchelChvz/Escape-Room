@@ -546,6 +546,72 @@ const leon={
 };
 
 /* 2 · Hidra de Lerna · Escritura rápida */
+// Hidra dibujada en el canvas, al estilo grabado: cabezas de dragón con cuernos y fauces abiertas,
+// cuellos de escamas con el vientre ocre y púas en el lomo, y el cuerpo enroscado en el pantano.
+const HID={piel:'#4f6274',sombra:'#36444f',vientre:'#cdb183',boca:'#4a1712',lengua:'#b0473a',ojo:'#e2b03c',diente:'#f3ead2'};
+const HID_ROJA={...HID,piel:'#8c3a2e',sombra:'#6a2a22'}; // al equivocarse, la hidra enrojece un instante
+const bezier=(p0,p1,p2,p3,t)=>{const u=1-t;return {x:u*u*u*p0.x+3*u*u*t*p1.x+3*u*t*t*p2.x+t*t*t*p3.x,y:u*u*u*p0.y+3*u*u*t*p1.y+3*u*t*t*p2.y+t*t*t*p3.y}};
+// tramo grueso de escamas (cuellos y cuerpo): tinta, piel, escamas y franja del vientre
+function trazoHidra(c,camino,ancho,col,vientre){
+  c.lineCap='round';c.lineJoin='round';
+  camino();c.strokeStyle=P.tinta;c.lineWidth=ancho+6;c.stroke();
+  camino();c.strokeStyle=col.piel;c.lineWidth=ancho;c.stroke();
+  camino();c.strokeStyle='rgba(20,28,36,.35)';c.lineWidth=ancho*.62;c.setLineDash([3,5]);c.stroke();c.setLineDash([]);
+  if(vientre){
+    c.save();c.translate(vientre.x,vientre.y);
+    camino();c.strokeStyle=col===HID?HID.vientre:'#d9a48a';c.lineWidth=ancho*.3;c.stroke();
+    camino();c.strokeStyle='rgba(42,28,13,.5)';c.lineWidth=ancho*.3;c.setLineDash([1.4,4.5]);c.stroke();c.setLineDash([]);
+    c.restore();
+  }
+}
+function cuelloHidra(c,a,e,dir,col){
+  const p0=a,p1={x:a.x+dir*8,y:a.y-95},p2={x:e.x-dir*75,y:e.y+55},p3=e;
+  trazoHidra(c,()=>{c.beginPath();c.moveTo(p0.x,p0.y);c.bezierCurveTo(p1.x,p1.y,p2.x,p2.y,p3.x,p3.y)},22,col,{x:dir*6,y:3});
+  // púas del lomo, en el lado contrario al vientre
+  for(let t=.18;t<.92;t+=.11){
+    const p=bezier(p0,p1,p2,p3,t),q=bezier(p0,p1,p2,p3,t+.02);
+    let tx=q.x-p.x,ty=q.y-p.y;const l=Math.hypot(tx,ty)||1;tx/=l;ty/=l;
+    let nx=-ty,ny=tx;if(nx*dir>0){nx=-nx;ny=-ny}
+    const bx=p.x+nx*13,by=p.y+ny*13;
+    c.beginPath();c.moveTo(bx-tx*6,by-ty*6);c.lineTo(bx+nx*11+tx*4,by+ny*11+ty*4);c.lineTo(bx+tx*6,by+ty*6);c.closePath();
+    c.fillStyle=HID.vientre;c.fill();c.lineWidth=1.6;c.strokeStyle=P.tinta;c.stroke();
+  }
+}
+// cabeza de dragón mirando a la derecha; el origen es donde se une el cuello
+function cabezaHidra(c,x,y,dir,s,col,abre){
+  c.save();c.translate(x,y);c.scale(dir*s,s);c.rotate(-.1);
+  c.lineJoin='round';c.lineCap='round';c.strokeStyle=P.tinta;
+  const forma=(d,fill,lw=2.2)=>{const p=new Path2D(d);c.fillStyle=fill;c.fill(p);c.lineWidth=lw;c.strokeStyle=P.tinta;c.stroke(p)};
+  // cuernos y crestas (detrás de la cabeza)
+  forma('M18 -26 Q-4 -44 -24 -64 Q2 -48 30 -32 Z',HID.vientre);
+  forma('M30 -32 Q22 -54 8 -74 Q32 -56 42 -34 Z',HID.vientre);
+  forma('M-2 -6 L-26 -6 L-8 -14 L-30 -22 L-6 -24 L-22 -36 L8 -26 Z',HID.vientre,1.8);
+  // fauces: interior, lengua bífida y mandíbula inferior (se abre y se cierra)
+  c.save();c.translate(28,8);c.rotate(abre*.22);c.translate(-28,-8);
+  forma('M28 6 L94 -4 L90 26 L46 24 Z',HID.boca,1.6);
+  c.strokeStyle=HID.lengua;c.lineWidth=4.5;c.beginPath();c.moveTo(46,12);c.quadraticCurveTo(84,10,106,22);c.stroke();
+  c.lineWidth=3;c.beginPath();c.moveTo(106,22);c.lineTo(116,15);c.moveTo(106,22);c.lineTo(113,31);c.stroke();
+  forma('M4 14 Q28 16 50 20 L88 22 Q94 28 86 32 L44 34 Q16 34 0 22 Z',HID.vientre);
+  c.fillStyle=HID.diente;c.lineWidth=1.2;c.strokeStyle=P.tinta;
+  for(let k=0;k<6;k++){const tx=52+k*6.5;c.beginPath();c.moveTo(tx-2.6,22);c.lineTo(tx,14-(k===4?5:0));c.lineTo(tx+2.6,22);c.closePath();c.fill();c.stroke()}
+  c.restore();
+  // cabeza superior
+  forma('M-6 -14 C10 -36 46 -42 70 -30 L96 -20 Q104 -15 99 -6 L93 -3 L60 2 Q40 4 28 10 L2 16 Z',col.piel,2.4);
+  forma('M-4 4 Q14 -2 30 10 L4 16 Z',col.sombra,1.4);
+  c.fillStyle=HID.diente;c.lineWidth=1.2;c.strokeStyle=P.tinta;
+  for(let k=0;k<6;k++){const tx=62+k*5.6,ty=1.4-k*.8;c.beginPath();c.moveTo(tx-2.4,ty);c.lineTo(tx,ty+8+(k===1||k===5?6:0));c.lineTo(tx+2.4,ty-.6);c.closePath();c.fill();c.stroke()}
+  // escamas de la frente
+  c.lineWidth=1;c.strokeStyle='rgba(20,28,36,.7)';
+  for(let k=0;k<5;k++){c.beginPath();c.arc(14+k*11,-24+Math.abs(k-2)*1.5,5,Math.PI,0);c.stroke()}
+  // ojo con pupila rasgada, ceño y fosa nasal
+  c.strokeStyle=P.tinta;
+  c.save();c.translate(58,-20);c.rotate(-.25);
+  c.beginPath();c.ellipse(0,0,8.5,5,0,0,TAU);c.fillStyle=HID.ojo;c.fill();c.lineWidth=1.6;c.stroke();
+  c.beginPath();c.ellipse(1,0,1.6,4.6,0,0,TAU);c.fillStyle=P.tinta;c.fill();c.restore();
+  c.lineWidth=3.6;c.beginPath();c.moveTo(44,-32);c.quadraticCurveTo(58,-34,72,-24);c.stroke();
+  c.lineWidth=1.8;c.beginPath();c.moveTo(90,-15);c.quadraticCurveTo(94,-18,97,-14);c.stroke();
+  c.restore();
+}
 const hidra={
   how:['Escribe con el teclado las dos inscripciones de la hidra, letra a letra.','Cada palabra completa corta una cabeza. Cada error hace brotar otra y os aturde un momento. Con nueve cabezas, la hidra gana.'],
   limite:60,castigo:20,penal:'Error: +1 cabeza y 2 s',
@@ -553,14 +619,19 @@ const hidra={
   start(g){
     const FRASES=shuffle(['EL FUEGO CIERRA CADA HERIDA','NUEVE CABEZAS Y UN SOLO HEROE','QUIEN TECLEA RAPIDO VENCE','LA HIDRA DUERME EN EL PANTANO','CORTA Y QUEMA SIN DUDAR','EL PANTANO DE LERNA NO PERDONA']);
     let ronda=0,frase=FRASES[0],idx=0,cabezas=4,error=0;
-    const cuello=k=>{const n=cabezas,a=lerp(-2.6,-.54,n===1?.5:k/(n-1));return {x:400+Math.cos(a)*200,y:440+Math.sin(a)*170}};
+    // dónde se une el cuello a la cabeza k: un arco por encima del cuerpo
+    // (con muchas cabezas, una de cada dos va en una fila interior más baja)
+    const cuello=k=>{
+      const n=cabezas,a=lerp(-2.72,-.42,n===1?.5:k/(n-1)),fila=n>5&&k%2?1:0;
+      return {x:400+Math.cos(a)*262*(fila?.78:1),y:322+Math.sin(a)*112*(fila?.55:1)+(fila?30:0),dir:Math.cos(a)>=0?1:-1};
+    };
     return {
       key(e){
         if(e.ctrlKey||e.metaKey||e.altKey||e.key.length!==1)return false;
         const ch=e.key.normalize('NFD').replace(/[̀-ͯ]/g,'').toUpperCase();
         if(ch===frase[idx]){
           idx++;g.sfx.tick();
-          if(idx===frase.length||frase[idx]===' '){if(cabezas>1){const p=cuello(cabezas-1);cabezas--;g.chispas(p.x,p.y,16,[P.oliva,P.oro,P.papel3]);g.sfx.ok()}}
+          if(idx===frase.length||frase[idx]===' '){if(cabezas>1){const p=cuello(cabezas-1);cabezas--;g.chispas(p.x+p.dir*55,p.y-20,22,[P.alerta,P.oro,HID.piel]);g.sfx.ok()}}
           if(idx===frase.length){
             if(ronda===1){g.ganar();return true}
             ronda=1;frase=FRASES[1];idx=0;g.aviso('Primera inscripción completa. ¡Otra!');
@@ -575,20 +646,21 @@ const hidra={
       update(dt){error=Math.max(0,error-dt);g.marcador(`INSCRIPCIÓN ${ronda+1}/2   ·   CABEZAS ${cabezas}/9`)},
       draw(c){
         papel(c);
-        // pantano
-        c.strokeStyle='rgba(93,107,47,.5)';c.lineWidth=1.5;
-        for(let k=0;k<6;k++){c.beginPath();for(let x=20;x<=780;x+=20){const y=420+k*12+Math.sin(x/30+g.t+k)*3;x===20?c.moveTo(x,y):c.lineTo(x,y)}c.stroke()}
-        for(let k=0;k<cabezas;k++){
-          const p=cuello(k),bal=Math.sin(g.t*2+k)*7;
-          c.strokeStyle=P.tinta;c.lineWidth=16;c.lineCap='round';
-          c.beginPath();c.moveTo(400,455);c.quadraticCurveTo(lerp(400,p.x,.4)+bal,lerp(455,p.y,.8),p.x+bal,p.y);c.stroke();
-          c.strokeStyle='#9aa86a';c.lineWidth=12;c.stroke();
-          c.fillStyle=error>0?'#c98a72':'#9aa86a';c.lineWidth=2;c.strokeStyle=P.tinta;
-          c.beginPath();c.ellipse(p.x+bal,p.y-6,24,17,0,0,TAU);c.fill();c.stroke();
-          c.fillStyle=P.tinta;[-1,1].forEach(d=>{c.beginPath();c.arc(p.x+bal+d*9,p.y-10,2.6,0,TAU);c.fill()});
-          c.beginPath();c.moveTo(p.x+bal-5,p.y+8);c.lineTo(p.x+bal,p.y+17);c.lineTo(p.x+bal+5,p.y+8);c.strokeStyle=P.alerta;c.lineWidth=2;c.stroke();
-        }
-        c.fillStyle='#9aa86a';c.strokeStyle=P.tinta;c.lineWidth=2;c.beginPath();c.ellipse(400,465,110,40,0,0,TAU);c.fill();c.stroke();
+        const col=error>0?HID_ROJA:HID,esc=cabezas>5?.86:1;
+        const pos=Array.from({length:cabezas},(_,k)=>{const p=cuello(k),b=Math.sin(g.t*1.8+k*1.3);return {...p,x:p.x+b*2,y:p.y+b*4,k,abre:.5+.5*Math.sin(g.t*2.4+k)}});
+        // cuellos: salen del lomo del cuerpo
+        pos.forEach((p,i)=>cuelloHidra(c,{x:lerp(338,462,cabezas===1?.5:i/(cabezas-1)),y:420},{x:p.x,y:p.y},p.dir,col));
+        // cuerpo enroscado (tapa el arranque de los cuellos)
+        const anillo=(rx,ry,y,a0,a1)=>()=>{c.beginPath();c.ellipse(400,y,rx,ry,0,a0,a1)};
+        trazoHidra(c,anillo(150,26,452,Math.PI*.98,Math.PI*2.02),30,col,{x:0,y:6});
+        trazoHidra(c,anillo(108,22,428,Math.PI*1.02,Math.PI*1.98),28,col,{x:0,y:5});
+        trazoHidra(c,anillo(150,26,452,Math.PI*.02,Math.PI*.98),30,col,{x:0,y:6});
+        // pantano por delante del cuerpo
+        c.fillStyle='rgba(243,232,200,.78)';c.fillRect(14,462,W-28,26);
+        c.strokeStyle='rgba(93,107,47,.55)';c.lineWidth=1.5;
+        for(let k=0;k<4;k++){c.beginPath();for(let x=20;x<=780;x+=20){const y=448+k*10+Math.sin(x/30+g.t+k)*3;x===20?c.moveTo(x,y):c.lineTo(x,y)}c.stroke()}
+        // cabezas: de los lados hacia el centro, para que las centrales queden delante
+        [...pos].sort((a,b)=>Math.abs(b.x-400)-Math.abs(a.x-400)).forEach(p=>cabezaHidra(c,p.x,p.y,p.dir,esc,col,p.abre));
         // inscripción
         c.font=`700 24px ${F_MONO}`;
         const cw=c.measureText('M').width+4,x0=W/2-frase.length*cw/2;
