@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}El jardín de las Hespérides{% endblock %}
+{% block css %}
+<style>
+    :root { --bg: #120c24; --oro: #f2c14e; --marmol: #f6eedb; --dim: #c9b994; }
+    body { margin: 0; min-height: 100dvh; display: grid; place-items: center; padding: 24px 16px;
+           background: radial-gradient(circle at 50% 20%, #3a2a5a, var(--bg) 70%); color: var(--marmol);
+           font-family: "Alegreya Sans", "Segoe UI", system-ui, sans-serif; text-align: center; box-sizing: border-box; }
+    .tablilla { max-width: 420px; width: 100%; padding: 28px 22px; border: 2px solid var(--oro); border-radius: 18px;
+                background: rgba(15, 10, 25, .7); }
+    h1 { margin: 0 0 6px; font: 900 1.6rem/1.2 Cinzel, Georgia, serif; color: var(--oro); }
+    .sub { margin: 0 0 22px; color: var(--dim); }
+    .cifrado { margin: 0 0 22px; font: 700 2.6rem/1 "JetBrains Mono", Consolas, monospace; letter-spacing: .35em;
+               color: #fff; text-indent: .35em; }
+    .acertijo { margin: 0 0 18px; font-size: 1.15rem; }
+    .acertijo b { color: var(--oro); }
+    .nota { margin: 0; font-size: .95rem; color: var(--dim); }
+</style>
+{% endblock %}
+{% block body %}
+<main class="tablilla">
+    <h1>El jardín de las Hespérides</h1>
+    <p class="sub">El dragón Ladón ha grabado su secreto en la corteza del árbol:</p>
+    <p class="cifrado" aria-label="Mensaje cifrado: {{ cifrado|join(' ') }}">{{ cifrado }}</p>
+    <p class="acertijo">Para leerlo, haz retroceder cada letra en el alfabeto <b>tantos pasos como cabezas tiene Cerbero</b>.</p>
+    <p class="nota">Escribid la palabra descifrada en la prueba de las Hespérides del mapa.</p>
+</main>
+{% endblock %}

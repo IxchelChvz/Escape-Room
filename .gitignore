@@ -11,6 +11,7 @@ instance/
 .env
 .secret_key
 .admin_password
+.qr_token
 
 # Otros
 scratch/

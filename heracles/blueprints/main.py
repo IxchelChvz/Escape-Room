@@ -1,10 +1,12 @@
 """Vistas HTML renderizadas con Jinja2."""
 
-from flask import Blueprint, render_template, redirect, url_for, request
+import hmac
+
+from flask import Blueprint, abort, current_app, render_template, redirect, url_for, request
 from flask_login import current_user, login_required, logout_user
 
 from ..extensions import db
-from ..game_data import format_seconds
+from ..game_data import HESPERIDES_CIFRADO, format_seconds
 from ..models import Team
 from ..services import all_trials, podio_teams
 
@@ -38,6 +40,14 @@ def mapa():
         current_user.start_session()
         db.session.commit()
     return render_template('mapa.html', trials=all_trials())
+
+
+@main_bp.route('/oraculo/<token>')
+def oraculo(token):
+    """Pagina que abre el QR de las Hesperides (prueba fisica). Sin sesion: se abre en el movil."""
+    if not hmac.compare_digest(token, current_app.config['QR_TOKEN']):
+        abort(404)
+    return render_template('oraculo.html', cifrado=HESPERIDES_CIFRADO)
 
 
 @main_bp.route('/restaurada')

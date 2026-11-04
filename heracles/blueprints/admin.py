@@ -7,6 +7,8 @@ from functools import wraps
 from flask import (Blueprint, abort, current_app, flash, redirect,
                    render_template, request, session, url_for)
 
+import segno
+
 from ..extensions import db
 from ..game_data import format_seconds
 from ..models import Submission, Team, Trial
@@ -82,6 +84,17 @@ def dashboard():
     } for tr in trials]
     ultimos = Submission.query.order_by(Submission.submitted_at.desc()).limit(20).all()
     return render_template('admin.html', filas=filas, por_trabajo=por_trabajo, ultimos=ultimos)
+
+
+@admin_bp.route('/qr')
+@admin_required
+def qr_hesperides():
+    """QR imprimible de las Hesperides. Usa la direccion con la que se abre el panel,
+    asi que hay que entrar por la IP de la red (no por localhost) para que funcione en los moviles."""
+    url = url_for('main.oraculo', token=current_app.config['QR_TOKEN'], _external=True)
+    svg = segno.make(url, error='m').svg_inline(scale=10, dark='#1a1204', light='#ffffff')
+    local = request.host.split(':')[0] in ('localhost', '127.0.0.1', '[::1]')
+    return render_template('admin_qr.html', url=url, svg=svg, local=local)
 
 
 @admin_bp.route('/team/<int:team_id>/reset', methods=['POST'])

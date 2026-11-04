@@ -20,6 +20,7 @@
     <nav class="menu" aria-label="Menú de administración">
         <a href="{{ url_for('main.home') }}">Inicio</a>
         <a href="{{ url_for('main.mapa') }}">Mapa</a>
+        <a href="{{ url_for('admin.qr_hesperides') }}">QR de las Hespérides</a>
         <form class="adm-inline" method="post" action="{{ url_for('admin.admin_logout') }}">
             <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
             <button class="adm-link" type="submit">Cerrar sesión de administración</button>

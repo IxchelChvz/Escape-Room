@@ -1562,3 +1562,93 @@ h2.sec::after {
 .reliquia {
     display: none;
 }
+
+/* ==========================================================================
+   CANVAS EMERGENTE DE LOS MINIJUEGOS (juegos.js)
+   Usa el mismo pergamino que el diálogo de las pruebas (variables de dialog).
+   ========================================================================== */
+dialog.juego {
+  /* el canvas (16:10) tiene que caber entero con la cabecera y la barra inferior */
+  max-width: min(980px, calc(100vw - 24px), calc((100dvh - 210px) * 1.6));
+  overflow: hidden;
+}
+
+dialog.juego .dhead {
+  padding: 14px 18px 10px;
+}
+
+.jstage {
+  padding: 0 18px;
+}
+
+#jCanvas {
+  display: block;
+  width: 100%;
+  aspect-ratio: 8 / 5;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  touch-action: none;
+  user-select: none;
+}
+
+#jCanvas:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.jbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 16px;
+  padding: 10px 18px 16px;
+}
+
+.jhud {
+  flex: 1 1 260px;
+  margin: 0;
+  min-height: 1.5em;
+  font: 500 .92rem var(--f-mono);
+  color: var(--dim);
+}
+
+.jform {
+  display: flex;
+  gap: 8px;
+  flex: 1 1 320px;
+}
+
+.jform[hidden] {
+  display: none;
+}
+
+.jform input {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 12px;
+  font: 600 1.05rem var(--f-mono);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 0;
+}
+
+.jform input:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.jform input:disabled {
+  opacity: .5;
+}
+
+.juego .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

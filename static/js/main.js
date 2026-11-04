@@ -15,10 +15,6 @@ try {
 
 const PASS='HERACLES.EXE';
 
-// Pista de la Hidra de Lerna: solo se ve en la consola del navegador (F12 > Consola)
-console.log('%cENIGMA DE LA HIDRA DE LERNA','color:#e0a82e;font-weight:bold;font-size:14px');
-console.log('Por cada cabeza cortada nacen dos más, salvo que cada muñón se cauterice.');
-console.log('El bucle empieza en 0 y termina antes de 9. Dentro: primero cortarCabeza(i), después quemarMuñon(i).');
 const root=document.documentElement;
 const $=s=>document.querySelector(s);
 const rm=matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -33,8 +29,6 @@ function h(tag,attrs,...kids){
   for(const x of kids.flat())e.append(x);
   return e;
 }
-const shuffle=a=>{const b=a.slice();for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b};
-const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 const shakeEl=el=>{el.classList.remove('shake');void el.offsetWidth;el.classList.add('shake');setTimeout(()=>el.classList.remove('shake'),400)};
 
 /* ---------- Progreso ---------- */
@@ -105,295 +99,21 @@ function handleTimeExpired() {
   }
 }
 
-/* ---------- Tipos de prueba ---------- */
-function quiz(items){
-  return ctx=>{
-    let k=0;
-    const picked=[];
-    const show=()=>{
-      const it=items[k];
-      const box=h('div',{class:'quiz'});
-      box.append(h('p',{class:'qlabel'},it.label||`Pregunta ${k+1} de ${items.length}`));
-      box.append(h('p',{class:'q'},it.q));
-      if(it.code)box.append(h('pre',{class:'code'},it.code));
-      const opts=h('div',{class:'opts'});
-      it.opts.forEach((o,j)=>{
-        const b=h('button',{class:'opt',type:'button'},o);
-        b.addEventListener('click',()=>{
-          if(j===it.ans){
-            b.classList.add('ok');
-            opts.querySelectorAll('button').forEach(x=>{x.disabled=true});
-            ctx.fb('Correcto.','ok');
-            picked.push(o);
-            if(k+1>=items.length)ctx.later(ctx.win,700,picked.join('|'));
-            else ctx.later(()=>{k++;ctx.fb('','');show()},700);
-          }else{
-            b.classList.add('bad');b.disabled=true;
-            ctx.fb(it.hint||'No es esa. Prueba otra.','err');
-          }
-        });
-        opts.append(b);
-      });
-      box.append(opts);
-      ctx.body.replaceChildren(box);
-    };
-    show();
-  };
-}
-
-function order(lines,hint){
-  return ctx=>{
-    let pos=0;
-    let pool=shuffle(lines.map((t,i)=>({t,i})));
-    let guard=0;
-    while(pool.every((p,j)=>p.i===j)&&guard++<10)pool=shuffle(pool);
-    const placed=h('pre',{class:'code placed'});
-    const refresh=()=>{placed.textContent=pos?lines.slice(0,pos).join('\n'):'// el código aparecerá aquí'};
-    refresh();
-    const wrap=h('div',{class:'pool'});
-    pool.forEach(p=>{
-      const b=h('button',{class:'line',type:'button'},p.t);
-      b.addEventListener('click',()=>{
-        if(p.i===pos){
-          pos++;b.disabled=true;b.classList.add('used');refresh();ctx.fb('','');
-          if(pos===lines.length){ctx.fb('Hidra derrotada.','ok');ctx.later(ctx.win,800)}
-        }else{
-          b.classList.add('bad');ctx.fb(hint,'err');
-          setTimeout(()=>b.classList.remove('bad'),400);
-        }
-      });
-      wrap.append(b);
-    });
-    ctx.body.replaceChildren(h('p',{class:'q'},'Pulsa las líneas en el orden correcto.'),placed,wrap);
-  };
-}
-
-const ANTLER='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22V10M12 14C8 12 6 8 5 3M12 14C16 12 18 8 19 3M8.5 10L4 8M15.5 10L20 8"/></svg>';
-function deer(total){
-  return ctx=>{
-    let n=0,delay=1100,t=0;
-    const count=h('p',{class:'meter'},`Capturas: 0/${total}`);
-    const arena=h('div',{class:'arena'});
-    const b=h('button',{class:'deer',type:'button','aria-label':'Cierva de Cerinea'});
-    b.innerHTML=ANTLER;
-    arena.append(b);
-    const jump=()=>{
-      const w=Math.max(arena.clientWidth-56,0),hh=Math.max(arena.clientHeight-56,0);
-      b.style.left=Math.round(Math.random()*w)+'px';
-      b.style.top=Math.round(Math.random()*hh)+'px';
-    };
-    const loop=()=>{jump();t=setTimeout(loop,delay)};
-    b.addEventListener('click',()=>{
-      n++;count.textContent=`Capturas: ${n}/${total}`;
-      clearTimeout(t);
-      if(n>=total){b.disabled=true;ctx.fb('Cierva atrapada.','ok');ctx.later(ctx.win,800);return}
-      delay=Math.max(480,delay-110);loop();
-    });
-    ctx.body.replaceChildren(count,arena);
-    ctx.fb('Haz clic en la cierva antes de que salte.','');
-    loop();
-    ctx.reg(()=>clearTimeout(t));
-  };
-}
-
-function dirt(){
-  return ctx=>{
-    const JUNK=['TODO','console.log','// ???','var x','debugger',';;','FIXME','temp2','alert()','//old'];
-    const total=24;let left=total;
-    const meter=h('p',{class:'meter'},`Desecho restante: ${left}`);
-    const grid=h('div',{class:'dirt'});
-    const clean=b=>{
-      if(b.disabled)return;
-      b.disabled=true;b.classList.add('clean');left--;
-      meter.textContent=left?`Desecho restante: ${left}`:'Todo limpio.';
-      if(!left){ctx.fb('Establos limpios.','ok');ctx.later(ctx.win,800)}
-    };
-    for(let i=0;i<total;i++){
-      const b=h('button',{class:'spot',type:'button','aria-label':'Mancha de código muerto'},JUNK[i%JUNK.length]);
-      b.addEventListener('click',()=>clean(b));
-      grid.append(b);
-    }
-    grid.addEventListener('pointermove',e=>{
-      if(!(e.buttons&1))return;
-      const el=document.elementFromPoint(e.clientX,e.clientY);
-      if(el&&el.classList&&el.classList.contains('spot'))clean(el);
-    });
-    ctx.body.replaceChildren(meter,grid);
-    ctx.fb('Haz clic o arrastra sobre las manchas.','');
-  };
-}
-
-function typos(){
-  return ctx=>{
-    const items=shuffle([['fucntion',1],['consle.log',1],['retrun',1],['arr.lenght',1],['documnet',1],
-      ['function',0],['console.log',0],['return',0],['arr.length',0],['document',0],['const',0],['addEventListener',0]]);
-    let found=0;
-    const meter=h('p',{class:'meter'},'Erratas derribadas: 0/5');
-    const wrap=h('div',{class:'birds'});
-    items.forEach(([t,bad],i)=>{
-      const b=h('button',{class:'bird',type:'button',style:`--d:${(i%5)*.4}s`},t);
-      b.addEventListener('click',()=>{
-        if(bad){
-          b.classList.add('caught');b.disabled=true;found++;
-          meter.textContent=`Erratas derribadas: ${found}/5`;ctx.fb('','');
-          if(found===5){ctx.fb('Bandada derribada.','ok');ctx.later(ctx.win,800)}
-        }else{
-          shakeEl(b);ctx.fb('Esa palabra está bien escrita.','err');
-        }
-      });
-      wrap.append(b);
-    });
-    ctx.body.replaceChildren(meter,wrap);
-  };
-}
-
-function simon(len){
-  return ctx=>{
-    const names=['Podargo','Lampón','Janto','Dinos'];
-    const seq=Array.from({length:len},()=>Math.floor(Math.random()*4));
-    let dead=false,lock=true,pos=0;
-    ctx.reg(()=>{dead=true});
-    const pads=names.map((nm,k)=>{
-      const b=h('button',{class:`pad p${k}`,type:'button',disabled:'true'},nm);
-      b.addEventListener('click',()=>press(k));
-      return b;
-    });
-    const play=async()=>{
-      lock=true;pos=0;pads.forEach(p=>{p.disabled=true});
-      ctx.fb('Memoriza el orden…','');
-      await sleep(500);
-      for(const k of seq){
-        if(dead)return;
-        pads[k].classList.add('lit');await sleep(520);
-        pads[k].classList.remove('lit');await sleep(240);
-      }
-      if(dead)return;
-      pads.forEach(p=>{p.disabled=false});lock=false;ctx.fb('Tu turno.','');
-    };
-    const press=async k=>{
-      if(lock)return;
-      pads[k].classList.add('lit');setTimeout(()=>pads[k].classList.remove('lit'),180);
-      if(k===seq[pos]){
-        pos++;
-        if(pos===len){lock=true;ctx.fb('Las yeguas se calman.','ok');ctx.later(ctx.win,800)}
-      }else{
-        lock=true;ctx.fb('Orden incorrecto. Mira otra vez.','err');
-        await sleep(900);
-        if(!dead)play();
-      }
-    };
-    const start=h('button',{class:'btn',type:'button'},`Empezar (${len} pasos)`);
-    start.addEventListener('click',()=>{start.hidden=true;play()});
-    ctx.body.replaceChildren(h('div',{class:'pads'},...pads),start);
-  };
-}
-
-function pairs(){
-  return ctx=>{
-    const P=[['<nav>','Menú de navegación'],['<footer>','Pie de página'],['<a>','Enlace a otra página'],['<img>','Imagen incrustada']];
-    let sel=null,left=P.length;
-    const L=h('div',{class:'col'}),R=h('div',{class:'col'});
-    const lb=P.map(([t],i)=>{
-      const b=h('button',{class:'pair',type:'button'},t);
-      b.addEventListener('click',()=>{
-        if(b.disabled)return;
-        lb.forEach(x=>x.classList.remove('sel'));
-        sel=i;b.classList.add('sel');ctx.fb('','');
-      });
-      L.append(b);
-      return b;
-    });
-    shuffle(P.map(([,d],i)=>({d,i}))).forEach(o=>{
-      const b=h('button',{class:'pair desc',type:'button'},o.d);
-      b.addEventListener('click',()=>{
-        if(b.disabled)return;
-        if(sel===null){ctx.fb('Elige primero una etiqueta.','err');return}
-        if(sel===o.i){
-          lb[sel].disabled=true;lb[sel].classList.remove('sel');lb[sel].classList.add('ok');
-          b.disabled=true;b.classList.add('ok');sel=null;left--;ctx.fb('','');
-          if(!left){ctx.fb('Cinturón entregado.','ok');ctx.later(ctx.win,800)}
-        }else{
-          b.classList.add('bad');ctx.fb('Esa no es su función.','err');
-          setTimeout(()=>b.classList.remove('bad'),400);
-        }
-      });
-      R.append(b);
-    });
-    ctx.body.replaceChildren(h('p',{class:'q'},'Une cada etiqueta con su función.'),h('div',{class:'cols'},L,R));
-  };
-}
-
-function cipher(text,answer){
-  return ctx=>{
-    const inp=h('input',{id:'cipherIn',class:'cin',type:'text',autocomplete:'off',autocapitalize:'characters',spellcheck:'false',maxlength:'16',placeholder:'Escribe el nombre','aria-label':'Texto descifrado'});
-    const go=h('button',{class:'btn',type:'submit'},'Descifrar');
-    const form=h('form',{class:'cform'},inp,go);
-    form.addEventListener('submit',e=>{
-      e.preventDefault();
-      if(inp.value.trim().toUpperCase()===answer){
-        inp.disabled=true;go.disabled=true;ctx.fb('Las manzanas son tuyas.','ok');ctx.later(ctx.win,800,inp.value.trim().toUpperCase());
-      }else{
-        shakeEl(form);ctx.fb('No coincide. Retrocede tres letras: la K pasa a ser H.','err');
-      }
-    });
-    ctx.body.replaceChildren(
-      h('p',{class:'q'},'Texto cifrado:'),
-      h('p',{class:'cipher'},text),
-      h('p',{class:'dim'},'Pista: cada letra avanzó 3 posiciones. Para descifrar, retrocede 3 (D vuelve a ser A).'),
-      form
-    );
-  };
-}
-
 /* ---------- Los doce trabajos y su lugar en el mapa ---------- */
+// Cada trabajo se juega en el canvas emergente de juegos.js (mismo orden que aqui).
 const T=[
-  {gr:'Α',name:'El León de Nemea',tag:'CSS',pos:[1310,510],
-   story:'Ninguna flecha atraviesa la piel del león, y ninguna regla de estilo lo mueve de su guarida. Céntralo en el friso para debilitarlo.',
-   run:quiz([{q:'Falta la propiedad que centra al león en vertical dentro del contenedor flex.',
-     code:'.guarida {\n  display: flex;\n  justify-content: center;\n  ___: center;\n}',
-     opts:['align-items','text-align','vertical-align','float'],ans:0,hint:'En flexbox, el eje cruzado se alinea con otra propiedad.'}])},
-  {gr:'Β',name:'La Hidra de Lerna',tag:'JavaScript · bucles',pos:[1500,665],
-   story:'Por cada cabeza cortada nacen dos más, salvo que cada muñón se cauterice. Ordena el código para cortar las nueve cabezas.',
-   run:order(['for (let i = 0; i < 9; i++) {','  cortarCabeza(i);','  quemarMuñon(i);','}'],'Esa línea no va ahora. Primero se corta la cabeza y luego se quema el muñón.')},
-  {gr:'Γ',name:'La Cierva de Cerinea',tag:'JavaScript · eventos',pos:[720,345],
-   story:'La cierva corre más rápido que cualquier flecha y cada vez salta antes. Atrápala con un clic seis veces.',
-   run:deer(6)},
-  {gr:'Δ',name:'El Jabalí de Erimanto',tag:'HTML · accesibilidad',pos:[430,345],
-   story:'El jabalí arrasa el marcado y deja imágenes sin descripción. Repara la etiqueta para que un lector de pantalla pueda describirla.',
-   run:quiz([{q:'¿Qué atributo falta en la imagen para que tenga texto alternativo?',
-     code:'<img src="jabali.png" ___="Jabalí de Erimanto">',
-     opts:['alt','href','name','rel'],ans:0,hint:'Es el atributo que describe la imagen cuando no se puede ver.'}])},
-  {gr:'Ε',name:'Los Establos de Augías',tag:'Código limpio',pos:[190,485],
-   story:'Los establos acumulan décadas de código muerto. Barre todo el desecho: haz clic o arrastra sobre las manchas.',
-   run:dirt()},
-  {gr:'Ζ',name:'Las Aves del Estínfalo',tag:'Depuración',pos:[545,495],
-   story:'Una bandada de aves de bronce ha anidado en el código. Derriba solo las cinco palabras mal escritas.',
-   run:typos()},
-  {gr:'Η',name:'El Toro de Creta',tag:'Flask · HTTP',pos:[1080,920],
-   story:'El toro se ha escapado del laberinto y nadie sabe dónde está. Averigua qué responde el servidor cuando la ruta no existe.',
-   run:quiz([{q:'Un cliente pide /minotauro y esa ruta no está definida en la app Flask. ¿Qué código HTTP recibe?',
-     code:'@app.route("/toro")\ndef toro():\n    return "Mu", 200',
-     opts:['200 OK','301 Moved','404 Not Found','500 Server Error'],ans:2,hint:'La ruta no existe: el recurso no se encuentra.'}])},
-  {gr:'Θ',name:'Las Yeguas de Diomedes',tag:'Memoria',pos:[1618,365],
-   story:'Las yeguas devoran a quien se distrae. Memoriza el orden en que se encabritan y repítelo.',
-   run:simon(5)},
-  {gr:'Ι',name:'El Cinturón de Hipólita',tag:'HTML semántico',pos:[1760,520],
-   story:'Hipólita entregará el cinturón si reconoces cada pieza del templo. Une cada etiqueta con su función.',
-   run:pairs()},
-  {gr:'Κ',name:'Los Bueyes de Gerión',tag:'JavaScript · tipos',pos:[580,735],
-   story:'Gerión tiene tres cuerpos y todos parecen el mismo buey. Descubre qué devuelve la comparación estricta.',
-   run:quiz([{q:'¿Qué muestra la consola?',code:"console.log('3' === 3);",
-     opts:['true','false','undefined','TypeError'],ans:1,hint:'El operador === compara el valor y también el tipo.'}])},
-  {gr:'Λ',name:'Las Manzanas de las Hespérides',tag:'Criptografía',pos:[310,690],
-   story:'El dragón Ladón vigila el jardín con un cifrado César. Descifra el nombre del héroe para entrar.',
-   run:cipher('KHUFXOHV','HERCULES')},
-  {gr:'Μ',name:'Cerbero',tag:'Python · SQL · Linux',pos:[1815,760],
-   story:'El guardián del inframundo tiene tres cabezas y cada una exige una respuesta distinta. Calma a las tres.',
-   run:quiz([
-     {label:'Cabeza 1 de 3 · Python',q:'¿Qué devuelve esta expresión?',code:'len(["a", "b", "c"])',opts:['2','3','4','Error'],ans:1,hint:'len cuenta los elementos de la lista.'},
-     {label:'Cabeza 2 de 3 · SQL',q:'¿Qué palabra elimina las filas repetidas en un SELECT?',code:'SELECT ___ nombre FROM monstruos;',opts:['DISTINCT','UNIQUE','GROUP','DROP'],ans:0,hint:'Una de ellas se usa justo después de SELECT.'},
-     {label:'Cabeza 3 de 3 · Linux',q:'¿Qué comando lista también los archivos ocultos?',opts:['ls -a','ls -h','cd -a','rm -a'],ans:0,hint:'La opción viene de «all».'}
-   ])}
+  {gr:'Α',name:'El León de Nemea',tag:'Colores RGB',pos:[1310,510]},
+  {gr:'Β',name:'La Hidra de Lerna',tag:'Escritura rápida',pos:[1500,665]},
+  {gr:'Γ',name:'La Cierva de Cerinea',tag:'Reflejos',pos:[720,345]},
+  {gr:'Δ',name:'El Jabalí de Erimanto',tag:'Huellas en la nieve',pos:[430,345]},
+  {gr:'Ε',name:'Los Establos de Augías',tag:'Arrastra al virus',pos:[190,485]},
+  {gr:'Ζ',name:'Las Aves del Estínfalo',tag:'Lag del Olimpo',pos:[545,495]},
+  {gr:'Η',name:'El Toro de Creta',tag:'Laberinto',pos:[1080,920]},
+  {gr:'Θ',name:'Las Yeguas de Diomedes',tag:'Simon dice',pos:[1618,365]},
+  {gr:'Ι',name:'El Cinturón de Hipólita',tag:'Bit roto',pos:[1760,520]},
+  {gr:'Κ',name:'Los Bueyes de Gerión',tag:'Atajos de teclado',pos:[580,735]},
+  {gr:'Λ',name:'Las Manzanas de las Hespérides',tag:'QR y cifrado · prueba física',pos:[310,690]},
+  {gr:'Μ',name:'Cerbero',tag:'Tres sentidos',pos:[1815,760]}
 ];
 
 
@@ -584,9 +304,10 @@ function reward(i,again){
       h('p',{class:'dim'},done.size===12?'Tienes los doce caracteres. Baja a la zona de desbloqueo y restaura el Olimpo.':`Llevas ${done.size} de 12 trabajos.`)),
     h('button',{class:'btn',type:'button',onclick:()=>dlg.close()},'Volver al mapa')));
 }
-function markDone(i,solution){
+function markDone(i,solution,validada){
   if(done.has(i))return;
   done.add(i);save();update();animFog(i);
+  if(validada)return; // el servidor ya la ha comprobado (pruebas con respuesta escrita)
   // El servidor comprueba la solucion y guarda el progreso del grupo.
   fetch('/api/validate-trial',{
     method:'POST',
@@ -603,9 +324,30 @@ function markDone(i,solution){
     }
   }).catch(()=>{});
 }
-function win(i,sol){
-  markDone(i,sol);
+// Comprueba una respuesta escrita en el servidor antes de dar la prueba por superada.
+function validar(i,solution){
+  return fetch('/api/validate-trial',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({trial_id:i+1,solution})
+  }).then(r=>{
+    if(r.status===401){window.location.replace('/login?msg=requerido');return {ok:false}}
+    return r.json().then(d=>({ok:!!(d&&d.success),msg:d&&!d.success?'Esa no es la respuesta. Revisadlo y volved a intentarlo.':''}));
+  }).catch(()=>({ok:false,msg:'No se pudo contactar con el servidor. Inténtalo de nuevo.'}));
+}
+function cabecera(i,story){
+  const t=T[i];
+  $('#dGr').textContent=t.gr;
+  $('#dTitle').textContent=t.name;
+  $('#dTag').textContent=`Trabajo ${i+1} de 12 · ${t.tag}`;
+  $('#dStory').textContent=story||'';
+}
+function win(i,sol,validada){
+  markDone(i,sol,validada);
+  window.HeraclesJuegos.cerrar();
   runCleanups();fb('','');
+  cabecera(i,'');
+  if(!dlg.open)dlg.showModal();
   reward(i,false);
 }
 function openTrial(i){
@@ -613,10 +355,9 @@ function openTrial(i){
   const isLocked = !UNLOCKED_TRIALS.has(i);
 
   if (isLocked) {
-    $('#dGr').textContent = t.gr;
+    cabecera(i,'Esta prueba está sellada bajo candado arcano por mandato divino.');
     $('#dTitle').textContent = t.name + ' [CANDADO]';
     $('#dTag').textContent = `Trabajo ${i+1} de 12 · Prueba bloqueada`;
-    $('#dStory').textContent = 'Esta prueba está sellada bajo candado arcano por mandato divino. Solo las pruebas 3, 11 y 12 están disponibles.';
     runCleanups();fb('','');
 
     dBody.innerHTML = `
@@ -627,7 +368,7 @@ function openTrial(i){
         </svg>
         <h3 class="lock-title">Prueba Bloqueada</h3>
         <p class="lock-text">
-          Este templo permanece custodiado bajo candado. Para continuar vuestra gesta, debéis resolver las pruebas desbloqueadas (3, 11 y 12).
+          Este templo permanece custodiado bajo candado. Para continuar vuestra gesta, resolved antes las pruebas disponibles.
         </p>
         <button class="btn" type="button" id="lockOk">Entendido</button>
       </div>
@@ -637,23 +378,18 @@ function openTrial(i){
     return;
   }
 
-  $('#dGr').textContent=t.gr;
-  $('#dTitle').textContent=t.name;
-  $('#dTag').textContent=`Trabajo ${i+1} de 12 · ${t.tag}`;
-  $('#dStory').textContent=t.story;
-  runCleanups();fb('','');
-  if(!dlg.open)dlg.showModal();
-  if(done.has(i)){reward(i,true);return}
-  const ctx={
-    body:dBody,fb,
-    win:sol=>win(i,sol),
-    reg:f=>cleanups.push(f),
-    later:(f,ms,sol)=>{
-      if(f===ctx.win)markDone(i,sol);
-      const x=setTimeout(()=>f(sol),ms);cleanups.push(()=>clearTimeout(x));
-    }
-  };
-  t.run(ctx);
+  if(done.has(i)){
+    runCleanups();fb('','');
+    cabecera(i,'');
+    if(!dlg.open)dlg.showModal();
+    reward(i,true);
+    return;
+  }
+  if(dlg.open)dlg.close();
+  window.HeraclesJuegos.abrir(i,{gr:t.gr,name:t.name,tag:t.tag},{
+    onWin:(sol,validada)=>win(i,sol,validada),
+    validar:sol=>validar(i,sol)
+  });
 }
 dlg.addEventListener('close',()=>{runCleanups();dBody.replaceChildren();fb('','')});
 $('#dClose').addEventListener('click',()=>dlg.close());

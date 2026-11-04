@@ -2,6 +2,7 @@ Flask>=3.0.0
 Flask-SQLAlchemy>=3.1.0
 Flask-Login>=0.6.3
 Jinja2>=3.1.0
+segno>=1.6
 # Solo si se usa PostgreSQL (DATABASE_URL=postgresql://...):
 # psycopg2-binary>=2.9
 # Solo para desplegar en Linux:
