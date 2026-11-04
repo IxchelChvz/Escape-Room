@@ -118,16 +118,41 @@ body::before {
 }
 
 .brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
     min-width: 0;
 }
 
+/* Logo del búho: la imagen tiene mucho margen transparente (el dibujo ocupa
+   230x238 de 676x369), así que la caja muestra solo el dibujo recortado */
 .logo {
+    position: relative;
+    flex: none;
     display: block;
-    margin: 0;
-    font: 900 1.6rem/1.1 var(--f-display);
-    letter-spacing: .06em;
-    color: var(--text);
+    width: 64px;
+    aspect-ratio: 230 / 238;
+    overflow: hidden;
     text-decoration: none;
+    transition: transform .2s ease;
+}
+
+.logo:hover {
+    transform: translateY(-2px);
+}
+
+.logo-img {
+    position: absolute;
+    left: -96.1%;
+    top: -20.6%;
+    width: 293.9%;
+    max-width: none;
+    height: auto;
+}
+
+.brand small {
+    padding-left: 14px;
+    border-left: 1px solid var(--line);
 }
 
 .logo span {

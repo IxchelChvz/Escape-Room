@@ -1198,6 +1198,43 @@ dialog .cin:focus-visible {
   margin-top: 3px;
 }
 
+/* Logo del búho: la imagen es marrón sobre transparente y aquí el fondo es oscuro,
+   así que se usa como máscara para pintarla con el dorado del tema. La caja recorta
+   el margen vacío de la imagen (el dibujo ocupa 230x238 de 676x369) */
+.brand:has(.logo-buho) {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.logo-buho {
+  flex: none;
+  width: 64px;
+  aspect-ratio: 230 / 238;
+  background: var(--gold-ink);
+  -webkit-mask: url("../images/JPIM_LogoBuho.png") 49.56% 37.4% / 293.9% auto no-repeat;
+  mask: url("../images/JPIM_LogoBuho.png") 49.56% 37.4% / 293.9% auto no-repeat;
+  transition: transform .2s ease;
+}
+
+.logo-buho:hover {
+  transform: translateY(-2px);
+}
+
+/* la imagen queda invisible pero da el texto alternativo y el área del enlace */
+.logo-buho .logo-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+}
+
+.brand:has(.logo-buho) small {
+  margin-top: 0;
+  padding-left: 14px;
+  border-left: 1px solid var(--line);
+}
+
 .stats {
   gap: 0;
   border: 1px solid var(--line);

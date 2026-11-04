@@ -49,7 +49,7 @@ def create_app():
         """Variables disponibles en TODAS las plantillas."""
         return {
             "active_team": current_user.name if current_user.is_authenticated else None,
-            "company": "Dódeka",
+            "company": "JPIM",
         }
 
     @app.errorhandler(404)
