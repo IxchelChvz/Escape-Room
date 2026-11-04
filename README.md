@@ -44,22 +44,32 @@ La aplicacion consta de cuatro vistas conectadas entre si y sincronizadas con el
 
 ---
 
-## 2. Matriz Curricular: Los 12 Trabajos de Heracles
+## 2. Las 12 pruebas: fichas técnicas y soluciones
 
-| Num | Trabajo Mitologico | Modulo DAW | Concepto Tecnico | Solucion / Letra |
-|:---:|:---|:---:|:---|:---:|
-| 1 | Leon de Nemea | DIW | CSS Flexbox y Box Model | `align-items: center` (**H**) |
-| 2 | Hidra de Lerna | DWEC | JavaScript, Bucles y Cauterizacion | Ordenar bucle `for` y cortar/quemar cabezas (**E**) |
-| 3 | Cierva de Cerinea | DWEC | Eventos y Evasion de Cursor | Capturar a la cierva 6 veces en movimiento (**R**) |
-| 4 | Jabali de Erimanto | DIW / DWEC | Marcado HTML y Accesibilidad | Atributo `alt` para lectores de pantalla (**A**) |
-| 5 | Establos de Augias | DWES | Codigo Limpio y Buenas Practicas | Limpiar los manchas de codigo muerto del DOM (**C**) |
-| 6 | Aves del Estinfalo | DAW | Depuracion de Sintaxis | Derribar las 5 erratas de codigo mal escritas (**L**) |
-| 7 | Toro de Creta | DWES | Flask, Rutas y Codigos HTTP | Manejo de ruta no existente HTTP 404 (**E**) |
-| 8 | Yeguas de Diomedes | DWEC / DWES | Memoria y Secuencia (Simon) | Memorizar y repetir el orden de las 4 yeguas (**S**) |
-| 9 | Cinturon de Hipolita | DIW / DAW | HTML Semantico | Emparejar etiquetas con su funcion semantica (**.**) |
-| 10 | Bueyes de Gerion | DWEC / DWES | Comparacion Estricta y Tipos | Comparacion `'3' === 3` devuelve `false` (**E**) |
-| 11 | Manzanas Hesperides | DWEC | Criptografia Clasica (Cesar) | Descifrar `KHUFXOHV` con desplazamiento -3 -> `HERCULES` (**X**) |
-| 12 | Cerbero | DWES | Python, SQL y Comandos Linux | 3 cabezas: `len()`, `DISTINCT`, `ls -a` (**E**) |
+Cada prueba es un minijuego en un canvas emergente (`static/js/juegos.js`) que se abre desde su pin del mapa.
+Al superarla se muestra **el carácter y la casilla (posición) que ocupa** en la contraseña final `HERACLES.EXE`.
+Todas tienen tiempo límite; los errores y el tiempo agotado se castigan con una espera que se guarda en el
+navegador (cerrar la ventana no la salta). Las pruebas 11 y 12 se comprueban en el servidor
+(`/api/validate-trial` con las soluciones de `heracles/game_data.py`); el resto se resuelve jugando y el
+servidor registra la superación en la base de datos.
+
+| Pos. | Trabajo | Módulo | Prueba (mecánica) | Solución | Carácter | Tiempo / castigo |
+|:---:|:---|:---:|:---|:---|:---:|:---|
+| 1 | León de Nemea | DIW | Colores RGB: igualar la melena del león con tres deslizadores (dos tonos) | Ajustar cada canal hasta que las tres pistas digan «✓ Bien» (±8) y pulsar *Sellar* | **H** | 1:20 · sellar mal 6 s |
+| 2 | Hidra de Lerna | DWEC | Escritura rápida de dos inscripciones; cada error hace brotar una cabeza | Escribir las dos frases sin llegar a 9 cabezas | **E** | 1:00 · error 2 s |
+| 3 | Cierva de Cerinea | DWEC | Atrapar 8 veces a la cierva dorada (eventos de ratón); hay ciervas falsas | 8 clics sobre la cierva dorada, evitando las rojas | **R** | 0:35 · cierva falsa 3 s |
+| 4 | Jabalí de Erimanto | DIW | Seguir un rastro de iconos en una cuadrícula hasta la guarida | Pulsar en orden solo las casillas con el icono indicado | **A** | 1:00 · fallo 4 s |
+| 5 | Establos de Augías | DAW | Arrastrar a la papelera los archivos peligrosos (extensiones dobles) | Tirar solo los que **terminan** en `.exe`, `.bat` o `.scr` | **C** | 1:10 · archivo bueno 6 s |
+| 6 | Aves del Estínfalo | DAW | Contar aves en una animación con lag simulado | Elegir el número exacto en las dos bandadas | **L** | 1:40 · fallo 8 s |
+| 7 | Toro de Creta | DWEC | Laberinto a oscuras con teclado (flechas / WASD) o botones | Llevar al toro hasta la puerta dorada | **E** | 2:00 · tiempo agotado 20 s |
+| 8 | Yeguas de Diomedes | DWEC | Simon dice: repetir secuencias (6 rondas) | Repetir cada secuencia en orden | **S** | 2:30 · fallo 5 s |
+| 9 | Cinturón de Hipólita | DIW | Encontrar el píxel/gema mal puesto en 4 cinturones | Pulsar la gema distinta en cada cinturón | **.** | 1:20 · fallo 4 s |
+| 10 | Bueyes de Gerión | DWEC | Unir atajos de teclado con su acción (arrastrar cables) | Ctrl+C Copiar, Ctrl+X Cortar, Ctrl+V Pegar, Ctrl+Z Deshacer, Ctrl+Y Rehacer, Ctrl+S Guardar, Ctrl+F Buscar, Ctrl+H Reemplazar, Ctrl+P Imprimir, Ctrl+A Seleccionar todo | **E** | 1:15 · fallo 5 s |
+| 11 | Manzanas de las Hespérides | DWES | **Prueba física**: un QR escondido abre `/oraculo/<token>` con `ODGRQ` y la pista «retrocede tantas letras como cabezas tiene Cerbero» (César −3) | `LADON` | **X** | sin límite · fallo 20 s |
+| 12 | Cerbero | DWEC | Tres cabezas, tres sentidos: una letra en estrellas (vista), otra hablada con `speechSynthesis` (oído) y un acertijo (texto) | `RIO` (R, I, O) | **E** | sin límite · fallo 20 s |
+
+El QR de las Hespérides se imprime desde el panel `/admin/qr` (abrir el panel con la IP del servidor para que
+los móviles puedan acceder). Si un grupo se atasca, el panel `/admin` permite **dar una prueba por superada**.
 
 ---
 
@@ -110,15 +120,26 @@ Escape-Room/
 
 ---
 
-## 5. Endpoints de la API REST
+## 5. Rutas de la aplicación
 
-* `POST /api/login`: Autentica o crea una nueva escuadra en la base de datos (`name`, `pin`).
-* `GET /api/teams`: Lista todos los equipos registrados y su estado.
-* `GET /api/team/current`: Devuelve los datos del equipo activo en la sesion actual.
-* `POST /api/verify`: Valida la clave `HERACLES.EXE`, asocia la victoria al equipo y devuelve `{ "success": true }`.
-* `GET /api/trials`: Devuelve el listado de los 12 trabajos con metadatos.
-* `POST /api/validate-trial`: Notifica y almacena en base de datos la superacion de un trabajo individual para el equipo activo.
-* `GET /api/leaderboard`: Clasificacion de tiempos y puntuaciones de las escuadras en la base de datos.
-* `POST /api/reset`: Reinicia el progreso en el backend.
+**Vistas (Jinja2, `heracles/blueprints/main.py`)**
+* `GET /` web averiada · `GET /login` identificación de grupo · `GET /mapa` mapa de pruebas (requiere grupo)
+* `GET /restaurada` web restaurada (requiere haber ganado; `?presentacion=1` para mostrarla)
+* `GET /oraculo/<token>` página que abre el QR de las Hespérides (sin sesión, para el móvil)
+
+**API REST (`heracles/blueprints/api.py`)**
+* `POST /api/login` / `POST /api/logout`: inicia o cierra la sesión del grupo (Flask-Login, PIN con hash).
+* `GET /api/teams` · `GET /api/team/current`: grupos y progreso del grupo activo.
+* `GET /api/trials`: los 12 trabajos.
+* `POST /api/validate-trial`: valida una prueba en el servidor y guarda el progreso del grupo.
+* `POST /api/verify`: valida la contraseña final `HERACLES.EXE` y registra la victoria y el tiempo.
+* `GET /api/leaderboard` · `GET /api/podio`: clasificación y podio.
+* `POST /api/reset`: reinicia el progreso (solo administración).
+
+**Panel interno (`heracles/blueprints/admin.py`)**
+* `/admin/login` · `/admin/`: grupos, tiempos, intentos y estado de cada prueba.
+* `POST /admin/team/<id>/pass`: da por superada una prueba a un grupo atascado.
+* `POST /admin/team/<id>/reset` · `POST /admin/team/<id>/delete` · `POST /admin/reset-all`.
+* `/admin/qr`: QR imprimible de la prueba física.
 
 ---

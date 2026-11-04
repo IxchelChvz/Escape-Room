@@ -1212,8 +1212,8 @@ dialog .cin:focus-visible {
   width: 64px;
   aspect-ratio: 230 / 238;
   background: var(--gold-ink);
-  -webkit-mask: url("../images/JPIM_LogoBuho.png") 49.56% 37.4% / 293.9% auto no-repeat;
-  mask: url("../images/JPIM_LogoBuho.png") 49.56% 37.4% / 293.9% auto no-repeat;
+  -webkit-mask: url("../images/JPIM_LogoBuho.webp") 49.56% 37.4% / 293.9% auto no-repeat;
+  mask: url("../images/JPIM_LogoBuho.webp") 49.56% 37.4% / 293.9% auto no-repeat;
   transition: transform .2s ease;
 }
 

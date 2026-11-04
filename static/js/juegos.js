@@ -375,6 +375,7 @@ document.getElementById('jClose').addEventListener('click',()=>dlg.close());
 function abrir(i,meta,host){
   if(S){S.cerrar();S=null}
   const def=JUEGOS[i];
+  if(def.precarga)def.precarga(); // las imágenes de cada juego solo se descargan al abrirlo
   jGr.textContent=meta.gr;jTitle.textContent=meta.name;jTag.textContent=`Trabajo ${i+1} de 12 · ${meta.tag}`;
   cv.setAttribute('aria-label',`Minijuego: ${meta.name}. ${(def.how||[]).join(' ')}`);
   if(!dlg.open)dlg.showModal();
@@ -407,12 +408,13 @@ function dibujarLeon(c,x,y,s,col,feliz){
   c.beginPath();c.moveTo(0,23);c.quadraticCurveTo(-7,32,-13,28);c.moveTo(0,23);c.quadraticCurveTo(7,32,13,28);c.stroke();
   c.restore();
 }
-// León de Nemea: imagen original sin fondo (static/images/leon-nemea.png). En la imagen la melena es azul:
+// León de Nemea: imagen original sin fondo (static/images/leon-nemea.webp). En la imagen la melena es azul:
 // se detectan esos píxeles y se repintan con el color elegido, conservando sus luces, sombras y
 // trazos de tinta. La cara, los ojos y el fondo no cambian.
 const MELENA_LUZ=103; // luminosidad media del azul de la melena original
-let LEON=null;
-(()=>{
+let LEON=null,leonPedido=false;
+function cargarLeon(){
+  if(leonPedido)return;leonPedido=true;
   const im=new Image();
   im.onload=()=>{
     const w=im.naturalWidth,h=im.naturalHeight,lz=document.createElement('canvas');lz.width=w;lz.height=h;
@@ -427,8 +429,8 @@ let LEON=null;
     }
     LEON={w,h,base,mascara,luz};
   };
-  im.src='/static/images/leon-nemea.png';
-})();
+  im.src='/static/images/leon-nemea.webp';
+}
 // Cada color de melena se pinta una vez y se reutiliza mientras no cambie
 const cacheLeon=new Map();
 function lienzoLeon(col){
@@ -455,6 +457,7 @@ function dibujarLeonImg(c,x,y,alto,col){
   c.drawImage(lienzoLeon(col),x-ancho/2,y-alto/2,ancho,alto);
 }
 const leon={
+  precarga:cargarLeon, // carga diferida: la imagen se pide al abrir la prueba
   how:['Pinta la melena de tu león del mismo color que la del león de Nemea con los deslizadores Rojo, Verde y Azul.','Bajo cada deslizador veréis hacia dónde moverlo y cuánto le falta. Cuando los tres digan «Bien», pulsad «Sellar». Son dos tonos distintos.'],
   limite:80,castigo:20,penal:'Sellar mal: 6 s de espera',
   aviso:{x:235,y:426,w:390}, // dentro del panel de los leones: así no tapa el botón Sellar
@@ -862,8 +865,8 @@ const augias={
 };
 
 /* 6 · Aves del Estínfalo · Lag del Olimpo */
-// Ave de bronce (static/images/ave-bronce.png, fondo transparente). Si no carga, se dibuja la sencilla.
-const imgAve=new Image();imgAve.src='/static/images/ave-bronce.png';
+// Ave de bronce (static/images/ave-bronce.webp, fondo transparente). Si no carga, se dibuja la sencilla.
+const imgAve=new Image(); // se pide al abrir la prueba (carga diferida)
 function dibujarAve(c,x,y,ala,s=1){
   if(imgAve.complete&&imgAve.naturalWidth){
     const w=86*s,h=w*imgAve.naturalHeight/imgAve.naturalWidth;
@@ -882,6 +885,7 @@ function dibujarAve(c,x,y,ala,s=1){
   c.restore();
 }
 const aves={
+  precarga:()=>{if(!imgAve.src)imgAve.src='/static/images/ave-bronce.webp'},
   how:['Una bandada de aves de bronce cruza el lago, pero la conexión del Olimpo va a trompicones.','Cuenta las aves de cada bandada y elige el número exacto. Son dos bandadas y la segunda es más grande.'],
   limite:100,castigo:15,penal:'Número incorrecto: 8 s y otra bandada',
   start(g){
@@ -1229,11 +1233,12 @@ const hesperides={
 /* 12 · Cerbero · Tres cabezas, tres sentidos */
 const LETRA_R=[[0,0],[0,1.5],[0,3],[0,4.5],[0,6],[1.5,0],[3,0],[4,1],[4,2],[3,3],[1.5,3],[2.6,4.4],[3.6,5.6]];
 const ESTRELLAS_FALSAS=[[-2,1],[6,0],[7,4],[-1,5],[2,7],[6,6],[1,-.4],[5,-.4]];
-// Ilustración de Cerbero sin fondo (static/images/cerbero.png, 752x600). Si no carga, se dibujan las cabezas sencillas.
-const imgCerbero=new Image();imgCerbero.src='/static/images/cerbero.png';
+// Ilustración de Cerbero sin fondo (static/images/cerbero.webp, 752x600). Si no carga, se dibujan las cabezas sencillas.
+const imgCerbero=new Image(); // se pide al abrir la prueba (carga diferida)
 const CERB_IMG={x:218,y:92,h:290};            // dónde va la ilustración en el canvas
 const CERB_CABEZAS=[[130,250],[376,270],[622,250]]; // centro de cada cabeza dentro de la imagen
 const cerbero={
+  precarga:()=>{if(!imgCerbero.src)imgCerbero.src='/static/images/cerbero.webp'},
   how:['Cerbero tiene tres cabezas y cada una guarda una letra: una se ve, otra se oye (subid el volumen) y otra se lee.','Pulsad las tres cabezas y escribid las tres letras en orden, de izquierda a derecha.'],
   penal:'Respuesta incorrecta: 20 s de espera',
   hud:'Pulsad las tres cabezas de Cerbero.',
@@ -1241,7 +1246,9 @@ const cerbero={
     const conImagen=imgCerbero.complete&&imgCerbero.naturalWidth>0;
     const esc=CERB_IMG.h/(conImagen?imgCerbero.naturalHeight:600);
     const CAB=[{x:240,y:205,ico:'ojo',nom:'VISTA'},{x:400,y:178,ico:'oreja',nom:'OÍDO'},{x:560,y:205,ico:'pergamino',nom:'TEXTO'}];
-    if(conImagen)CAB.forEach((h,k)=>{h.x=CERB_IMG.x+CERB_CABEZAS[k][0]*esc;h.y=CERB_IMG.y+CERB_CABEZAS[k][1]*esc});
+    // las posiciones de las cabezas están medidas sobre una imagen de 600 px de alto
+    const ref=CERB_IMG.h/600;
+    if(conImagen)CAB.forEach((h,k)=>{h.x=CERB_IMG.x+CERB_CABEZAS[k][0]*ref;h.y=CERB_IMG.y+CERB_CABEZAS[k][1]*ref});
     const visto=[false,false,false];
     let act=-1,dormidos=false,ocupado=false,anim=0,sinVoz=false,hov=-1;
     const hablar=()=>{
