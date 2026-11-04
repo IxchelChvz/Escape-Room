@@ -1,6 +1,6 @@
 """
 HERACLES.EXE // Backend Flask + SQLAlchemy + Flask-Login + Jinja2
-Dódeka - Grupo 4 (DAW)
+JPIM - Grupo 4 (DAW)
 
 Estructura:
     app.py                  -> crea la aplicacion (factory) y arranca el servidor

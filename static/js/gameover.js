@@ -30,13 +30,13 @@
     }
 
     function getPartialKey() {
-        var PASS = 'HERACLES.EXE';
+        var PASS = window.HERACLES_CH || [];
         var chars = [];
         try {
             var saved = JSON.parse(localStorage.getItem('heracles-mapa-done') || '[]');
             var set = new Set(saved);
             for (var i = 0; i < 12; i++) {
-                chars.push(set.has(i) ? PASS[i] : '_');
+                chars.push(set.has(i) ? (PASS[i] || '?') : '_');
             }
             return chars.join(' ');
         } catch (e) {

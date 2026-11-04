@@ -1,6 +1,6 @@
 # HERACLES.EXE // Escape Room Digital - Los 12 Trabajos del Codigo
 
-**Olympus Tech Solutions - Grupo 4 (DAW - Desarrollo de Aplicaciones Web)**  
+**JPIM - Grupo 4 (DAW - Desarrollo de Aplicaciones Web)**  
 *Proyecto Intermodular: DIW, DWEC, DWES y Despliegue de Aplicaciones Web*
 
 ---
@@ -25,7 +25,7 @@ La aplicacion consta de cuatro vistas conectadas entre si y sincronizadas con el
 
 3. **Pantalla 2 - Mapa de la Helade (`/mapa`):**
    * Archivo: `templates/mapa.html` y estilos `static/css/styles.css`.
-   * Cartografia de Grecia (`static/images/mapaGriego.jpeg`) con niebla de guerra dinamica renderizada sobre un lienzo `<canvas id="fog">`.
+   * Cartografia de Grecia (`static/images/mapaGriego.webp`) con niebla de guerra dinamica renderizada sobre un lienzo `<canvas id="fog">`.
    * 12 pines interactivos (`<button class="pin">`) que abren modales de dialogo (`<dialog id="dlg">`) con los 12 desafios gestionados por `static/js/main.js`.
    * Muestra el nombre de la escuadra activa en las estadisticas superiores.
    * Zona de pedestales (`#slots`) para introducir la contraseña final:
@@ -38,9 +38,9 @@ La aplicacion consta de cuatro vistas conectadas entre si y sincronizadas con el
    * Archivo: `templates/webRestaurada.html` y estilos `static/css/webRestaurada.css`.
    * El templo dorado refulge con estado HTTP 200 y sistema RESTAURADO.
    * Muestra el nombre de la escuadra victoriosa en el mensaje de gloria.
-   * Tabla de honor de las escuadras (Leaderboard) cargada dinamicamente desde la base de datos.
+   * Podio con los cuatro últimos grupos registrados, renderizado con Jinja2 desde la base de datos.
    * Buscador de secciones (`#q`) gestionado por `static/js/webRestaurada_2.js`.
-   * Formulario de contacto y memoria tecnica del oraculo.
+   * Memoria técnica del oráculo.
 
 ---
 
@@ -129,12 +129,12 @@ Escape-Room/
 
 **API REST (`heracles/blueprints/api.py`)**
 * `POST /api/login` / `POST /api/logout`: inicia o cierra la sesión del grupo (Flask-Login, PIN con hash).
-* `GET /api/teams` · `GET /api/team/current`: grupos y progreso del grupo activo.
-* `GET /api/trials`: los 12 trabajos.
+* `GET /api/teams` · `GET /api/team/current`: grupos y progreso del grupo activo (incluye los segundos que le quedan, calculados por el servidor).
+* `GET /api/trials`: los 12 trabajos (el carácter de cada uno solo se revela al grupo que la supera).
 * `POST /api/validate-trial`: valida una prueba en el servidor y guarda el progreso del grupo.
 * `POST /api/verify`: valida la contraseña final `HERACLES.EXE` y registra la victoria y el tiempo.
 * `GET /api/leaderboard` · `GET /api/podio`: clasificación y podio.
-* `POST /api/reset`: reinicia el progreso (solo administración).
+* `POST /api/reset`: reinicia el progreso del grupo identificado (la administración reinicia desde `/admin`).
 
 **Panel interno (`heracles/blueprints/admin.py`)**
 * `/admin/login` · `/admin/`: grupos, tiempos, intentos y estado de cada prueba.

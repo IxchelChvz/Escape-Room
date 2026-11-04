@@ -49,7 +49,7 @@ class Trial(db.Model):
             "name": self.name,
             "module": self.module,
             "concept": self.concept,
-            "char": self.password_char,
+            "char": self.password_char if solved else None,
             "pos": [self.pos_x, self.pos_y],
             "solved": solved,
             "solved_by_count": self.solved_by_teams.count(),
@@ -122,8 +122,8 @@ class Team(UserMixin, db.Model):
             db.session.delete(gs)
         self.start_session()
 
-    def to_dict(self):
-        return {
+    def to_dict(self, include_chars=False):
+        data = {
             "id": self.id,
             "name": self.name,
             "has_pin": self.has_pin,
@@ -135,6 +135,10 @@ class Team(UserMixin, db.Model):
             "completed_at": self.completed_at.strftime('%Y-%m-%d %H:%M:%S') if self.completed_at else None,
             "solved_trial_ids": sorted(t.num for t in self.solved_trials),
         }
+        if include_chars:
+            # Solo el propio grupo recibe los caracteres de las pruebas que ya ha superado.
+            data["solved_chars"] = {str(t.num): t.password_char for t in self.solved_trials}
+        return data
 
 
 class Submission(db.Model):

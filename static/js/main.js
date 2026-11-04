@@ -13,7 +13,9 @@ try {
   return;
 }
 
-const PASS='HERACLES.EXE';
+// Los caracteres ya no estan en el cliente: los envia el servidor al superar cada prueba.
+const PASS=Array(12).fill('');
+window.HERACLES_CH=PASS;
 
 const root=document.documentElement;
 const $=s=>document.querySelector(s);
@@ -267,7 +269,7 @@ function applyState(){
 function update(){
   const n=done.size;
   countEl.textContent=`${n}/12`;
-  passEl.textContent=[...PASS].map((c,i)=>done.has(i)?c:'_').join(' ');
+  passEl.textContent=PASS.map((c,i)=>done.has(i)?(c||'?'):'_').join(' ');
   pins.forEach((b,i)=>{
     b.classList.toggle('done',done.has(i));
     b.setAttribute('aria-label',`Trabajo ${i+1}: ${T[i].name}. ${done.has(i)?'Superado':'Pendiente'}`);
@@ -276,7 +278,7 @@ function update(){
     const isLocked = !UNLOCKED_TRIALS.has(i);
     b.classList.toggle('done',done.has(i));
     if(done.has(i)){
-      st.textContent=`PURIFICADO · ${PASS[i]}`;
+      st.textContent=`PURIFICADO · ${PASS[i]||'?'}`;
     } else if(isLocked){
       st.innerHTML=`${LOCK_SVG} CANDADO`;
     } else {
@@ -284,7 +286,7 @@ function update(){
     }
   });
   slots.forEach((sl,i)=>{
-    if(done.has(i)){sl.value=PASS[i];sl.readOnly=true;sl.classList.add('locked')}
+    if(done.has(i)){sl.value=PASS[i]||'';sl.readOnly=true;sl.classList.add('locked')}
     else if(sl.classList.contains('locked')){sl.value='';sl.readOnly=false;sl.classList.remove('locked')}
   });
 }
@@ -295,7 +297,7 @@ let cleanups=[];
 const runCleanups=()=>{cleanups.forEach(f=>{try{f()}catch(e){}});cleanups=[]};
 const fb=(t,k)=>{dFb.textContent=t||'';dFb.className='fb '+(k||'')};
 function reward(i,again){
-  const c=PASS[i];
+  const c=PASS[i]||'?';
   dBody.replaceChildren(h('div',{class:'reward'},
     h('div',{class:'glyph','aria-hidden':'true'},c),
     h('div',{},
@@ -321,6 +323,10 @@ function markDone(i,solution,validada){
       // El servidor no lo da por bueno: se deshace el progreso local.
       done.delete(i);save();update();drawFog();
       msg(d.message||'El servidor no ha aceptado la solución.','err');
+      if(dlg.open)dlg.close();
+    }else if(d&&d.success&&d.char){
+      PASS[i]=d.char;update();
+      if(dlg.open&&dBody.querySelector('.reward'))reward(i,false);
     }
   }).catch(()=>{});
 }
@@ -332,7 +338,7 @@ function validar(i,solution){
     body:JSON.stringify({trial_id:i+1,solution})
   }).then(r=>{
     if(r.status===401){window.location.replace('/login?msg=requerido');return {ok:false}}
-    return r.json().then(d=>({ok:!!(d&&d.success),msg:d&&!d.success?'Esa no es la respuesta. Revisadlo y volved a intentarlo.':''}));
+    return r.json().then(d=>{if(d&&d.success&&d.char)PASS[i]=d.char;return d}).then(d=>({ok:!!(d&&d.success),msg:d&&!d.success?'Esa no es la respuesta. Revisadlo y volved a intentarlo.':''}));
   }).catch(()=>({ok:false,msg:'No se pudo contactar con el servidor. Inténtalo de nuevo.'}));
 }
 function cabecera(i,story){
@@ -404,7 +410,6 @@ function restore(){
   const v=slots.map(x=>x.value.toUpperCase());
   const filled=v.filter(Boolean).length;
   if(filled<12){msg(`Faltan ${12-filled} caracteres. Supera más trabajos para revelarlos.`,'err');shakeEl(slotsEl);return}
-  if(v.join('')!==PASS){msg('Esa contraseña no abre el templo. Revisa los caracteres escritos a mano.','err');shakeEl(slotsEl);return}
   if(done.size<12){msg('Aún te faltan trabajos por superar en el mapa.','err');shakeEl(slotsEl);return}
   
   msg('Comprobando la contraseña con el servidor…','ok');
@@ -480,6 +485,13 @@ fetch('/api/team/current').then(r=>r.json()).then(d=>{
   if(!d||!d.authenticated){window.location.replace('/login?msg=requerido');return}
   done.clear();
   (d.team.solved_trial_ids||[]).forEach(n=>{if(Number.isInteger(n)&&n>=1&&n<=12)done.add(n-1)});
+  const ch=d.team.solved_chars||{};
+  Object.keys(ch).forEach(k=>{PASS[Number(k)-1]=ch[k]});
+  // Reloj: manda el servidor
+  if(typeof d.team.remaining_seconds==='number'&&!d.team.is_restored){
+    try{localStorage.setItem(TIMER_KEY,String(Date.now()+d.team.remaining_seconds*1000))}catch(e){}
+    initCountdown();
+  }
   save();update();drawFog();
 }).catch(()=>{});
 // Cada 15 s se recogen las pruebas que la administración haya dado por superadas
@@ -489,6 +501,8 @@ setInterval(()=>{
   fetch('/api/team/current').then(r=>r.json()).then(d=>{
     if(!d||!d.authenticated)return;
     const nuevas=(d.team.solved_trial_ids||[]).filter(n=>Number.isInteger(n)&&n>=1&&n<=12&&!done.has(n-1));
+    const ch=d.team.solved_chars||{};
+    Object.keys(ch).forEach(k=>{PASS[Number(k)-1]=ch[k]});
     if(!nuevas.length)return;
     nuevas.forEach(n=>{done.add(n-1);animFog(n-1)});
     save();update();

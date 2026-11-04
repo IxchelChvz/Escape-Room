@@ -458,7 +458,7 @@ function dibujarLeonImg(c,x,y,alto,col){
 }
 const leon={
   precarga:cargarLeon, // carga diferida: la imagen se pide al abrir la prueba
-  how:['Pinta la melena de tu león del mismo color que la del león de Nemea con los deslizadores Rojo, Verde y Azul.','Bajo cada deslizador veréis hacia dónde moverlo y cuánto le falta. Cuando los tres digan «Bien», pulsad «Sellar». Son dos tonos distintos.'],
+  how:['Pinta la melena de tu león del mismo color que la del león de Nemea con los deslizadores Rojo, Verde y Azul.','Bajo cada deslizador veréis si ese color ya está bien. Cuando los tres lo estén, pulsad «Sellar». Son dos tonos distintos.'],
   limite:80,castigo:20,penal:'Sellar mal: 6 s de espera',
   aviso:{x:235,y:426,w:390}, // dentro del panel de los leones: así no tapa el botón Sellar
   hud:'Arrastra los deslizadores (o usa ↑ ↓ para elegir y ← → para mover; Mayús va más rápido).',
@@ -487,13 +487,8 @@ const leon={
       const d=separados(cur,objetivo);
       return d>130?['Muy lejos',P.alerta]:d>80?['Lejos',P.alerta]:d>30?['Cerca',P.oroT]:['Casi…',P.oroT];
     };
-    // Pista de cada deslizador: hacia dónde moverlo y cuánto le falta
-    const consejo=k=>{
-      const dif=objetivo[k]-cur[k],a=Math.abs(dif);
-      if(a<=TOL)return ['✓ Bien',P.oliva];
-      const lado=dif>0?'→':'←',mas=dif>0?'más':'menos';
-      return a>60?[`${lado} Mucho ${mas}`,P.alerta]:a>25?[`${lado} Bastante ${mas}`,P.oroT]:[`${lado} Un poco ${mas}`,P.oroT];
-    };
+    // Pista de cada deslizador: solo dice si ese canal ya está bien (no hacia dónde moverlo)
+    const consejo=k=>Math.abs(objetivo[k]-cur[k])<=TOL?['✓ Bien',P.oliva]:['✗ Sin ajustar',P.dim];
     const fijar=(k,x)=>{cur[k]=Math.round(clamp((x-sl[k].x)/sl[k].w,0,1)*255)};
     const sobre=p=>sl.find(s=>Math.abs(p.y-s.y)<24&&p.x>s.x-16&&p.x<s.x+s.w+16);
     const sellar=()=>{
@@ -812,7 +807,7 @@ const TRAMPAS=['manual.exe.pdf','instalar.bat.txt','informe.scr.docx'];
 const SEGUROS=['foto.jpg','tarea.docx','musica.mp3','notas.txt','mapa.png','video.mp4','factura.pdf'];
 const SELLO_TIPO={jpg:'IMG',png:'IMG',docx:'DOC',pdf:'PDF',mp3:'MP3',txt:'TXT',mp4:'VID',exe:'EXE',bat:'BAT',scr:'SCR'};
 const augias={
-  how:['Los establos están llenos de archivos y algunos son virus disfrazados.','Arrastra a la papelera solo los peligrosos: los que TERMINAN en .exe, .bat o .scr. Ojo: lo que importa es la última extensión.'],
+  how:['Los establos están llenos de archivos y algunos son virus disfrazados.','Arrastra a la papelera solo los archivos peligrosos. Fijaos bien en sus extensiones.'],
   limite:70,castigo:15,penal:'Archivo bueno a la papelera: 6 s',
   start(g){
     const lista=shuffle([...shuffle(PELIGROSOS).slice(0,6).map(n=>({n,mal:true})),...shuffle(TRAMPAS).slice(0,2).map(n=>({n,mal:false})),...shuffle(SEGUROS).slice(0,4).map(n=>({n,mal:false}))]);
