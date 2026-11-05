@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 {% block title %}Panel de administración · Olimpo Digital{% endblock %}
 {% block css %}<link rel="stylesheet" href="{{ url_for('static', filename='css/webAveriada.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">{% endblock %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/gameover.css') }}">{% endblock %}
 {% block body %}
 <a class="skip" href="#contenido">Saltar al contenido</a>
 <div class="wrap">
@@ -17,15 +18,6 @@
     </header>
     <div class="meander" aria-hidden="true"></div>
 
-    <nav class="menu" aria-label="Menú de administración">
-        <a href="{{ url_for('main.home') }}">Inicio</a>
-        <a href="{{ url_for('main.mapa') }}">Mapa</a>
-        <a href="{{ url_for('admin.qr_hesperides') }}">QR de las Hespérides</a>
-        <form class="adm-inline" method="post" action="{{ url_for('admin.admin_logout') }}">
-            <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
-            <button class="adm-link" type="submit">Cerrar sesión de administración</button>
-        </form>
-    </nav>
 
     <main id="contenido">
         {% for category, message in get_flashed_messages(with_categories=true) %}
@@ -97,6 +89,16 @@
             </form>
         </section>
 
+        <section aria-labelledby="t-vistas">
+            <h2 class="sec" id="t-vistas">Vistas previas</h2>
+            <p class="adm-note">Para revisar en producción lo que ven los grupos. No modifican el progreso de ningún grupo.</p>
+            <div class="adm-previews">
+                <a class="adm-btn" href="{{ url_for('main.oraculo', token=config['QR_TOKEN']) }}" target="_blank" rel="noopener">Ver el oráculo (QR de las Hespérides)</a>
+                <button class="adm-btn" id="verDerrota" type="button">Ver la pantalla de tiempo agotado</button>
+                <a class="adm-btn" href="{{ url_for('main.restaurada', presentacion=1) }}" target="_blank" rel="noopener">Ir a la web restaurada</a>
+            </div>
+        </section>
+
         <section aria-labelledby="t-trabajos">
             <h2 class="sec" id="t-trabajos">Trabajos</h2>
             <div class="adm-scroll">
@@ -135,10 +137,18 @@
             {% endfor %}
             </ul>
         </section>
+         <nav class="menu" aria-label="Menú de administración">
+            <form class="adm-inline" method="post" action="{{ url_for('admin.admin_logout') }}">
+                <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+                <button class="adm-link" type="submit">Cerrar sesión de administración</button>
+            </form>
+        </nav>
     </main>
 </div>
 {% endblock %}
 
 {% block scripts %}
     <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+    <script>window.HERACLES_GAMEOVER_PREVIEW = true;</script>
+    <script src="{{ url_for('static', filename='js/gameover.js') }}"></script>
 {% endblock %}

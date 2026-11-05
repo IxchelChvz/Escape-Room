@@ -1652,3 +1652,38 @@ dialog.juego .dhead {
   clip: rect(0 0 0 0);
   white-space: nowrap;
 }
+
+/* Mapa en movil: se adapta al ancho de la pantalla (sin scroll horizontal) y los pines se escalan con el */
+@media (max-width: 860px) {
+  .mapscroll {
+    overflow-x: visible;
+    padding-bottom: 0;
+  }
+  .map {
+    min-width: 0;
+    width: 100%;
+  }
+  .pin {
+    width: clamp(22px, 5.2vw, 44px);
+    height: clamp(22px, 5.2vw, 44px);
+    font-size: clamp(.68rem, 2.4vw, 1.1rem);
+    border-width: 1.5px;
+  }
+  .pin .pin-lock-badge {
+    top: -4px;
+    right: -4px;
+    width: 12px;
+    height: 12px;
+  }
+  .pin .pin-lock-badge svg {
+    width: 7px;
+    height: 7px;
+  }
+  .tip {
+    font-size: 11px;
+    padding: 4px 7px;
+  }
+  .tip i {
+    font-size: 9px;
+  }
+}
