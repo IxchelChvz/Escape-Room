@@ -617,7 +617,7 @@ const HIDRA_CAJA={y0:140,y1:478,ancho:620}; // zona del canvas donde va la ilust
 const hidra={
   precarga:()=>{if(!IMG_HIDRA[1].src)for(let n=1;n<=9;n++)IMG_HIDRA[n].src=`/static/images/hidra-${n}.webp`},
   how:['Escribe con el teclado las dos inscripciones de la hidra, letra a letra.','Cada palabra completa corta una cabeza. Cada error hace brotar otra y os aturde un momento. Con nueve cabezas, la hidra gana.'],
-  limite:35,castigo:20,penal:'Error: +1 cabeza y 2 s',
+  limite:15,castigo:20,penal:'Error: +1 cabeza y 2 s',
   hud:'Escribe con el teclado. Las tildes no hacen falta.',
   start(g){
     const FRASES=shuffle(['EL FUEGO CIERRA CADA HERIDA','NUEVE CABEZAS Y UN SOLO HEROE','QUIEN TECLEA RAPIDO VENCE','LA HIDRA DUERME EN EL PANTANO','CORTA Y QUEMA SIN DUDAR','EL PANTANO DE LERNA NO PERDONA']);
