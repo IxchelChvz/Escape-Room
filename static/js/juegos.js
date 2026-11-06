@@ -610,9 +610,14 @@ function cabezaHidra(c,x,y,dir,s,col,abre){
   c.lineWidth=1.8;c.beginPath();c.moveTo(90,-15);c.quadraticCurveTo(94,-18,97,-14);c.stroke();
   c.restore();
 }
+// Ilustraciones de la hidra con 1 a 9 cabezas (static/images/hidra-N.webp), con carga diferida.
+// Si aún no han cargado, se usa la hidra dibujada por código.
+const IMG_HIDRA=Array.from({length:10},()=>new Image());
+const HIDRA_CAJA={y0:140,y1:478,ancho:620}; // zona del canvas donde va la ilustración
 const hidra={
+  precarga:()=>{if(!IMG_HIDRA[1].src)for(let n=1;n<=9;n++)IMG_HIDRA[n].src=`/static/images/hidra-${n}.webp`},
   how:['Escribe con el teclado las dos inscripciones de la hidra, letra a letra.','Cada palabra completa corta una cabeza. Cada error hace brotar otra y os aturde un momento. Con nueve cabezas, la hidra gana.'],
-  limite:60,castigo:20,penal:'Error: +1 cabeza y 2 s',
+  limite:35,castigo:20,penal:'Error: +1 cabeza y 2 s',
   hud:'Escribe con el teclado. Las tildes no hacen falta.',
   start(g){
     const FRASES=shuffle(['EL FUEGO CIERRA CADA HERIDA','NUEVE CABEZAS Y UN SOLO HEROE','QUIEN TECLEA RAPIDO VENCE','LA HIDRA DUERME EN EL PANTANO','CORTA Y QUEMA SIN DUDAR','EL PANTANO DE LERNA NO PERDONA']);
@@ -645,14 +650,26 @@ const hidra={
       draw(c){
         papel(c);
         const col=error>0?HID_ROJA:HID,esc=cabezas>5?.86:1;
-        const pos=Array.from({length:cabezas},(_,k)=>{const p=cuello(k),b=Math.sin(g.t*1.8+k*1.3);return {...p,x:p.x+b*2,y:p.y+b*4,k,abre:.5+.5*Math.sin(g.t*2.4+k)}});
-        // cuellos: salen del lomo del cuerpo
-        pos.forEach((p,i)=>cuelloHidra(c,{x:lerp(338,462,cabezas===1?.5:i/(cabezas-1)),y:420},{x:p.x,y:p.y},p.dir,col));
-        // cuerpo enroscado (tapa el arranque de los cuellos)
-        const anillo=(rx,ry,y,a0,a1)=>()=>{c.beginPath();c.ellipse(400,y,rx,ry,0,a0,a1)};
-        trazoHidra(c,anillo(150,26,452,Math.PI*.98,Math.PI*2.02),30,col,{x:0,y:6});
-        trazoHidra(c,anillo(108,22,428,Math.PI*1.02,Math.PI*1.98),28,col,{x:0,y:5});
-        trazoHidra(c,anillo(150,26,452,Math.PI*.02,Math.PI*.98),30,col,{x:0,y:6});
+        const ilus=IMG_HIDRA[Math.max(1,Math.min(9,cabezas))];
+        const conImagen=ilus.complete&&ilus.naturalWidth>0;
+        const pos=conImagen?[]:Array.from({length:cabezas},(_,k)=>{const p=cuello(k),b=Math.sin(g.t*1.8+k*1.3);return {...p,x:p.x+b*2,y:p.y+b*4,k,abre:.5+.5*Math.sin(g.t*2.4+k)}});
+        if(conImagen){
+          // ilustración con tantas cabezas como tenga la hidra; respira despacio y enrojece al fallar
+          const h0=HIDRA_CAJA.y1-HIDRA_CAJA.y0,s=Math.min(h0/ilus.naturalHeight,HIDRA_CAJA.ancho/ilus.naturalWidth);
+          const w=ilus.naturalWidth*s,h=ilus.naturalHeight*s,resp=Math.sin(g.t*1.6)*3;
+          c.save();
+          if(error>0)c.filter='sepia(1) saturate(5) hue-rotate(-35deg)';
+          c.drawImage(ilus,400-w/2,HIDRA_CAJA.y1-h+resp,w,h);
+          c.restore();
+        }else{
+          // cuellos: salen del lomo del cuerpo
+          pos.forEach((p,i)=>cuelloHidra(c,{x:lerp(338,462,cabezas===1?.5:i/(cabezas-1)),y:420},{x:p.x,y:p.y},p.dir,col));
+          // cuerpo enroscado (tapa el arranque de los cuellos)
+          const anillo=(rx,ry,y,a0,a1)=>()=>{c.beginPath();c.ellipse(400,y,rx,ry,0,a0,a1)};
+          trazoHidra(c,anillo(150,26,452,Math.PI*.98,Math.PI*2.02),30,col,{x:0,y:6});
+          trazoHidra(c,anillo(108,22,428,Math.PI*1.02,Math.PI*1.98),28,col,{x:0,y:5});
+          trazoHidra(c,anillo(150,26,452,Math.PI*.02,Math.PI*.98),30,col,{x:0,y:6});
+        }
         // pantano por delante del cuerpo
         c.fillStyle='rgba(243,232,200,.78)';c.fillRect(14,462,W-28,26);
         c.strokeStyle='rgba(93,107,47,.55)';c.lineWidth=1.5;
