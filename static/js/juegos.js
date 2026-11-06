@@ -459,7 +459,7 @@ function dibujarLeonImg(c,x,y,alto,col){
 const leon={
   precarga:cargarLeon, // carga diferida: la imagen se pide al abrir la prueba
   how:['Pinta la melena de tu león del mismo color que la del león de Nemea con los deslizadores Rojo, Verde y Azul.','Bajo cada deslizador veréis si ese color ya está bien. Cuando los tres lo estén, pulsad «Sellar». Son dos tonos distintos.'],
-  limite:20,castigo:20,penal:'Sellar mal: 6 s de espera',
+  limite:30,castigo:20,penal:'Sellar mal: 6 s de espera',
   aviso:{x:235,y:426,w:390}, // dentro del panel de los leones: así no tapa el botón Sellar
   hud:'Arrastra los deslizadores (o usa ↑ ↓ para elegir y ← → para mover; Mayús va más rápido).',
   start(g){
@@ -965,7 +965,7 @@ function laberinto(cols,rows){
 }
 const toro={
   how:['El toro de Creta se ha perdido en un laberinto a oscuras: solo veis lo que alumbra su antorcha.','Llevadlo hasta la puerta dorada con las flechas del teclado (o W A S D), o con los botones de la derecha.'],
-  limite:20,castigo:20,penal:'Si se acaba el tiempo: 20 s',
+  limite:25,castigo:20,penal:'Si se acaba el tiempo: 20 s',
   hud:'Flechas del teclado, W A S D o los botones de la derecha.',
   start(g){
     const COLS=19,ROWS=11,CS=32,OX=24,OY=64,RAD=3.2*CS;
@@ -1036,7 +1036,7 @@ const toro={
 /* 8 · Yeguas de Diomedes · Simon dice (como el original) */
 const yeguas={
   how:['Las yeguas de Diomedes relinchan en un orden secreto.','Mirad qué yegua se ilumina y repetid la secuencia pulsándolas (o con las teclas 1, 2, 3 y 4). Son 6 rondas, cada una más larga y más rápida.'],
-  limite:35,castigo:15,penal:'Fallo: 5 s y se repite la ronda',
+  limite:45,castigo:15,penal:'Fallo: 5 s y se repite la ronda',
   hud:'Mirad la secuencia y repetidla.',
   start(g){
     const NOM=['Podargo','Lampón','Janto','Dinos'],COL=[P.oroT,P.acento,P.alerta,P.tinta];
