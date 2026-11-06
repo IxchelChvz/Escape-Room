@@ -597,8 +597,6 @@ h2.sec::after {
 
 /* ---- Cosas rotas a propósito ---- */
 
-.menu a:nth-child(2) { transform: translateY(5px); }
-.menu a:nth-child(3) { margin-left: -8px; }
 .tile:nth-child(4) { font-family: Arial, sans-serif; }
 .tile:nth-child(5n) { margin-top: -5px; }
 .tile:nth-child(3n+2) .tgr { transform: translate(2px, -3px) skewX(-8deg); }
@@ -830,4 +828,18 @@ h2.sec::after {
 
 .svg-defs {
     position: absolute;
+}
+
+/* Cabecera: logo y cuadro de estado siempre en la misma fila (como en el mapa), salvo en movil */
+@media (min-width: 640px) {
+    .bar { flex-wrap: nowrap; gap: 16px; }
+    .brand { flex: none; }
+    .brand:has(.logo-buho) small { max-width: 150px; line-height: 1.5; }
+    .stats { flex-wrap: nowrap; min-width: 0; }
+}
+/* En pantallas medianas el cuadro se compacta y sus valores pueden partirse en dos lineas */
+@media (min-width: 640px) and (max-width: 1100px) {
+    .stat { padding: 8px 10px; }
+    .stat dt { letter-spacing: .08em; }
+    .stat dd { font-size: 12px; letter-spacing: .02em; white-space: normal; }
 }
