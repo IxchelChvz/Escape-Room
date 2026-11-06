@@ -459,7 +459,7 @@ function dibujarLeonImg(c,x,y,alto,col){
 const leon={
   precarga:cargarLeon, // carga diferida: la imagen se pide al abrir la prueba
   how:['Pinta la melena de tu león del mismo color que la del león de Nemea con los deslizadores Rojo, Verde y Azul.','Bajo cada deslizador veréis si ese color ya está bien. Cuando los tres lo estén, pulsad «Sellar». Son dos tonos distintos.'],
-  limite:80,castigo:20,penal:'Sellar mal: 6 s de espera',
+  limite:20,castigo:20,penal:'Sellar mal: 6 s de espera',
   aviso:{x:235,y:426,w:390}, // dentro del panel de los leones: así no tapa el botón Sellar
   hud:'Arrastra los deslizadores (o usa ↑ ↓ para elegir y ← → para mover; Mayús va más rápido).',
   start(g){
@@ -765,7 +765,7 @@ function rastro(cols,rows){
 }
 const jabali={
   how:['El jabalí ha dejado huellas entre muchas otras parecidas.','Sigue solo las huellas del símbolo indicado, casilla a casilla (arriba, abajo o a la derecha), desde la columna de la izquierda hasta su guarida.'],
-  limite:60,castigo:15,penal:'Huella equivocada: 4 s de espera',
+  limite:25,castigo:15,penal:'Huella equivocada: 4 s de espera',
   start(g){
     const COLS=11,ROWS=7,CS=54,OX=30,OY=62;
     const obj=pick(HUELLAS),otros=HUELLAS.filter(x=>x!==obj);
@@ -825,7 +825,7 @@ const SEGUROS=['foto.jpg','tarea.docx','musica.mp3','notas.txt','mapa.png','vide
 const SELLO_TIPO={jpg:'IMG',png:'IMG',docx:'DOC',pdf:'PDF',mp3:'MP3',txt:'TXT',mp4:'VID',exe:'EXE',bat:'BAT',scr:'SCR'};
 const augias={
   how:['Los establos están llenos de archivos y algunos son virus disfrazados.','Arrastra a la papelera solo los archivos peligrosos. Fijaos bien en sus extensiones.'],
-  limite:70,castigo:15,penal:'Archivo bueno a la papelera: 6 s',
+  limite:18,castigo:15,penal:'Archivo bueno a la papelera: 6 s',
   start(g){
     const lista=shuffle([...shuffle(PELIGROSOS).slice(0,6).map(n=>({n,mal:true})),...shuffle(TRAMPAS).slice(0,2).map(n=>({n,mal:false})),...shuffle(SEGUROS).slice(0,4).map(n=>({n,mal:false}))]);
     const items=lista.map((o,k)=>({...o,x:30+(k%6)*100+rnd(-4,4),y:70+Math.floor(k/6)*196+rnd(-4,4),w:86,h:118,vivo:true,ox:0,oy:0,bx:0,by:0}));
@@ -965,7 +965,7 @@ function laberinto(cols,rows){
 }
 const toro={
   how:['El toro de Creta se ha perdido en un laberinto a oscuras: solo veis lo que alumbra su antorcha.','Llevadlo hasta la puerta dorada con las flechas del teclado (o W A S D), o con los botones de la derecha.'],
-  limite:120,castigo:20,penal:'Si se acaba el tiempo: 20 s',
+  limite:20,castigo:20,penal:'Si se acaba el tiempo: 20 s',
   hud:'Flechas del teclado, W A S D o los botones de la derecha.',
   start(g){
     const COLS=19,ROWS=11,CS=32,OX=24,OY=64,RAD=3.2*CS;
@@ -1036,7 +1036,7 @@ const toro={
 /* 8 · Yeguas de Diomedes · Simon dice (como el original) */
 const yeguas={
   how:['Las yeguas de Diomedes relinchan en un orden secreto.','Mirad qué yegua se ilumina y repetid la secuencia pulsándolas (o con las teclas 1, 2, 3 y 4). Son 6 rondas, cada una más larga y más rápida.'],
-  limite:150,castigo:15,penal:'Fallo: 5 s y se repite la ronda',
+  limite:35,castigo:15,penal:'Fallo: 5 s y se repite la ronda',
   hud:'Mirad la secuencia y repetidla.',
   start(g){
     const NOM=['Podargo','Lampón','Janto','Dinos'],COL=[P.oroT,P.acento,P.alerta,P.tinta];
@@ -1090,7 +1090,7 @@ const yeguas={
 /* 9 · Cinturón de Hipólita · Bit roto */
 const hipolita={
   how:['El cinturón de Hipólita está tejido con píxeles y gemas.','En cada cinturón hay UNA gema mal puesta: encontradla y pulsadla. Son 4 cinturones, cada uno más difícil.'],
-  limite:80,castigo:15,penal:'Gema equivocada: 4 s de espera',
+  limite:18,castigo:15,penal:'Gema equivocada: 4 s de espera',
   hud:'Buscad la gema que no encaja y pulsadla.',
   start(g){
     const COLS=26,ROWS=7,CS=26,OX=(W-COLS*CS)/2,OY=200;
@@ -1149,7 +1149,7 @@ const hipolita={
 const ATAJOS=[['C','Copiar','copiar'],['X','Cortar','cortar'],['V','Pegar','pegar'],['Z','Deshacer','deshacer'],['Y','Rehacer','rehacer'],['S','Guardar','disquete'],['F','Buscar','buscar'],['H','Reemplazar','reemplazar'],['P','Imprimir','imprimir'],['A','Seleccionar todo','seleccionar']];
 const gerion={
   how:['Gerión tiene tres cuerpos y su rebaño se ha mezclado: cada atajo tiene que volver con su acción.','Arrastrad desde la tecla hasta la acción (o pulsad la tecla y luego la acción). Hay acciones que se parecen mucho.'],
-  limite:75,castigo:15,penal:'Pareja equivocada: 5 s de espera',
+  limite:20,castigo:15,penal:'Pareja equivocada: 5 s de espera',
   hud:'Arrastrad desde cada atajo hasta su acción.',
   start(g){
     const sel=shuffle(ATAJOS).slice(0,6);
