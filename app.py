@@ -1,6 +1,6 @@
 """
 HERACLES.EXE // Backend Flask + SQLAlchemy + Flask-Login + Jinja2
-Dódeka - Grupo 4 (DAW)
+JPIM - Grupo 4 (DAW)
 
 Estructura:
     app.py                  -> crea la aplicacion (factory) y arranca el servidor
@@ -24,11 +24,26 @@ from heracles.config import Config
 from heracles.extensions import db, login_manager
 from heracles.game_data import DEFAULT_TRIALS, DEMO_TEAMS
 from heracles.models import Team, Trial
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 
 def create_app():
     app = Flask(__name__, template_folder='templates', static_folder='static')
     app.config.from_object(Config)
+
+    app.wsgi_app = ProxyFix(
+    app.wsgi_app,
+    x_for=1,
+    x_proto=1,
+    x_host=0,
+    x_port=0,
+    x_prefix=0,
+    )
+
+    app.config.update(
+    SESSION_COOKIE_SECURE=True,
+    REMEMBER_COOKIE_SECURE=True,
+    )
 
     db.init_app(app)
     login_manager.init_app(app)

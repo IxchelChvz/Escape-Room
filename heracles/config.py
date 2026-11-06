@@ -51,6 +51,9 @@ class Config:
     # Panel /admin
     ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD') or _persisted('.admin_password', lambda: secrets.token_urlsafe(9))
 
+    # Codigo de la URL que abre el QR de las Hesperides (no se puede adivinar escribiendo)
+    QR_TOKEN = os.environ.get('QR_TOKEN') or _persisted('.qr_token', lambda: secrets.token_urlsafe(8))
+
     # Cookies de sesion
     SESSION_COOKIE_HTTPONLY = True
     SESSION_COOKIE_SAMESITE = 'Lax'

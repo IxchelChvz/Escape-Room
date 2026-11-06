@@ -1,0 +1,21 @@
+# /etc/systemd/system/heracles.service
+[Unit]
+Description=Heracles.exe (Escape Room) - gunicorn
+After=network.target
+
+[Service]
+User=heracles
+Group=heracles
+WorkingDirectory=/opt/heracles
+EnvironmentFile=/etc/heracles.env
+ExecStart=/opt/heracles/venv/bin/gunicorn -w 2 -b 127.0.0.1:8000 wsgi:app
+Restart=on-failure
+RestartSec=3
+# Endurecimiento basico
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ReadWritePaths=/opt/heracles
+
+[Install]
+WantedBy=multi-user.target

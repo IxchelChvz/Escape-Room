@@ -10,6 +10,8 @@
     var COUNTDOWN_SECONDS = 90 * 60; // 5400s (1.30h)
     var isGameOverActive = false;
     var dismissed = false; // true si el usuario pulso "Inspeccionar ruinas"
+    // Vista previa desde /admin: solo muestra la pantalla; no reinicia nada ni mira el reloj
+    var PREVIEW = !!window.HERACLES_GAMEOVER_PREVIEW;
 
     function getTeamInfo() {
         var name = 'Escuadra sin registrar';
@@ -30,13 +32,13 @@
     }
 
     function getPartialKey() {
-        var PASS = 'HERACLES.EXE';
+        var PASS = window.HERACLES_CH || [];
         var chars = [];
         try {
             var saved = JSON.parse(localStorage.getItem('heracles-mapa-done') || '[]');
             var set = new Set(saved);
             for (var i = 0; i < 12; i++) {
-                chars.push(set.has(i) ? PASS[i] : '_');
+                chars.push(set.has(i) ? (PASS[i] || '?') : '_');
             }
             return chars.join(' ');
         } catch (e) {
@@ -54,12 +56,14 @@
 
     function showGameOverScreen() {
         if (isGameOverActive) return;
-        // Si el Olimpo ya habia sido restaurado con exito antes de agotarse el tiempo, no mostrar derrota
-        if (document.documentElement.classList.contains('restored')) return;
-        try {
-            var dk = JSON.parse(localStorage.getItem('dk') || '{}');
-            if (dk && dk.completed) return;
-        } catch (e) {}
+        if (!PREVIEW) {
+            // Si el Olimpo ya habia sido restaurado con exito antes de agotarse el tiempo, no mostrar derrota
+            if (document.documentElement.classList.contains('restored')) return;
+            try {
+                var dk = JSON.parse(localStorage.getItem('dk') || '{}');
+                if (dk && dk.completed) return;
+            } catch (e) {}
+        }
 
         // Primero se limpia (esto pone el indicador a false) y despues se marca como activa;
         // asi la comprobacion de cada segundo no reconstruye la pantalla y el scroll no se reinicia.
@@ -71,9 +75,9 @@
         document.documentElement.classList.add('crt-active');
         document.body.classList.add('crt-active');
 
-        var teamName = getTeamInfo();
-        var solved = getSolvedCount();
-        var partialKey = getPartialKey();
+        var teamName = PREVIEW ? 'Vista previa (administración)' : getTeamInfo();
+        var solved = PREVIEW ? 0 : getSolvedCount();
+        var partialKey = PREVIEW ? '_ _ _ _ _ _ _ _ _ _ _ _' : getPartialKey();
 
         var overlay = document.createElement('div');
         overlay.id = 'crtGameOverModal';
@@ -133,9 +137,9 @@
                     '<button type="button" id="crtResetBtn" class="crt-btn">' +
                         '[ REINICIAR MISION Y RESTABLECER RELOJ (1.30H) ]' +
                     '</button>' +
-                    '<button type="button" id="crtCloseBtn" class="crt-btn crt-btn-secondary">' +
+                    /* '<button type="button" id="crtCloseBtn" class="crt-btn crt-btn-secondary">' +
                         '[ INSPECCIONAR RUINAS DEL SISTEMA ]' +
-                    '</button>' +
+                    '</button>' + */
                 '</div>' +
             '</div>';
 
@@ -147,6 +151,7 @@
         var resetBtn = document.getElementById('crtResetBtn');
         if (resetBtn) {
             resetBtn.onclick = function () {
+                if (PREVIEW) { removeGameOverScreen(); return; }
                 resetBtn.disabled = true;
                 try {
                     localStorage.removeItem('heracles-mapa-done');
@@ -168,6 +173,7 @@
         var closeBtn = document.getElementById('crtCloseBtn');
         if (closeBtn) {
             closeBtn.onclick = function () {
+                if (PREVIEW) { removeGameOverScreen(); return; }
                 dismissed = true;
                 removeGameOverScreen();
                 ensureReopenPill();
@@ -200,6 +206,9 @@
     // Exponer globalmente
     window.showGameOverScreen = showGameOverScreen;
     window.checkGameOverCondition = checkTimerStatus;
+
+    // En la vista previa de /admin la pantalla solo se abre con el boton
+    if (PREVIEW) return;
 
     // Comprobacion periodica
     setInterval(checkTimerStatus, 1000);

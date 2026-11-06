@@ -120,10 +120,10 @@
             '<div class="intro-crt-tube-content">' +
                 '<div class="intro-console-box" id="introConsoleBox"></div>' +
                 '<div class="intro-spider-container" id="introSpiderBox">' +
-                    '<div class="intro-spider-title">=== HERACLES.EXE // SISTEMA SECUESTRADO ===</div>' +
+                    '<div class="intro-spider-title">=== OLIMPO DIGITAL // SISTEMA SECUESTRADO ===</div>' +
                     '<div class="intro-spider-subtitle">EXPLOIT: CVE-0404-HERA-CHIMAERA (RCE ROOTKIT ACTIVO)</div>' +
                     '<pre class="intro-spider-pre">' + SPIDER_ASCII + '</pre>' +
-                    '<div class="intro-spider-footer">MALDICION DE HERA ACTIVADA // 9 TEMPLOS CON CANDADO // PRUEBAS 3, 11 Y 12 DISPONIBLES</div>' +
+                    '<div class="intro-spider-footer">MALDICION DE HERA ACTIVADA // 12 TEMPLOS // PRUEBAS DISPONIBLES</div>' +
                 '</div>' +
             '</div>';
 
@@ -259,8 +259,7 @@
             addLine('======================================================================', '');
             addLine('[ALERTA ROJA] INTRUSION CONFIRMADA: KERNEL PANIC EN TEMPLO DEL OLIMPO', 'alert-red glitch-flash');
             addLine('[10:15:10] > Sobreescribiendo tabla IDT y punteros: 0x7FFF_OLYMPOS -> 0xDEAD_CHIMAERA', '');
-            addLine('[10:15:10] > Modificando cerrojos: 9 templos bloqueados con candado arcano', 'alert-red');
-            addLine('[10:15:11] > Solo permanecen accesibles las pruebas 3, 11 y 12 para resolver la clave', '');
+            addLine('[10:15:11] > Resuelve la clave', '');
             addLine('[10:15:11] [ROOTKIT] LA QUIMERA HA CORROMPIDO LA BASE DE DATOS SAGRADA', 'alert-red');
         }, 8400);
 

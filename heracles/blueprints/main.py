@@ -1,10 +1,12 @@
 """Vistas HTML renderizadas con Jinja2."""
 
-from flask import Blueprint, render_template, redirect, url_for, request
+import hmac
+
+from flask import Blueprint, abort, current_app, render_template, redirect, url_for, request, session
 from flask_login import current_user, login_required, logout_user
 
 from ..extensions import db
-from ..game_data import format_seconds
+from ..game_data import HESPERIDES_CIFRADO, format_seconds
 from ..models import Team
 from ..services import all_trials, podio_teams
 
@@ -40,10 +42,22 @@ def mapa():
     return render_template('mapa.html', trials=all_trials())
 
 
+@main_bp.route('/oraculo/<token>')
+def oraculo(token):
+    """Pagina que abre el QR de las Hesperides (prueba fisica). La prueba 11 esta bloqueada,
+    asi que solo se abre con la sesion de administracion (vista previa del panel /admin)."""
+    if not session.get('is_admin'):
+        return redirect(url_for('admin.admin_login'))
+    if not hmac.compare_digest(token, current_app.config['QR_TOKEN']):
+        abort(404)
+    return render_template('oraculo.html', cifrado=HESPERIDES_CIFRADO)
+
+
 @main_bp.route('/restaurada')
 def restaurada():
-    """Web restaurada. Requiere haber ganado, salvo en modo presentacion (?presentacion=1)."""
-    presentacion = request.args.get('presentacion') is not None
+    """Web restaurada. Requiere haber ganado, salvo en modo presentacion (?presentacion=1),
+    que solo funciona con la sesion de administracion abierta (boton del panel /admin)."""
+    presentacion = request.args.get('presentacion') is not None and bool(session.get('is_admin'))
     if not presentacion and not (current_user.is_authenticated and current_user.is_restored):
         return redirect(url_for('main.mapa'))
     tiempo = None

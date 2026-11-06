@@ -5,7 +5,7 @@
 <div class="wrap">
     <header class="bar">
         <div class="brand">
-            <a class="logo" href="#inicio"><img class="logo-img" src="{{ url_for('static', filename='images/JPIM_LogoBuho.png') }}" alt="Logo Olimpo Digital" width="676" height="369" decoding="async"></a>
+            <a class="logo" href="#inicio"><img class="logo-img" src="{{ url_for('static', filename='images/JPIM_LogoBuho.webp') }}" alt="Logo Olimpo Digital" width="676" height="369" decoding="async"></a>
             <small>Portal oficial · build 1.0.0</small>
         </div>
         <dl class="stats">
@@ -30,7 +30,6 @@
         <a href="#secciones">Dioses</a>
         <a href="#clasificacion">Clasificación</a>
         <a href="#oraculo">Oráculo</a>
-        <a href="{{ url_for('main.mapa') }}">Volver al Mapa</a>
         <a class="link-gold" href="{{ url_for('main.login') }}">Cambiar Grupo</a>
     </nav>
 
@@ -65,7 +64,7 @@
             <p id="who">
                 Habéis superado las pruebas del mapa y reunido los <b>12 caracteres</b> de la contraseña. El Olimpo Digital vuelve a estar en línea.
             </p>
-            <div class="actions"><a class="btn" href="#secciones">Explorar el templo</a><a class="btn ghost" href="{{ url_for('main.mapa') }}">Volver al mapa</a></div>
+            <div class="actions"><a class="btn" href="#secciones">Explorar el templo</a></div>
         </section>
 
         <section class="trials" id="secciones" aria-labelledby="sec">
@@ -92,14 +91,14 @@
         <section class="section" id="oraculo" aria-labelledby="or">
             <h2 class="sec" id="or">Oráculo · cómo se restauró</h2>
             <ol class="crew">
-                <li><b>1. Inspeccionar</b>
-                    <p>El código fuente guardaba la nota del León.</p>
+                <li><b>1. Explorar el mapa</b>
+                    <p>El grupo recorrió la Hélade y abrió los doce templos malditos por Hera.</p>
                 </li>
-                <li><b>2. Depurar</b>
-                    <p>La consola reveló el enigma de la Hidra.</p>
+                <li><b>2. Vencer contra el reloj</b>
+                    <p>Colores, reflejos, memoria y teclado: once minijuegos superados antes de que se agotara el tiempo.</p>
                 </li>
-                <li><b>3. Corregir</b>
-                    <p>Las herramientas de desarrollo sacaron a la luz el elemento que el CSS escondía.</p>
+                <li><b>3. Descifrar el oráculo</b>
+                    <p>El QR escondido en la sala reveló el mensaje cifrado de Ladón en el jardín de las Hespérides.</p>
                 </li>
                 <li><b>4. Unir las piezas</b>
                     <p>Cada carácter ocupó su posición y la contraseña purificó la web.</p>

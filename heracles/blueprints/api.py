@@ -14,6 +14,8 @@ from ..services import all_trials, podio_teams
 api_bp = Blueprint('api', __name__, url_prefix='/api')
 
 SOLUTIONS = {t["num"]: t["solution"] for t in DEFAULT_TRIALS}
+MIN_SECONDS_BETWEEN_TRIALS = 5  # margen anti-script: corto para no quitar victorias legitimas a grupos rapidos
+LOCKED_TRIALS = {11}  # bloqueadas con candado: solo el admin puede darlas por superada desde /admin
 
 
 def _error(message, status):
@@ -56,7 +58,7 @@ def api_login():
         "success": True,
         "is_new": is_new,
         "message": f"Grupo '{team.name}' identificado correctamente.",
-        "team": team.to_dict(),
+        "team": team.to_dict(include_chars=True),
     })
 
 
@@ -76,7 +78,12 @@ def api_get_teams():
 def api_current_team():
     """Grupo de la sesion actual y su progreso (el navegador lo usa para sincronizarse)."""
     if current_user.is_authenticated:
-        return jsonify({"authenticated": True, "team": current_user.to_dict()})
+        team = current_user.to_dict(include_chars=True)
+        # El reloj lo manda el servidor (el navegador solo lo pinta).
+        gs = current_user.current_session()
+        used = int((datetime.utcnow() - gs.created_at).total_seconds()) if gs and gs.created_at else 0
+        team["remaining_seconds"] = max(0, current_app.config['TIME_LIMIT_SECONDS'] - used)
+        return jsonify({"authenticated": True, "team": team})
     return jsonify({"authenticated": False, "team": None})
 
 
@@ -103,6 +110,8 @@ def validate_trial():
     trial = Trial.query.filter_by(num=num).first()
     if trial is None:
         return _error("Trabajo no encontrado.", 404)
+    if num in LOCKED_TRIALS:
+        return _error("Esta prueba está bloqueada con candado.", 403)
 
     expected = SOLUTIONS.get(num)
     if expected is None:
@@ -111,6 +120,17 @@ def validate_trial():
         correct = normalize(solution) == normalize(expected)
 
     team = current_user
+
+    # Anti-script: los minijuegos se validan con SOLVED; se exige un tiempo minimo desde la ultima
+    # prueba acertada (o desde el inicio de la partida) para que un script no encadene las 10.
+    if correct and expected is None:
+        last = (team.submissions.filter_by(is_correct=True)
+                .order_by(Submission.submitted_at.desc()).first())
+        gs = team.current_session()
+        ref = last.submitted_at if last else (gs.created_at if gs else None)
+        if ref and (datetime.utcnow() - ref).total_seconds() < MIN_SECONDS_BETWEEN_TRIALS:
+            correct = False
+
     db.session.add(Submission(team_id=team.id, team_name=team.name, trial_id=trial.id,
                               solution_sent=solution or '(vacío)', is_correct=correct))
     if not correct:

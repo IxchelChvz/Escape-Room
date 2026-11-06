@@ -15,7 +15,7 @@
     <div class="wrap">
         <header class="bar">
             <div class="brand">
-                <a class="logo logo-buho" href="{{ url_for('main.home') }}"><img class="logo-img" src="{{ url_for('static', filename='images/JPIM_LogoBuho.png') }}" alt="Logo Olimpo Digital" width="676" height="369" decoding="async"></a>
+                <a class="logo logo-buho" href="{{ url_for('main.home') }}"><img class="logo-img" src="{{ url_for('static', filename='images/JPIM_LogoBuho.webp') }}" alt="Logo Olimpo Digital" width="676" height="369" decoding="async"></a>
                 <small>{{ company }} - Grupo 4</small>
             </div>
             <dl class="stats">
@@ -53,24 +53,17 @@
                         <li><b>El mapa:</b> cada pin es un trabajo de Heracles. Púlsalo, supera la prueba y la niebla se disipará mostrando un carácter.</li>
                         <li><b>Candados:</b> algunos templos están sellados. Empieza por los que están disponibles.</li>
                         <li><b>La zona de desbloqueo:</b> cuando tengas los 12 caracteres, escríbelos en las casillas y pulsa <i>Restaurar el Olimpo</i>.</li>
-                        <li><b>Pistas:</b> no todo está a la vista. Mira el código fuente de la web averiada, la consola del navegador y los elementos que el CSS esconde.</li>
+                        <li><b>Las pruebas:</b> cada una es un minijuego que se abre en una ventana; lee las instrucciones y pulsa <i>¡A jugar!</i>. La de las Hespérides se resuelve fuera del ordenador, con un código QR escondido en la sala.</li>
                         <li><b>Si se acaba el tiempo</b> aparece la pantalla de derrota; puedes reiniciar la misión desde ella.</li>
                     </ol>
                 </details>
             </section>
 
-            <!--
-            PISTA DEL LEÓN DE NEMEA (hallada inspeccionando el código fuente del mapa):
-            "Ninguna flecha me atraviesa, pero una sola propiedad de flexbox me deja centrado en mi guarida:
-            la que alinea en el eje cruzado. Su nombre lleva un guion."
-            -->
-            <p class="reliquia">Pista oculta con CSS (visible con las herramientas de desarrollo): Hipólita solo entrega el cinturón a quien sabe que <code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code> y <code>&lt;footer&gt;</code> nombran la función de cada pieza del templo.</p>
-
             <!-- Contenedor del Mapa -->
             <section class="mapsec" aria-label="Mapa de los doce trabajos">
                 <div class="mapscroll">
                     <div class="map" id="map">
-                        <img class="base" src="{{ url_for('static', filename='images/mapaGriego.jpeg') }}" alt="Mapa de la antigua Grecia con los doce templos de los trabajos" width="1998" height="1115" decoding="async">
+                        <img class="base" src="{{ url_for('static', filename='images/mapaGriego.webp') }}" alt="Mapa de la antigua Grecia con los doce templos de los trabajos" width="1998" height="1115" decoding="async">
                         <canvas id="fog" aria-hidden="true"></canvas>
                     </div>
                 </div>
@@ -95,7 +88,30 @@
         </main>
     </div>
 
-    <!-- Modal de diálogos para las pruebas -->
+    <!-- Canvas emergente de los minijuegos (lo controla juegos.js) -->
+    <dialog id="juego" class="juego" aria-labelledby="jTitle">
+        <div class="dhead">
+            <span class="dgr" id="jGr" aria-hidden="true"></span>
+            <div>
+                <p class="dtag" id="jTag"></p>
+                <h2 id="jTitle"></h2>
+            </div>
+            <button class="x" id="jClose" type="button" aria-label="Cerrar">×</button>
+        </div>
+        <div class="jstage">
+            <canvas id="jCanvas" width="800" height="500" tabindex="0"></canvas>
+        </div>
+        <div class="jbar">
+            <p class="jhud" id="jHud" role="status"></p>
+            <form class="jform" id="jForm" hidden>
+                <label class="sr-only" for="jInput">Respuesta</label>
+                <input id="jInput" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="40">
+                <button class="btn" type="submit">Comprobar</button>
+            </form>
+        </div>
+    </dialog>
+
+    <!-- Diálogo de recompensa y de pruebas con candado -->
     <dialog id="dlg" aria-labelledby="dTitle">
         <div class="dhead">
             <span class="dgr" id="dGr" aria-hidden="true"></span>
@@ -113,6 +129,7 @@
 {% endblock %}
 
 {% block scripts %}
+    <script src="{{ url_for('static', filename='js/juegos.js') }}"></script>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     <script src="{{ url_for('static', filename='js/gameover.js') }}"></script>
 {% endblock %}
