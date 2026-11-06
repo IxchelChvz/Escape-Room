@@ -44,7 +44,10 @@ def mapa():
 
 @main_bp.route('/oraculo/<token>')
 def oraculo(token):
-    """Pagina que abre el QR de las Hesperides (prueba fisica). Sin sesion: se abre en el movil."""
+    """Pagina que abre el QR de las Hesperides (prueba fisica). La prueba 11 esta bloqueada,
+    asi que solo se abre con la sesion de administracion (vista previa del panel /admin)."""
+    if not session.get('is_admin'):
+        return redirect(url_for('admin.admin_login'))
     if not hmac.compare_digest(token, current_app.config['QR_TOKEN']):
         abort(404)
     return render_template('oraculo.html', cifrado=HESPERIDES_CIFRADO)

@@ -15,6 +15,7 @@ api_bp = Blueprint('api', __name__, url_prefix='/api')
 
 SOLUTIONS = {t["num"]: t["solution"] for t in DEFAULT_TRIALS}
 MIN_SECONDS_BETWEEN_TRIALS = 5  # margen anti-script: corto para no quitar victorias legitimas a grupos rapidos
+LOCKED_TRIALS = {11}  # bloqueadas con candado: solo el admin puede darlas por superada desde /admin
 
 
 def _error(message, status):
@@ -109,6 +110,8 @@ def validate_trial():
     trial = Trial.query.filter_by(num=num).first()
     if trial is None:
         return _error("Trabajo no encontrado.", 404)
+    if num in LOCKED_TRIALS:
+        return _error("Esta prueba está bloqueada con candado.", 403)
 
     expected = SOLUTIONS.get(num)
     if expected is None:
