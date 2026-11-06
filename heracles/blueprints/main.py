@@ -2,7 +2,7 @@
 
 import hmac
 
-from flask import Blueprint, abort, current_app, render_template, redirect, url_for, request
+from flask import Blueprint, abort, current_app, render_template, redirect, url_for, request, session
 from flask_login import current_user, login_required, logout_user
 
 from ..extensions import db
@@ -52,8 +52,9 @@ def oraculo(token):
 
 @main_bp.route('/restaurada')
 def restaurada():
-    """Web restaurada. Requiere haber ganado, salvo en modo presentacion (?presentacion=1)."""
-    presentacion = request.args.get('presentacion') is not None
+    """Web restaurada. Requiere haber ganado, salvo en modo presentacion (?presentacion=1),
+    que solo funciona con la sesion de administracion abierta (boton del panel /admin)."""
+    presentacion = request.args.get('presentacion') is not None and bool(session.get('is_admin'))
     if not presentacion and not (current_user.is_authenticated and current_user.is_restored):
         return redirect(url_for('main.mapa'))
     tiempo = None
