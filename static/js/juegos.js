@@ -1178,7 +1178,13 @@ const gerion={
 };
 
 /* 11 · Manzanas de las Hespérides · QR y cifrado (prueba física) */
+// Ilustraciones sin fondo (carga diferida): el árbol con Ladón y una manzana de oro que se repite sobre la copa
+const imgArbolHesp=new Image(),imgManzana=new Image();
+const HESP_ARBOL={x:266,y:138,h:340};   // dónde va el árbol en el canvas (la imagen mide 619x640)
+const HESP_MANZANAS=[[150,105],[305,60],[455,95],[85,225],[255,185],[400,200],[535,245],[175,300],[470,320]]; // sobre la copa, en px de la imagen
+const listaImg=im=>im.complete&&im.naturalWidth>0;
 const hesperides={
+  precarga:()=>{if(!imgArbolHesp.src){imgArbolHesp.src='/static/images/hesperides-arbol.webp';imgManzana.src='/static/images/manzana-oro.webp'}},
   how:['Las manzanas de oro no están en esta pantalla: el dragón Ladón las esconde.','Buscad por la sala el código QR del jardín y escaneadlo con el móvil. Descifrad el mensaje y escribid aquí la palabra.'],
   penal:'Respuesta incorrecta: 20 s de espera',
   hud:'Escribid abajo la palabra descifrada y pulsad «Comprobar».',
@@ -1200,26 +1206,39 @@ const hesperides={
         papel(c);
         c.strokeStyle=P.tinta;c.lineWidth=2;c.fillStyle=P.papel2;
         c.beginPath();c.moveTo(14,470);c.quadraticCurveTo(400,400,786,470);c.lineTo(786,486);c.lineTo(14,486);c.closePath();c.fill();c.stroke();
-        c.fillStyle='#8a6a44';c.fillRect(388,270,24,170);c.strokeRect(388,270,24,170);
-        c.fillStyle='#c9c58a';[[400,215,115],[345,200,70],[455,205,70]].forEach(([x,y,r])=>{c.beginPath();c.arc(x,y,r,0,TAU);c.fill();c.stroke()});
-        manz.forEach(([x,y],k)=>{
-          const yy=caen>=0?Math.min(450,y+caen*caen*300*(1+k*.15)):y+Math.sin(g.t*2+k)*2;
-          c.fillStyle=P.oro;c.beginPath();c.arc(x,yy,12,0,TAU);c.fill();c.stroke();
-          c.beginPath();c.moveTo(x,yy-12);c.lineTo(x+3,yy-18);c.stroke();
-        });
-        // Ladón
-        c.lineCap='round';c.strokeStyle=P.tinta;c.lineWidth=18;
-        c.beginPath();c.moveTo(230,455);c.bezierCurveTo(320,395,470,445,420,365);c.bezierCurveTo(380,315,470,305,520,335);c.stroke();
-        c.strokeStyle='#7d8f4a';c.lineWidth=14;c.stroke();
-        c.fillStyle='#7d8f4a';c.strokeStyle=P.tinta;c.lineWidth=2;c.beginPath();c.ellipse(540,333,26,17,.3,0,TAU);c.fill();c.stroke();
-        c.fillStyle=parpadeo>3.85?'#7d8f4a':P.alerta;c.beginPath();c.arc(547,326,4,0,TAU);c.fill();
+        if(listaImg(imgArbolHesp)){
+          // Árbol con Ladón (imagen) y manzanas de oro encima de la copa
+          const esc=HESP_ARBOL.h/imgArbolHesp.naturalHeight;
+          c.drawImage(imgArbolHesp,HESP_ARBOL.x,HESP_ARBOL.y,imgArbolHesp.naturalWidth*esc,HESP_ARBOL.h);
+          const mw=24,mh=listaImg(imgManzana)?mw*imgManzana.naturalHeight/imgManzana.naturalWidth:mw;
+          HESP_MANZANAS.forEach(([px,py],k)=>{
+            const x=HESP_ARBOL.x+px*esc,y=HESP_ARBOL.y+py*esc;
+            const yy=caen>=0?Math.min(462-mh/2,y+caen*caen*300*(1+k*.15)):y+Math.sin(g.t*2+k)*1.5;
+            if(listaImg(imgManzana))c.drawImage(imgManzana,x-mw/2,yy-mh/2,mw,mh);
+            else{c.fillStyle=P.oro;c.strokeStyle=P.tinta;c.lineWidth=2;c.beginPath();c.arc(x,yy,10,0,TAU);c.fill();c.stroke()}
+          });
+        }else{
+          // Respaldo mientras carga la imagen: árbol y Ladón dibujados
+          c.fillStyle='#8a6a44';c.fillRect(388,270,24,170);c.strokeRect(388,270,24,170);
+          c.fillStyle='#c9c58a';[[400,215,115],[345,200,70],[455,205,70]].forEach(([x,y,r])=>{c.beginPath();c.arc(x,y,r,0,TAU);c.fill();c.stroke()});
+          manz.forEach(([x,y],k)=>{
+            const yy=caen>=0?Math.min(450,y+caen*caen*300*(1+k*.15)):y+Math.sin(g.t*2+k)*2;
+            c.fillStyle=P.oro;c.beginPath();c.arc(x,yy,12,0,TAU);c.fill();c.stroke();
+          });
+          c.lineCap='round';c.strokeStyle=P.tinta;c.lineWidth=18;
+          c.beginPath();c.moveTo(230,455);c.bezierCurveTo(320,395,470,445,420,365);c.bezierCurveTo(380,315,470,305,520,335);c.stroke();
+          c.strokeStyle='#7d8f4a';c.lineWidth=14;c.stroke();
+          c.fillStyle='#7d8f4a';c.strokeStyle=P.tinta;c.lineWidth=2;c.beginPath();c.ellipse(540,333,26,17,.3,0,TAU);c.fill();c.stroke();
+          c.fillStyle=parpadeo>3.85?'#7d8f4a':P.alerta;c.beginPath();c.arc(547,326,4,0,TAU);c.fill();
+        }
+        c.strokeStyle=P.tinta;c.lineWidth=2;
         // pista del QR
         caja(c,40,70,240,150,{fondo:P.papel,borde:P.oro,grosor:2});
         const Q=[[1,1,1,0,1,0,1,1,1],[1,0,1,0,0,1,1,0,1],[1,1,1,0,1,1,1,1,1],[0,0,0,1,0,1,0,0,0],[1,0,1,1,1,0,1,1,0],[0,1,0,0,1,1,0,1,1],[1,1,1,0,0,1,1,0,1],[1,0,1,1,0,0,0,1,0],[1,1,1,0,1,1,1,0,1]];
         c.fillStyle=P.tinta;Q.forEach((f,y)=>f.forEach((v,x)=>{if(v)c.fillRect(58+x*11,98+y*11,10,10)}));
         txt(c,'BUSCAD',212,118,{size:15,font:F_TIT,color:P.oroT});txt(c,'este código',212,144,{size:15,weight:500,color:P.dim});txt(c,'en la sala',212,166,{size:15,weight:500,color:P.dim});
-        caja(c,560,410,210,52,{fondo:P.papel,borde:P.linea});
-        txt(c,'Escribid la palabra',665,428,{size:14,weight:500,color:P.dim});txt(c,'en la casilla de abajo ↓',665,446,{size:14,weight:500,color:P.dim});
+        caja(c,604,410,182,52,{fondo:P.papel,borde:P.linea});
+        txt(c,'Escribid la palabra',695,428,{size:14,weight:500,color:P.dim});txt(c,'en la casilla de abajo ↓',695,446,{size:13,weight:500,color:P.dim});
       }
     };
   }
